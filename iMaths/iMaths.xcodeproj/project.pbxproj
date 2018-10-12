@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		294D1A6E21712A45001AC69F /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A6C21712A45001AC69F /* PanelController.m */; };
+		294D1A6F21712A45001AC69F /* PanelController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294D1A6D21712A45001AC69F /* PanelController.xib */; };
+		294D1A7221712A57001AC69F /* PanelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A7121712A57001AC69F /* PanelModel.m */; };
 		29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C92798216A7FF500E43BA8 /* AppDelegate.m */; };
 		29C9279B216A7FF700E43BA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29C9279A216A7FF700E43BA8 /* Assets.xcassets */; };
 		29C9279E216A7FF700E43BA8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C9279C216A7FF700E43BA8 /* MainMenu.xib */; };
@@ -15,6 +18,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		294D1A6B21712A45001AC69F /* PanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
+		294D1A6C21712A45001AC69F /* PanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
+		294D1A6D21712A45001AC69F /* PanelController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelController.xib; sourceTree = "<group>"; };
+		294D1A7021712A57001AC69F /* PanelModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelModel.h; sourceTree = "<group>"; };
+		294D1A7121712A57001AC69F /* PanelModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelModel.m; sourceTree = "<group>"; };
 		29C92794216A7FF500E43BA8 /* iMaths.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMaths.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29C92797216A7FF500E43BA8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		29C92798216A7FF500E43BA8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -63,6 +71,11 @@
 				29C9279C216A7FF700E43BA8 /* MainMenu.xib */,
 				29C927A8216A809400E43BA8 /* Controller.h */,
 				29C927A9216A809400E43BA8 /* Controller.m */,
+				294D1A6B21712A45001AC69F /* PanelController.h */,
+				294D1A6C21712A45001AC69F /* PanelController.m */,
+				294D1A6D21712A45001AC69F /* PanelController.xib */,
+				294D1A7021712A57001AC69F /* PanelModel.h */,
+				294D1A7121712A57001AC69F /* PanelModel.m */,
 				29C9279F216A7FF700E43BA8 /* Info.plist */,
 				29C927A0216A7FF700E43BA8 /* main.m */,
 				29C927A2216A7FF700E43BA8 /* iMaths.entitlements */,
@@ -128,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29C9279B216A7FF700E43BA8 /* Assets.xcassets in Resources */,
+				294D1A6F21712A45001AC69F /* PanelController.xib in Resources */,
 				29C9279E216A7FF700E43BA8 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,8 +153,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D1A6E21712A45001AC69F /* PanelController.m in Sources */,
 				29C927A1216A7FF700E43BA8 /* main.m in Sources */,
 				29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */,
+				294D1A7221712A57001AC69F /* PanelModel.m in Sources */,
 				29C927AA216A809400E43BA8 /* Controller.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

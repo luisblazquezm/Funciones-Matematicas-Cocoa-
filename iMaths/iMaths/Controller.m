@@ -11,14 +11,31 @@
 /* --------- Esquema metodos ---------
  *   > Tratamiento de ventana
  *       - windowShouldClose()
- *   > Dibujo graficas
- *   > Acciones botones
- *   >
+ *   > Representacion graficas
  *
  */
 
 
 @implementation Controller
+
+extern NSString *PanelChangeTableNotification;
+
+/*!
+ * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
+ * @return id, puntero genérico.
+ */
+
+-(id)init
+{
+    self = [super init];
+    if (self){
+        NSLog(@"En init");
+        //NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];[nc addObserver:self selector:@selector(handlePanelChange:) name:PanelChangeTableNotification object:nil];
+    }
+    
+    return self;
+}
+
 
 /*!
  * @brief  Notifica al usuario del cierre total de la ventana de la aplicacion.
@@ -44,5 +61,14 @@
     
 }
 
+/*!
+ * @brief  Elimina el registro de objetos instanciados.
+ */
+
+-(void)dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
+}
 
 @end
