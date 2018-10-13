@@ -9,14 +9,67 @@
 #import <Cocoa/Cocoa.h>
 @class PanelModel;
 
-@interface PanelController : NSWindowController
+/* --------- Delegados ---------
+ *   - Ventana (NSWindowDelegate)
+ *   - TextField (NSTextFieldDelegate, NSControlTextEditingDelegate)
+ *   - TableView (NSTableViewDelegate, NSTableViewDataSource)
+ */
+
+
+@interface PanelController : NSWindowController <NSWindowDelegate,
+                                                 NSTextFieldDelegate,
+                                                 NSTableViewDelegate,
+                                                 NSTableViewDataSource,
+                                                 NSControlTextEditingDelegate>
 {
     /* Variable Modelo */
-    PanelModel *ModelInPanel;
     
-    /* Outlets Botones */
+    PanelModel *modelInPanel;
     
-    /* Outlets */
+    /* Outlets Definicion de la Grafica */
+    
+    IBOutlet NSComboBox *selectListFuncComboBox;
+    IBOutlet NSTextField *selectParamAField; // Cambiar a formateador para solo introducir numeros y convertirlos a float con formato 0.00
+    IBOutlet NSTextField *selectParamBField;
+    IBOutlet NSTextField *selectParamNField;
+    IBOutlet NSColorWell *selectColorFuncButton;
+    IBOutlet NSButton *addFuncButton;
+    
+    /* Outlets Parámetros Generales */
+    
+    // Editables
+    IBOutlet NSTableView *listOfCreatedFunctionsTableView;
+    IBOutlet NSButton *drawFunctionButton;
+    IBOutlet NSButton *modifyFunctionButton;
+    IBOutlet NSButton *deleteFunctionButton;
+    IBOutlet NSTextField *minRangeXField;
+    IBOutlet NSTextField *minRangeYField;
+    IBOutlet NSTextField *maxRangeXField;
+    IBOutlet NSTextField *maxRangeYField;
+    // No editables
+    IBOutlet NSTextField *showFuncField;
+    IBOutlet NSTextField *showNameFuncField;
+    IBOutlet NSTextField *showParamAField;
+    IBOutlet NSTextField *showParamBField;
+    IBOutlet NSTextField *showParamNField;
+    IBOutlet NSColorWell *showColorFuncField;
+    
+
 }
+
+    /* Métodos Definicion de la Grafica */
+
+-(IBAction)selectForNewFunction:(id)sender;
+-(IBAction)selectParameter:(id)sender;
+-(IBAction)selectColor:(id)sender;
+
+    /* Métodos Parámetros Generales */
+
+-(IBAction)drawFunction:(id)sender;
+-(IBAction)modifyFunction:(id)sender;
+-(IBAction)deleteFunction:(id)sender;
+-(IBAction)showFunctionInfo:(id)sender;
+-(IBAction)selectDrawingRange:(id)sender;
+
 
 @end

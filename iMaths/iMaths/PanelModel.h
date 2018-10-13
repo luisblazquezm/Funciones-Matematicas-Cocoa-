@@ -9,5 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface PanelModel : NSObject
+{
+    NSArray *arrayListFunctions; // Array que contendra una serie de objetos de tipo Funcion
+}
 
 @end

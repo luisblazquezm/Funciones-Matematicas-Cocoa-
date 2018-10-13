@@ -14,7 +14,8 @@
  *       - init
  *       - initWithWindow
  *   > Tratamiento de ventana
- *       - windowShouldClose()
+ *       - windowShouldClose
+ *       - windowDidLoad
  *   > Dibujo graficas
  *   > Acciones botones
  *   >
@@ -44,7 +45,7 @@
     self = [super initWithWindow:window];
     if (self){
         NSLog(@"En init Panel");
-        ModelInPanel = [[PanelModel alloc] init];
+        modelInPanel = [[PanelModel alloc] init];
     }
     
     return self;
