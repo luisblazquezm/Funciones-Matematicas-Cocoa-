@@ -9,5 +9,5 @@
 #import "GraphicsClass.h"
 
 @implementation GraphicsClass
-
+@synthesize funcName, function, paramA, paramB, paramN, colour;
 @end

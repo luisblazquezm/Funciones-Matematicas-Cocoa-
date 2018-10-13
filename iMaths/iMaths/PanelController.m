@@ -152,14 +152,8 @@ objectValueForItemAtIndex:(NSInteger)index
 */
 
 
--(IBAction)addNewGraphic:(id)sender
+-(IBAction)selectNewGraphic:(id)sender
 {
-    NSLog(@"Activar boton: nombre(%ld), function(%ld), paramA(%f), paramB(%f), paramN(%f)\r",
-          [[newGraphic funcName] length],
-          [[newGraphic function] length],
-          [newGraphic paramA],
-          [newGraphic paramB],
-          [newGraphic paramN]);
     
     NSString *parametersN[] =
     {
@@ -193,19 +187,19 @@ objectValueForItemAtIndex:(NSInteger)index
      *--------- Definicion Funcion ------------
      */
     
-    [newGraphic setFunction:[selectListFuncComboBox stringValue]];
-    NSLog(@"Funcion %@ escogida\r", [newGraphic function]);
+    function = [selectListFuncComboBox stringValue];
+    NSLog(@"Funcion %@ escogida\r", function);
     
-    [newGraphic setFuncName:[selectGraphicNameField stringValue]];
-    NSLog(@"Nombre Funcion %@\r", [newGraphic funcName]);
+    name = [selectGraphicNameField stringValue];
+    NSLog(@"Nombre Funcion %@\r", name);
     
     /*
      *--------- Parametros ------------
      */
     
-    if([[newGraphic function] length] != 0){
+    if([function length] != 0){
         [selectParamAField setEnabled:YES];
-        [newGraphic setParamA:[selectParamAField floatValue]];
+        paramA = [selectParamAField floatValue];
         
         /* Hallo los indices del array de funciones cuyas formulas no contienen una 'n'
          * para poder deshabilitar el campo del parámetro 'n' en el controlador PanelController
@@ -213,19 +207,19 @@ objectValueForItemAtIndex:(NSInteger)index
          */
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             
-            NSLog(@"Funcion %@ - Patron %@\r",[newGraphic function],parametersN[j]);
-            if ([[newGraphic function] rangeOfString:parametersN[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
+            NSLog(@"Funcion %@ - Patron %@\r", function, parametersN[j]);
+            if ([function rangeOfString:parametersN[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamNField setEnabled:YES];
-                [newGraphic setParamN:[selectParamNField floatValue]];
+                paramN = [selectParamNField floatValue];
                 break;
             } else {
                 [selectParamNField setEnabled:NO];
             }
             
-            NSLog(@"Funcion %@ - Patron %@\r",[newGraphic function],parametersB[j]);
-            if ([[newGraphic function] rangeOfString:parametersB[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
+            NSLog(@"Funcion %@ - Patron %@\r", function, parametersB[j]);
+            if ([function rangeOfString:parametersB[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamBField setEnabled:YES];
-                [newGraphic setParamB:[selectParamBField floatValue]];
+                paramB = [selectParamBField floatValue];
                 break;
             } else {
                 [selectParamBField setEnabled:NO];
@@ -233,32 +227,54 @@ objectValueForItemAtIndex:(NSInteger)index
             
         }
         
-        NSLog(@"Parámetros introducidos correctamente A:%f B:%f N:%f\r", [newGraphic paramA], [newGraphic paramB], [newGraphic paramN]);
+        NSLog(@"Parámetros introducidos correctamente A:%f B:%f N:%f\r", paramA, paramB, paramN);
     }
     
     /*
      *--------- Apariencia ------------
      */
     
-    [newGraphic setColour:[selectColorGraphicButton color]];
-    NSLog(@"Apariencia introducida correctamente color: %@\r", [newGraphic colour]);
+    colour = [selectColorGraphicButton color];
+    NSLog(@"Apariencia introducida correctamente color: %@\r", colour);
     
-    if([[newGraphic funcName] length] != 0 &&
-       [[newGraphic function] length] != 0 &&
+    if([name length] != 0 &&
+       [function length] != 0 &&
        (
-        ([selectParamAField isEnabled] && [selectParamBField isEnabled] && [newGraphic paramA] != 0 && [newGraphic paramB] != 0) ||
-        ([selectParamAField isEnabled] && [selectParamNField isEnabled] && [newGraphic paramA] != 0 && [newGraphic paramN] != 0) ||
-        ([selectParamAField isEnabled] && [newGraphic paramA] != 0) )
+        ([selectParamAField isEnabled] && [selectParamBField isEnabled] && paramA != 0 && paramB != 0) ||
+        ([selectParamAField isEnabled] && [selectParamNField isEnabled] && paramA != 0 && paramN != 0) ||
+        ([selectParamAField isEnabled] && paramA != 0) )
        )
     {
         [addGraphicButton setEnabled:YES];
-        [[modelInPanel arrayListGraphics] addObject:newGraphic];
-        NSLog(@"Grafica nueva guardada en tabla\r");
-        [listOfCreatedFunctionsTableView reloadData];
+        
     } else {
         [addGraphicButton setEnabled:NO];
     }
+    
 
+}
+
+-(IBAction)addNewGraphic:(id)sender
+{
+    [newGraphic setFunction:function];
+    [newGraphic setFuncName:name];
+    [newGraphic setParamA:paramA];
+    [newGraphic setParamB:paramB];
+    [newGraphic setParamN:paramN];
+    [newGraphic setColour:colour];
+    
+    [[modelInPanel arrayListGraphics] addObject:newGraphic];
+    NSLog(@"Grafica nueva guardada en tabla\r");
+    [listOfCreatedFunctionsTableView reloadData];
+    
+    [addGraphicButton setEnabled:NO];
+    
+    [selectListFuncComboBox deselectItemAtIndex:[selectListFuncComboBox indexOfSelectedItem]];
+    [selectGraphicNameField setStringValue:@""];
+    [selectParamAField setStringValue:@""];
+    [selectParamBField setStringValue:@""];
+    [selectParamNField setStringValue:@""];
+    
 }
 
 
@@ -268,6 +284,8 @@ objectValueForItemAtIndex:(NSInteger)index
 -(void) tableViewSelectionDidChange:(NSNotification *)notification
 {
     NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    NSLog(@"Fila seleccionada %ld\r", aRowSelected);
+    
     if (aRowSelected != -1){
         [drawGraphicButton setEnabled:YES];
         [modifyGraphicButton setEnabled:YES];
@@ -316,6 +334,29 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         [addGraphicButton setEnabled:NO];
     }
     
+}
+
+-(IBAction)drawGraphic:(id)sender
+{
+    
+}
+
+-(IBAction)modifyGraphic:(id)sender
+{
+    
+}
+
+-(IBAction)deleteGraphic:(id)sender
+{
+    
+}
+
+-(IBAction)selectDrawingRange:(id)sender
+{
+    NSInteger minX = [minRangeXField integerValue];
+    NSInteger minY = [minRangeYField integerValue];
+    NSInteger maxX = [maxRangeXField integerValue];
+    NSInteger maxY = [maxRangeYField integerValue];
 }
 
 @end

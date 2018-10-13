@@ -64,12 +64,19 @@
     /* Variables de instancia */
     
     GraphicsClass *newGraphic;
+    NSString *name;
+    NSString *function;
+    float paramA;
+    float paramB;
+    float paramN;
+    NSColor *colour;
     
 
 }
 
     /* Métodos Definicion de la Grafica */
 
+-(IBAction)selectNewGraphic:(id)sender;
 -(IBAction)addNewGraphic:(id)sender;
 
     /* Métodos Parámetros Generales */
@@ -77,7 +84,6 @@
 -(IBAction)drawGraphic:(id)sender;
 -(IBAction)modifyGraphic:(id)sender;
 -(IBAction)deleteGraphic:(id)sender;
--(IBAction)showGraphicInfo:(id)sender;
 -(IBAction)selectDrawingRange:(id)sender;
 
 

@@ -89,7 +89,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="addNewGraphic:" target="-2" id="oz3-fB-G8S"/>
+                                                                    <action selector="selectNewGraphic:" target="-2" id="ID1-oQ-zmu"/>
                                                                     <outlet property="delegate" destination="-2" id="9Vf-n0-ECm"/>
                                                                 </connections>
                                                             </textField>
@@ -111,7 +111,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </comboBoxCell>
                                                                 <connections>
-                                                                    <action selector="addNewGraphic:" target="-2" id="Qqu-te-kKc"/>
+                                                                    <action selector="selectNewGraphic:" target="-2" id="aOf-md-NNm"/>
                                                                     <outlet property="dataSource" destination="-2" id="kxa-jD-l4z"/>
                                                                     <outlet property="delegate" destination="-2" id="Kj3-hf-vq4"/>
                                                                 </connections>
@@ -120,7 +120,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Parámetros" identifier="" id="0Ns-VD-9y9">
-                                                    <view key="view" id="17J-E6-GC2">
+                                                    <view key="view" ambiguous="YES" id="17J-E6-GC2">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -151,7 +151,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="addNewGraphic:" target="-2" id="WLb-Lb-iNd"/>
+                                                                    <action selector="selectNewGraphic:" target="-2" id="BH3-pT-hjz"/>
                                                                     <outlet property="delegate" destination="-2" id="2aV-qW-AgH"/>
                                                                 </connections>
                                                             </textField>
@@ -164,7 +164,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="addNewGraphic:" target="-2" id="dsa-28-Bsn"/>
+                                                                    <action selector="selectNewGraphic:" target="-2" id="ojA-bb-saL"/>
                                                                     <outlet property="delegate" destination="-2" id="PNT-xw-6eV"/>
                                                                 </connections>
                                                             </textField>
@@ -177,7 +177,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="addNewGraphic:" target="-2" id="Edx-eB-T3B"/>
+                                                                    <action selector="selectNewGraphic:" target="-2" id="5Wq-rh-vr7"/>
                                                                     <outlet property="delegate" destination="-2" id="oVZ-HV-4Dw"/>
                                                                 </connections>
                                                             </textField>
@@ -194,7 +194,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Apariencia" identifier="" id="xXT-P1-HLP">
-                                                    <view key="view" ambiguous="YES" id="yoK-ad-pEL">
+                                                    <view key="view" id="yoK-ad-pEL">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -313,14 +313,6 @@
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </searchFieldCell>
-                                            <connections>
-                                                <binding destination="oXf-iK-21G" name="predicate" keyPath="filterPredicate" id="7Eu-qY-8OE">
-                                                    <dictionary key="options">
-                                                        <string key="NSDisplayName">predicate</string>
-                                                        <string key="NSPredicateFormat">Graficas contains[cd] $value</string>
-                                                    </dictionary>
-                                                </binding>
-                                            </connections>
                                         </searchField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ifp-kq-FVI">
                                             <rect key="frame" x="221" y="181" width="214" height="22"/>
@@ -605,10 +597,6 @@
             </connections>
             <point key="canvasLocation" x="243" y="237"/>
         </window>
-        <arrayController id="oXf-iK-21G">
-            <connections>
-                <binding destination="-2" name="contentArray" keyPath="self" id="VWE-UN-1oc"/>
-            </connections>
-        </arrayController>
+        <userDefaultsController representsSharedInstance="YES" id="RYK-CP-rcm"/>
     </objects>
 </document>
