@@ -7,6 +7,7 @@
 //
 
 #import "Controller.h"
+#import "PanelController.h"
 
 /* --------- Esquema metodos ---------
  *   > Tratamiento de ventana
@@ -59,6 +60,15 @@ extern NSString *PanelChangeTableNotification;
         [NSApp terminate:self];
     return YES;
     
+}
+
+-(IBAction)showPanel:(id)sender
+{
+    if(!panelController)
+        panelController = [[PanelController alloc] init];
+    
+    NSLog(@"panel %@\r", panelController);
+    [panelController showWindow:self];
 }
 
 /*!

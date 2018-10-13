@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		29422BC52171D6F3005ADBE3 /* FunctionClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 29422BC42171D6F3005ADBE3 /* FunctionClass.m */; };
+		291A0135217208CF00212DF6 /* GraphicsClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 291A0134217208CF00212DF6 /* GraphicsClass.m */; };
 		294D1A6E21712A45001AC69F /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A6C21712A45001AC69F /* PanelController.m */; };
 		294D1A6F21712A45001AC69F /* PanelController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294D1A6D21712A45001AC69F /* PanelController.xib */; };
 		294D1A7221712A57001AC69F /* PanelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A7121712A57001AC69F /* PanelModel.m */; };
@@ -19,8 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		29422BC32171D6F3005ADBE3 /* FunctionClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FunctionClass.h; sourceTree = "<group>"; };
-		29422BC42171D6F3005ADBE3 /* FunctionClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FunctionClass.m; sourceTree = "<group>"; };
+		291A0133217208CF00212DF6 /* GraphicsClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsClass.h; sourceTree = "<group>"; };
+		291A0134217208CF00212DF6 /* GraphicsClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsClass.m; sourceTree = "<group>"; };
 		294D1A6B21712A45001AC69F /* PanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
 		294D1A6C21712A45001AC69F /* PanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
 		294D1A6D21712A45001AC69F /* PanelController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelController.xib; sourceTree = "<group>"; };
@@ -77,13 +77,13 @@
 				294D1A6B21712A45001AC69F /* PanelController.h */,
 				294D1A6C21712A45001AC69F /* PanelController.m */,
 				294D1A6D21712A45001AC69F /* PanelController.xib */,
-				29422BC32171D6F3005ADBE3 /* FunctionClass.h */,
-				29422BC42171D6F3005ADBE3 /* FunctionClass.m */,
 				294D1A7021712A57001AC69F /* PanelModel.h */,
 				294D1A7121712A57001AC69F /* PanelModel.m */,
 				29C9279F216A7FF700E43BA8 /* Info.plist */,
 				29C927A0216A7FF700E43BA8 /* main.m */,
 				29C927A2216A7FF700E43BA8 /* iMaths.entitlements */,
+				291A0133217208CF00212DF6 /* GraphicsClass.h */,
+				291A0134217208CF00212DF6 /* GraphicsClass.m */,
 			);
 			path = iMaths;
 			sourceTree = "<group>";
@@ -159,8 +159,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				294D1A6E21712A45001AC69F /* PanelController.m in Sources */,
+				291A0135217208CF00212DF6 /* GraphicsClass.m in Sources */,
 				29C927A1216A7FF700E43BA8 /* main.m in Sources */,
-				29422BC52171D6F3005ADBE3 /* FunctionClass.m in Sources */,
 				29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */,
 				294D1A7221712A57001AC69F /* PanelModel.m in Sources */,
 				29C927AA216A809400E43BA8 /* Controller.m in Sources */,

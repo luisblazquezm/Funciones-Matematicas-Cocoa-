@@ -8,7 +8,7 @@
 
 #import "PanelController.h"
 #import "PanelModel.h"
-#import "FunctionClass.h"
+#import "GraphicsClass.h"
 
 /* --------- Esquema metodos ---------
  *   > Inicializadores
@@ -30,6 +30,7 @@
 @implementation PanelController
 
 //NSString *PanelChangeTableNotification = @"PanelChangeTable";
+extern NSString *PanelDisableIndexesFunctionNotification;
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -39,7 +40,7 @@
 */
 -(id)init
 {
-    if (![super initWithWindowNibName:@"PanelWindowController"])
+    if (![super initWithWindowNibName:@"PanelController"])
         return nil;
     
     return self;
@@ -57,6 +58,11 @@
     if (self){
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init];
+        //NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        //[nc addObserver:self
+               // selector:@selector(handlePanelChange:)
+               // name:PanelDisableIndexesFunctionNotification
+               // object:nil];
     }
     
     return self;
@@ -99,29 +105,77 @@
 
 /* --------------------------- ACCIONES DEFINICION GRAFICA ---------------------- */
 
--(IBAction)selectForNewFunction:(id)sender
+-(IBAction)selectForNewGraphic:(id)sender
 {
-    FunctionClass *newFunction;
+    static NSString *parametersN[] =
+    {
+        @"^n",
+        @"n^",
+        @"n*",
+        @"*n",
+        @"n+",
+        @"+n",
+        @"-n",
+        @"n-",
+        @"n/",
+        @"/n"
+    };
+    
+    static NSString *parametersB[] =
+    {
+        @"^b",
+        @"b^",
+        @"b*",
+        @"*b",
+        @"b+",
+        @"+b",
+        @"-b",
+        @"b-",
+        @"b/",
+        @"/b"
+    };
     
     // Definición
-    [newFunction setFormula:[selectListFuncComboBox stringValue]];
-    [newFunction setName:[selectFuncNameField stringValue]];
+    NSString *function = [selectListFuncComboBox stringValue];
+    NSString *name = [selectGraphicNameField stringValue];
+    NSLog(@"Definición introducida correctamente\r");
     
     // Parametros
-    if (sender == selectParamAField) {
-        ;
-    } else if (sender == selectParamBField) {
-        
-    } else {
-        
+    
+    float A = [selectParamAField floatValue];
+    
+    /* Hallo los indices del array de funciones cuyas formulas no contienen una 'n'
+     * para poder deshabilitar el campo del parámetro 'n' en el controlador PanelController
+     * Lo envio a través de un set de indices dentro de un NSDictionary por medio de una Notificación
+     */
+    for (int i = 0; i < NUM_DEFAULT_FUNCTIONS; i++) {
+        for (int j = 0; j < NUM_PARAMETERS; j++) {
+            
+            if ([function containsString:parametersN[j]]){
+                [selectParamNField setEnabled:YES];
+                float N = [selectParamNField floatValue];
+            } else {
+                [selectParamNField setEnabled:NO];
+            }
+            
+            if ([function containsString:parametersB[j]]){
+                [selectParamBField setEnabled:YES];
+                float B = [selectParamBField floatValue];
+            } else {
+                [selectParamBField setEnabled:NO];
+            }
+            
+        }
     }
+    
+    NSLog(@"Parámetros introducidos correctamente\r");
     
     // Apariencia
 }
 
--(IBAction)addNewFunction:(id)sender
+-(IBAction)addNewGraphic:(id)sender
 {
-    
+    [addGraphicButton setEnabled:YES];
 }
 
 

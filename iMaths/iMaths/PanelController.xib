@@ -9,23 +9,31 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PanelController">
             <connections>
                 <outlet property="addFuncButton" destination="Ofs-UC-afN" id="uO8-7e-72q"/>
+                <outlet property="addGraphicButton" destination="Ofs-UC-afN" id="9JH-wc-6vg"/>
                 <outlet property="deleteFunctionButton" destination="DiB-cU-mEc" id="6sQ-KX-u6x"/>
+                <outlet property="deleteGraphicButton" destination="DiB-cU-mEc" id="ngq-pG-1QP"/>
                 <outlet property="drawFunctionButton" destination="c3y-Ez-Abz" id="dkK-p4-2Ld"/>
+                <outlet property="drawGraphicButton" destination="c3y-Ez-Abz" id="82h-ZV-sUd"/>
                 <outlet property="listOfCreatedFunctionsTableView" destination="3Nn-Oh-TKh" id="is8-7s-zhD"/>
                 <outlet property="maxRangeXField" destination="G4S-o6-Tb1" id="8LD-f2-fR4"/>
                 <outlet property="maxRangeYField" destination="oyP-R7-Eou" id="ah8-Xc-cBS"/>
                 <outlet property="minRangeXField" destination="udK-EU-YCH" id="6Gp-eE-ORE"/>
                 <outlet property="minRangeYField" destination="NEa-hp-kYg" id="kcQ-PW-lOM"/>
                 <outlet property="modifyFunctionButton" destination="57W-c9-0KZ" id="uAi-fu-F33"/>
+                <outlet property="modifyGraphicButton" destination="57W-c9-0KZ" id="K5I-54-wwR"/>
                 <outlet property="selectColorFuncButton" destination="KBn-nZ-zao" id="qOv-tf-qUV"/>
+                <outlet property="selectColorGraphicButton" destination="KBn-nZ-zao" id="2Gp-ap-prf"/>
                 <outlet property="selectFuncNameField" destination="sbx-tU-Qz3" id="wSj-Y7-2sT"/>
+                <outlet property="selectGraphicNameField" destination="sbx-tU-Qz3" id="gcM-MF-ZUI"/>
                 <outlet property="selectListFuncComboBox" destination="2xj-hz-Fql" id="3D6-jS-vYe"/>
                 <outlet property="selectParamAField" destination="Utw-Mk-8Eq" id="K9T-Ha-o2W"/>
                 <outlet property="selectParamBField" destination="zpy-wz-jYz" id="jkd-Hr-FPF"/>
                 <outlet property="selectParamNField" destination="aqj-FX-itO" id="twn-gk-2Td"/>
                 <outlet property="showColorFuncField" destination="7sw-S9-SN3" id="aOS-qH-k07"/>
+                <outlet property="showColorGraphicField" destination="7sw-S9-SN3" id="VL1-SH-v7y"/>
                 <outlet property="showFuncField" destination="ifp-kq-FVI" id="5Wc-pF-J0J"/>
                 <outlet property="showNameFuncField" destination="2Ts-10-XBK" id="LFS-qJ-QPt"/>
+                <outlet property="showNameGraphicField" destination="2Ts-10-XBK" id="5X2-A0-jKY"/>
                 <outlet property="showParamAField" destination="NB4-kD-KFf" id="cxs-xd-ZMz"/>
                 <outlet property="showParamBField" destination="pxT-CK-3cx" id="3Ie-SO-Yjg"/>
                 <outlet property="showParamNField" destination="vsk-9o-T6Y" id="Fhl-WT-7CW"/>
@@ -59,7 +67,7 @@
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Definición Función" identifier="" id="mhF-rm-ebC">
-                                                    <view key="view" ambiguous="YES" id="bH1-la-hhW">
+                                                    <view key="view" id="bH1-la-hhW">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -87,23 +95,11 @@
                                                                     </objectValues>
                                                                 </comboBoxCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="EO4-0M-Nmd"/>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="InQ-aA-edJ"/>
                                                                     <outlet property="dataSource" destination="-2" id="kxa-jD-l4z"/>
                                                                     <outlet property="delegate" destination="-2" id="Kj3-hf-vq4"/>
                                                                 </connections>
                                                             </comboBox>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
-                                                                <rect key="frame" x="206" y="55" width="306" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bm3-Nx-E0R">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                                <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="Y7u-7K-Gru"/>
-                                                                </connections>
-                                                            </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
                                                                 <rect key="frame" x="133" y="57" width="57" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -113,11 +109,23 @@
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
+                                                                <rect key="frame" x="206" y="52" width="306" height="22"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bm3-Nx-E0R">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <connections>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="ISp-b2-tH0"/>
+                                                                </connections>
+                                                            </textField>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Parámetros" identifier="" id="0Ns-VD-9y9">
-                                                    <view key="view" id="17J-E6-GC2">
+                                                    <view key="view" ambiguous="YES" id="17J-E6-GC2">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -148,7 +156,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="kct-pm-2cJ"/>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="o8X-eg-JLF"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="zpy-wz-jYz">
@@ -160,7 +168,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="ZgK-9H-Bj0"/>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="CrF-c0-bxW"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="aqj-FX-itO">
@@ -172,7 +180,7 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="iRq-gh-jfh"/>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="jfi-Gw-ohO"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tMT-v8-zn1">
@@ -197,7 +205,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <connections>
-                                                                    <action selector="selectForNewFunction:" target="-2" id="Lfe-KN-zcU"/>
+                                                                    <action selector="selectForNewGraphic:" target="-2" id="byf-a9-BT8"/>
                                                                 </connections>
                                                             </colorWell>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5s-K9-uwA">
@@ -217,12 +225,12 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ofs-UC-afN">
                                             <rect key="frame" x="552" y="0.0" width="93" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Añadir" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4f4-Dv-wf3">
+                                            <buttonCell key="cell" type="push" title="Añadir" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4f4-Dv-wf3">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="addNewFunction:" target="-2" id="3YD-5D-3nH"/>
+                                                <action selector="addNewGraphic:" target="-2" id="TBH-y4-JW2"/>
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bl7-mp-VQ2">
@@ -279,15 +287,19 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                         </tableColumns>
+                                                        <connections>
+                                                            <outlet property="dataSource" destination="-2" id="sVv-o8-Exw"/>
+                                                            <outlet property="delegate" destination="-2" id="5d8-SH-wCi"/>
+                                                        </connections>
                                                     </tableView>
                                                 </subviews>
                                             </clipView>
                                             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="qcb-rM-F4e">
-                                                <rect key="frame" x="1" y="119" width="223" height="15"/>
+                                                <rect key="frame" x="-7" y="8" width="0.0" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="pjl-gR-Acd">
-                                                <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                                <rect key="frame" x="-14" y="15" width="15" height="0.0"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <tableHeaderView key="headerView" id="KVw-fh-xhi">
@@ -313,7 +325,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <action selector="showFunctionInfo:" target="-2" id="pN9-ES-LP7"/>
+                                                <action selector="showGraphicInfo:" target="-2" id="S1J-Na-naQ"/>
                                             </connections>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3y-Ez-Abz">
@@ -324,7 +336,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="drawFunction:" target="-2" id="Ozf-xL-zBe"/>
+                                                <action selector="drawGraphic:" target="-2" id="01k-BU-b7N"/>
                                             </connections>
                                         </button>
                                         <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qen-B8-KHK">
@@ -333,7 +345,7 @@
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Información" identifier="" id="0Jy-1o-Ypu">
-                                                    <view key="view" id="mi1-JO-5q0">
+                                                    <view key="view" ambiguous="YES" id="mi1-JO-5q0">
                                                         <rect key="frame" x="10" y="33" width="616" height="146"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -389,7 +401,7 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showFunctionInfo:" target="-2" id="ROO-P7-cNs"/>
+                                                                                <action selector="showGraphicInfo:" target="-2" id="AhJ-hh-aSn"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pxT-CK-3cx">
@@ -401,7 +413,7 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showFunctionInfo:" target="-2" id="Ted-l8-fsA"/>
+                                                                                <action selector="showGraphicInfo:" target="-2" id="4iD-J9-Jgn"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vsk-9o-T6Y">
@@ -413,7 +425,7 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showFunctionInfo:" target="-2" id="ARH-eD-oN4"/>
+                                                                                <action selector="showGraphicInfo:" target="-2" id="eHZ-pg-u79"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7sw-S9-SN3">
@@ -421,7 +433,7 @@
                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <connections>
-                                                                                <action selector="showFunctionInfo:" target="-2" id="Kk2-T4-WUw"/>
+                                                                                <action selector="showGraphicInfo:" target="-2" id="uOM-U3-V5X"/>
                                                                             </connections>
                                                                         </colorWell>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9fA-kP-O38">
@@ -442,7 +454,7 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showFunctionInfo:" target="-2" id="0Sh-wp-1gb"/>
+                                                                                <action selector="showGraphicInfo:" target="-2" id="t7l-sw-obQ"/>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -452,7 +464,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Propiedades representación" identifier="" id="Ocb-1k-HKb">
-                                                    <view key="view" ambiguous="YES" id="zZh-ZY-Hx9">
+                                                    <view key="view" id="zZh-ZY-Hx9">
                                                         <rect key="frame" x="10" y="33" width="616" height="146"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -553,7 +565,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="modifyFunction:" target="-2" id="Tzi-M3-E1D"/>
+                                                <action selector="modifyGraphic:" target="-2" id="Em4-cs-rFR"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DiB-cU-mEc">
@@ -564,7 +576,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="deleteFunction:" target="-2" id="Bp5-0G-dVy"/>
+                                                <action selector="deleteGraphic:" target="-2" id="owN-ZU-d5e"/>
                                             </connections>
                                         </button>
                                     </subviews>

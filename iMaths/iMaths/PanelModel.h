@@ -8,13 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#define NUM_DEFAULT_FUNCTIONS 6
+
 @interface PanelModel : NSObject
 {
-    NSMutableArray *arrayListFunctions; // Array que contendra una serie de objetos de tipo Funcion
+    NSMutableArray *arrayListGraphics; // Array que contendra una serie de objetos de tipo Funcion
+    NSMutableArray *arrayListFunctions; // Array que contendra las funciones a escoger para añadir una gráfica
 }
 
 /* Getters y setters */
 
 @property (nonatomic) NSMutableArray *arrayListFunctions;
+
+-(void)initializeArrayListFunctions;
 
 @end

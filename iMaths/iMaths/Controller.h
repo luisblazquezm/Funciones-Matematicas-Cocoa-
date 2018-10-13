@@ -7,10 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class PanelController;
 
 @interface Controller : NSObject <NSWindowDelegate>
 {
+    PanelController *panelController;
 }
+
+-(IBAction)showPanel:(id)sender;
 
 @end
 
