@@ -7,7 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class PanelModel;
 
 @interface PanelController : NSWindowController
+{
+    /* Variable Modelo */
+    PanelModel *ModelInPanel;
+    
+    /* Outlets Botones */
+    
+    /* Outlets */
+}
 
 @end
