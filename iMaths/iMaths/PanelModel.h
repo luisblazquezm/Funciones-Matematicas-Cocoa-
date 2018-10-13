@@ -10,7 +10,11 @@
 
 @interface PanelModel : NSObject
 {
-    NSArray *arrayListFunctions; // Array que contendra una serie de objetos de tipo Funcion
+    NSMutableArray *arrayListFunctions; // Array que contendra una serie de objetos de tipo Funcion
 }
+
+/* Getters y setters */
+
+@property (nonatomic) NSMutableArray *arrayListFunctions;
 
 @end

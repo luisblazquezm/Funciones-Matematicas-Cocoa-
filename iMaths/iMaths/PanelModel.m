@@ -9,5 +9,20 @@
 #import "PanelModel.h"
 
 @implementation PanelModel
+@synthesize arrayListFunctions;
+/*!
+ * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
+ * @return id, puntero genérico.
+ */
+-(id)init
+{
+    self = [super init];
+    if (self){
+        NSLog(@"En init");
+        arrayListFunctions = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
 
 @end

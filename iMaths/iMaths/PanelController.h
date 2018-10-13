@@ -29,6 +29,7 @@
     /* Outlets Definicion de la Grafica */
     
     IBOutlet NSComboBox *selectListFuncComboBox;
+    IBOutlet NSTextField *selectFuncNameField;
     IBOutlet NSTextField *selectParamAField; // Cambiar a formateador para solo introducir numeros y convertirlos a float con formato 0.00
     IBOutlet NSTextField *selectParamBField;
     IBOutlet NSTextField *selectParamNField;
@@ -60,8 +61,7 @@
     /* Métodos Definicion de la Grafica */
 
 -(IBAction)selectForNewFunction:(id)sender;
--(IBAction)selectParameter:(id)sender;
--(IBAction)selectColor:(id)sender;
+-(IBAction)addNewFunction:(id)sender;
 
     /* Métodos Parámetros Generales */
 
