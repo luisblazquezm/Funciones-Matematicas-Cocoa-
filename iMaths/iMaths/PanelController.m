@@ -58,6 +58,7 @@ extern NSString *PanelDisableIndexesFunctionNotification;
     if (self){
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init];
+        newGraphic = [[GraphicsClass alloc] init];
         //NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         //[nc addObserver:self
                // selector:@selector(handlePanelChange:)
@@ -66,6 +67,16 @@ extern NSString *PanelDisableIndexesFunctionNotification;
     }
     
     return self;
+}
+
+/*!
+ * @brief  Realiza una operación al cargar el fichero NIB
+ */
+
+- (void)awakeFromNib
+{
+    [modelInPanel initializeArrayListFunctions];       // Inicializa el array del modelo de funciones
+    [selectListFuncComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]]; // Añade esas funciones al ComboBox
 }
 
 /* --------------------------- TRATAMIENTO DE VENTANAS ---------------------- */
@@ -105,9 +116,52 @@ extern NSString *PanelDisableIndexesFunctionNotification;
 
 /* --------------------------- ACCIONES DEFINICION GRAFICA ---------------------- */
 
--(IBAction)selectForNewGraphic:(id)sender
+
+/* SI EL CONTENIDO CAMBIA DINAMICAMENTE (ES DECIR AÑADIMOS NUEVAS FUNCIONES)
+ * tambien habria que pasarlo a Editable porque solo se puede seleccionar
+- (void)comboBoxWillPopUp:(NSNotification *)notification
 {
-    static NSString *parametersN[] =
+    [[modelInPanel arrayListFunctions] ]
+}
+
+
+- (NSString *)comboBox:(NSComboBox *)comboBox
+       completedString:(NSString *)string
+{
+    int z = 0;
+    
+    for (int i = 0; i < NUM_PARAMETERS; i++) {
+        if ([[[modelInPanel arrayListFunctions] objectAtIndex:i ] containsString:string] ){
+             z = i;
+        }
+    }
+    
+    return [[modelInPanel arrayListFunctions] objectAtIndex:z ];
+}
+
+- (id)comboBox:(NSComboBox *)comboBox
+objectValueForItemAtIndex:(NSInteger)index
+{
+    return [[modelInPanel arrayListFunctions] objectAtIndex:index];
+}
+
+- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)comboBox
+{
+    return [[modelInPanel arrayListFunctions] count];
+}
+*/
+
+
+-(IBAction)addNewGraphic:(id)sender
+{
+    NSLog(@"Activar boton: nombre(%ld), function(%ld), paramA(%f), paramB(%f), paramN(%f)\r",
+          [[newGraphic funcName] length],
+          [[newGraphic function] length],
+          [newGraphic paramA],
+          [newGraphic paramB],
+          [newGraphic paramN]);
+    
+    NSString *parametersN[] =
     {
         @"^n",
         @"n^",
@@ -121,7 +175,7 @@ extern NSString *PanelDisableIndexesFunctionNotification;
         @"/n"
     };
     
-    static NSString *parametersB[] =
+    NSString *parametersB[] =
     {
         @"^b",
         @"b^",
@@ -135,47 +189,76 @@ extern NSString *PanelDisableIndexesFunctionNotification;
         @"/b"
     };
     
-    // Definición
-    NSString *function = [selectListFuncComboBox stringValue];
-    NSString *name = [selectGraphicNameField stringValue];
-    NSLog(@"Definición introducida correctamente\r");
-    
-    // Parametros
-    
-    float A = [selectParamAField floatValue];
-    
-    /* Hallo los indices del array de funciones cuyas formulas no contienen una 'n'
-     * para poder deshabilitar el campo del parámetro 'n' en el controlador PanelController
-     * Lo envio a través de un set de indices dentro de un NSDictionary por medio de una Notificación
+    /*
+     *--------- Definicion Funcion ------------
      */
-    for (int i = 0; i < NUM_DEFAULT_FUNCTIONS; i++) {
+    
+    [newGraphic setFunction:[selectListFuncComboBox stringValue]];
+    NSLog(@"Funcion %@ escogida\r", [newGraphic function]);
+    
+    [newGraphic setFuncName:[selectGraphicNameField stringValue]];
+    NSLog(@"Nombre Funcion %@\r", [newGraphic funcName]);
+    
+    /*
+     *--------- Parametros ------------
+     */
+    
+    if([[newGraphic function] length] != 0){
+        [selectParamAField setEnabled:YES];
+        [newGraphic setParamA:[selectParamAField floatValue]];
+        
+        /* Hallo los indices del array de funciones cuyas formulas no contienen una 'n'
+         * para poder deshabilitar el campo del parámetro 'n' en el controlador PanelController
+         * Lo envio a través de un set de indices dentro de un NSDictionary por medio de una Notificación
+         */
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             
-            if ([function containsString:parametersN[j]]){
+            NSLog(@"Funcion %@ - Patron %@\r",[newGraphic function],parametersN[j]);
+            if ([[newGraphic function] rangeOfString:parametersN[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamNField setEnabled:YES];
-                float N = [selectParamNField floatValue];
+                [newGraphic setParamN:[selectParamNField floatValue]];
+                break;
             } else {
                 [selectParamNField setEnabled:NO];
             }
             
-            if ([function containsString:parametersB[j]]){
+            NSLog(@"Funcion %@ - Patron %@\r",[newGraphic function],parametersB[j]);
+            if ([[newGraphic function] rangeOfString:parametersB[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamBField setEnabled:YES];
-                float B = [selectParamBField floatValue];
+                [newGraphic setParamB:[selectParamBField floatValue]];
+                break;
             } else {
                 [selectParamBField setEnabled:NO];
             }
             
         }
+        
+        NSLog(@"Parámetros introducidos correctamente A:%f B:%f N:%f\r", [newGraphic paramA], [newGraphic paramB], [newGraphic paramN]);
     }
     
-    NSLog(@"Parámetros introducidos correctamente\r");
+    /*
+     *--------- Apariencia ------------
+     */
     
-    // Apariencia
-}
+    [newGraphic setColour:[selectColorGraphicButton color]];
+    NSLog(@"Apariencia introducida correctamente color: %@\r", [newGraphic colour]);
+    
+    if([[newGraphic funcName] length] != 0 &&
+       [[newGraphic function] length] != 0 &&
+       (
+        ([selectParamAField isEnabled] && [selectParamBField isEnabled] && [newGraphic paramA] != 0 && [newGraphic paramB] != 0) ||
+        ([selectParamAField isEnabled] && [selectParamNField isEnabled] && [newGraphic paramA] != 0 && [newGraphic paramN] != 0) ||
+        ([selectParamAField isEnabled] && [newGraphic paramA] != 0) )
+       )
+    {
+        [addGraphicButton setEnabled:YES];
+        [[modelInPanel arrayListGraphics] addObject:newGraphic];
+        NSLog(@"Grafica nueva guardada en tabla\r");
+        [listOfCreatedFunctionsTableView reloadData];
+    } else {
+        [addGraphicButton setEnabled:NO];
+    }
 
--(IBAction)addNewGraphic:(id)sender
-{
-    [addGraphicButton setEnabled:YES];
 }
 
 
@@ -184,7 +267,17 @@ extern NSString *PanelDisableIndexesFunctionNotification;
 // Si selecciona alguna fila, se habilita el botón eliminar. En caso contrario se deshabilita
 -(void) tableViewSelectionDidChange:(NSNotification *)notification
 {
-    
+    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    if (aRowSelected != -1){
+        [drawGraphicButton setEnabled:YES];
+        [modifyGraphicButton setEnabled:YES];
+        [deleteGraphicButton setEnabled:YES];
+    } else {
+        [drawGraphicButton setEnabled:NO];
+        [modifyGraphicButton setEnabled:NO];
+        [deleteGraphicButton setEnabled:NO];
+    }
+     
 }
 
 
@@ -193,9 +286,12 @@ extern NSString *PanelDisableIndexesFunctionNotification;
 objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(NSInteger)row
 {
-    return nil;
+    NSString *cadena = [[[modelInPanel arrayListGraphics] objectAtIndex:row] funcName];
+    NSLog(@"Fila %ld - Texto (%@)\r", row, cadena);
+    return cadena;
 }
 
+/* CAMPO NO EDITABLE, HAY QUE DARLE AL BOTON MODIFICAR
 // Permite editar los campos de las filas de la tabla
 -(void) tableView:(NSTableView *)tableView
    setObjectValue:(nullable id)object
@@ -204,17 +300,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
     
 }
+*/
 
 // Devuelve el numero de columnas de la tabla
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return 1;
+    return [[modelInPanel arrayListGraphics] count];
 }
 
 // En cuanto el usuario meta un solo carácter, el boton añadir se hará visible
 -(IBAction)controlTextDidChange:(NSNotification *)obj;
 {
-    
+    NSString *cadena = [selectGraphicNameField stringValue];
+    if ([cadena length] == 0){
+        [addGraphicButton setEnabled:NO];
+    }
     
 }
 

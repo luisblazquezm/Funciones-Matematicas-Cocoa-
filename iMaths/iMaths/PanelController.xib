@@ -57,7 +57,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Definición de la gráfica" identifier="" id="6Ie-FJ-LhB">
-                                <view key="view" ambiguous="YES" id="FYB-A6-gfh">
+                                <view key="view" id="FYB-A6-gfh">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -80,35 +80,6 @@
                                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2xj-hz-Fql">
-                                                                <rect key="frame" x="206" y="114" width="309" height="26"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="XJH-Lt-7zX">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <objectValues>
-                                                                        <string>Item 1</string>
-                                                                        <string>Item 2</string>
-                                                                        <string>Item 3</string>
-                                                                        <string>Item</string>
-                                                                    </objectValues>
-                                                                </comboBoxCell>
-                                                                <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="InQ-aA-edJ"/>
-                                                                    <outlet property="dataSource" destination="-2" id="kxa-jD-l4z"/>
-                                                                    <outlet property="delegate" destination="-2" id="Kj3-hf-vq4"/>
-                                                                </connections>
-                                                            </comboBox>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
-                                                                <rect key="frame" x="133" y="57" width="57" height="17"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nombre:" id="L2h-EN-0fu">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
                                                                 <rect key="frame" x="206" y="52" width="306" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -118,14 +89,38 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="ISp-b2-tH0"/>
+                                                                    <action selector="addNewGraphic:" target="-2" id="oz3-fB-G8S"/>
+                                                                    <outlet property="delegate" destination="-2" id="9Vf-n0-ECm"/>
                                                                 </connections>
                                                             </textField>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
+                                                                <rect key="frame" x="133" y="57" width="57" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nombre:" id="L2h-EN-0fu">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2xj-hz-Fql">
+                                                                <rect key="frame" x="206" y="114" width="309" height="26"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="XJH-Lt-7zX">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </comboBoxCell>
+                                                                <connections>
+                                                                    <action selector="addNewGraphic:" target="-2" id="Qqu-te-kKc"/>
+                                                                    <outlet property="dataSource" destination="-2" id="kxa-jD-l4z"/>
+                                                                    <outlet property="delegate" destination="-2" id="Kj3-hf-vq4"/>
+                                                                </connections>
+                                                            </comboBox>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Parámetros" identifier="" id="0Ns-VD-9y9">
-                                                    <view key="view" ambiguous="YES" id="17J-E6-GC2">
+                                                    <view key="view" id="17J-E6-GC2">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -156,31 +151,34 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="o8X-eg-JLF"/>
+                                                                    <action selector="addNewGraphic:" target="-2" id="WLb-Lb-iNd"/>
+                                                                    <outlet property="delegate" destination="-2" id="2aV-qW-AgH"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="zpy-wz-jYz">
                                                                 <rect key="frame" x="256" y="79" width="147" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="gLF-Ka-tEz">
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="gLF-Ka-tEz">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="CrF-c0-bxW"/>
+                                                                    <action selector="addNewGraphic:" target="-2" id="dsa-28-Bsn"/>
+                                                                    <outlet property="delegate" destination="-2" id="PNT-xw-6eV"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="aqj-FX-itO">
                                                                 <rect key="frame" x="256" y="17" width="147" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WOS-x0-QJ9">
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WOS-x0-QJ9">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="jfi-Gw-ohO"/>
+                                                                    <action selector="addNewGraphic:" target="-2" id="Edx-eB-T3B"/>
+                                                                    <outlet property="delegate" destination="-2" id="oVZ-HV-4Dw"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tMT-v8-zn1">
@@ -196,7 +194,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Apariencia" identifier="" id="xXT-P1-HLP">
-                                                    <view key="view" id="yoK-ad-pEL">
+                                                    <view key="view" ambiguous="YES" id="yoK-ad-pEL">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -205,7 +203,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <connections>
-                                                                    <action selector="selectForNewGraphic:" target="-2" id="byf-a9-BT8"/>
+                                                                    <action selector="addNewGraphic:" target="-2" id="9id-22-sT2"/>
                                                                 </connections>
                                                             </colorWell>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5s-K9-uwA">
@@ -255,7 +253,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Parámetros generales" identifier="" id="Zrr-Ff-mkK">
-                                <view key="view" id="K7l-d6-r50">
+                                <view key="view" ambiguous="YES" id="K7l-d6-r50">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -274,7 +272,7 @@
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
                                                             <tableColumn identifier="" width="116" minWidth="40" maxWidth="1000" id="4oc-dD-ztK">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Graficas">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -315,6 +313,14 @@
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </searchFieldCell>
+                                            <connections>
+                                                <binding destination="oXf-iK-21G" name="predicate" keyPath="filterPredicate" id="7Eu-qY-8OE">
+                                                    <dictionary key="options">
+                                                        <string key="NSDisplayName">predicate</string>
+                                                        <string key="NSPredicateFormat">Graficas contains[cd] $value</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </searchField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ifp-kq-FVI">
                                             <rect key="frame" x="221" y="181" width="214" height="22"/>
@@ -599,5 +605,10 @@
             </connections>
             <point key="canvasLocation" x="243" y="237"/>
         </window>
+        <arrayController id="oXf-iK-21G">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self" id="VWE-UN-1oc"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

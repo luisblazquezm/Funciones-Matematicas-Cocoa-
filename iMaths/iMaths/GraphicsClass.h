@@ -10,7 +10,7 @@
 
 @interface GraphicsClass : NSObject
 {
-    NSString *name;
+    NSString *funcName;
     NSString *function;
     float paramA;
     float paramB;
@@ -20,7 +20,7 @@
 
 /* Getters y setters */
 
-@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *funcName;
 @property (nonatomic) NSString *function;
 @property (nonatomic) float paramA;
 @property (nonatomic) float paramB;

@@ -9,9 +9,9 @@
 #import "PanelModel.h"
 
 @implementation PanelModel
-@synthesize arrayListFunctions;
+@synthesize arrayListFunctions, arrayListGraphics;
 
-NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
+//NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
 
 /*!
  * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 @class PanelModel;
+@class GraphicsClass;
 
 #define NUM_PARAMETERS 10
 #define NUM_DEFAULT_FUNCTIONS 6
@@ -23,7 +24,9 @@
                                                  NSTextFieldDelegate,
                                                  NSTableViewDelegate,
                                                  NSTableViewDataSource,
-                                                 NSControlTextEditingDelegate>
+                                                 NSControlTextEditingDelegate,
+                                                 NSComboBoxDelegate,
+                                                 NSComboBoxDataSource>
 {
     /* Variable Modelo */
     
@@ -58,12 +61,15 @@
     IBOutlet NSTextField *showParamNField;
     IBOutlet NSColorWell *showColorGraphicField;
     
+    /* Variables de instancia */
+    
+    GraphicsClass *newGraphic;
+    
 
 }
 
     /* Métodos Definicion de la Grafica */
 
--(IBAction)selectForNewGraphic:(id)sender;
 -(IBAction)addNewGraphic:(id)sender;
 
     /* Métodos Parámetros Generales */

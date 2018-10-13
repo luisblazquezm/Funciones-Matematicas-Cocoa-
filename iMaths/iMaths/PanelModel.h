@@ -19,6 +19,7 @@
 /* Getters y setters */
 
 @property (nonatomic) NSMutableArray *arrayListFunctions;
+@property (nonatomic) NSMutableArray *arrayListGraphics;
 
 -(void)initializeArrayListFunctions;
 
