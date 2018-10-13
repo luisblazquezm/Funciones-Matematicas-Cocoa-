@@ -400,6 +400,7 @@
                                                                             </textFieldCell>
                                                                             <connections>
                                                                                 <action selector="showGraphicInfo:" target="-2" id="AhJ-hh-aSn"/>
+                                                                                <outlet property="delegate" destination="-2" id="qBC-zR-EbM"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pxT-CK-3cx">
@@ -412,6 +413,7 @@
                                                                             </textFieldCell>
                                                                             <connections>
                                                                                 <action selector="showGraphicInfo:" target="-2" id="4iD-J9-Jgn"/>
+                                                                                <outlet property="delegate" destination="-2" id="czJ-ir-w6F"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vsk-9o-T6Y">
@@ -424,6 +426,7 @@
                                                                             </textFieldCell>
                                                                             <connections>
                                                                                 <action selector="showGraphicInfo:" target="-2" id="eHZ-pg-u79"/>
+                                                                                <outlet property="delegate" destination="-2" id="r9A-ZF-Vyz"/>
                                                                             </connections>
                                                                         </textField>
                                                                         <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7sw-S9-SN3">
@@ -453,6 +456,7 @@
                                                                             </textFieldCell>
                                                                             <connections>
                                                                                 <action selector="showGraphicInfo:" target="-2" id="t7l-sw-obQ"/>
+                                                                                <outlet property="delegate" destination="-2" id="nOV-Dl-ONZ"/>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -563,7 +567,7 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="modifyGraphic:" target="-2" id="Em4-cs-rFR"/>
+                                                <action selector="showPanel:" target="-2" id="jhH-P7-ngF"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DiB-cU-mEc">

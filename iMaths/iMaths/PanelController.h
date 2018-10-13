@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 @class PanelModel;
 @class GraphicsClass;
+@class PanelModificationController;
 
 #define NUM_PARAMETERS 10
 #define NUM_DEFAULT_FUNCTIONS 6
@@ -28,9 +29,11 @@
                                                  NSComboBoxDelegate,
                                                  NSComboBoxDataSource>
 {
-    /* Variable Modelo */
+    /* Variables de otras clases */
     
     PanelModel *modelInPanel;
+    GraphicsClass *newGraphic;
+    PanelModificationController *panelModController;
     
     /* Outlets Definicion de la Grafica */
     
@@ -44,7 +47,7 @@
     
     /* Outlets Parámetros Generales */
     
-    // Editables
+            // Editables
     IBOutlet NSTableView *listOfCreatedFunctionsTableView;
     IBOutlet NSButton *drawGraphicButton;
     IBOutlet NSButton *modifyGraphicButton;
@@ -53,7 +56,7 @@
     IBOutlet NSTextField *minRangeYField;
     IBOutlet NSTextField *maxRangeXField;
     IBOutlet NSTextField *maxRangeYField;
-    // No editables
+           // No editables
     IBOutlet NSTextField *showFuncField;
     IBOutlet NSTextField *showNameGraphicField;
     IBOutlet NSTextField *showParamAField;
@@ -63,14 +66,12 @@
     
     /* Variables de instancia */
     
-    GraphicsClass *newGraphic;
     NSString *name;
     NSString *function;
     float paramA;
     float paramB;
     float paramN;
     NSColor *colour;
-    
 
 }
 
@@ -85,6 +86,10 @@
 -(IBAction)modifyGraphic:(id)sender;
 -(IBAction)deleteGraphic:(id)sender;
 -(IBAction)selectDrawingRange:(id)sender;
+
+    /* Métodos otras Clases */
+
+-(IBAction)showPanel:(id)sender;
 
 
 @end

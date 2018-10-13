@@ -9,6 +9,7 @@
 #import "PanelController.h"
 #import "PanelModel.h"
 #import "GraphicsClass.h"
+#import "PanelModificationController.h"
 
 /* --------- Esquema metodos ---------
  *   > Inicializadores
@@ -30,7 +31,7 @@
 @implementation PanelController
 
 //NSString *PanelChangeTableNotification = @"PanelChangeTable";
-extern NSString *PanelDisableIndexesFunctionNotification;
+//extern NSString *PanelDisableIndexesFunctionNotification;
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -58,7 +59,6 @@ extern NSString *PanelDisableIndexesFunctionNotification;
     if (self){
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init];
-        newGraphic = [[GraphicsClass alloc] init];
         //NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         //[nc addObserver:self
                // selector:@selector(handlePanelChange:)
@@ -256,18 +256,22 @@ objectValueForItemAtIndex:(NSInteger)index
 
 -(IBAction)addNewGraphic:(id)sender
 {
+    newGraphic = [[GraphicsClass alloc] init];
+    
     [newGraphic setFunction:function];
     [newGraphic setFuncName:name];
     [newGraphic setParamA:paramA];
     [newGraphic setParamB:paramB];
     [newGraphic setParamN:paramN];
     [newGraphic setColour:colour];
-    
+ 
     [[modelInPanel arrayListGraphics] addObject:newGraphic];
     NSLog(@"Grafica nueva guardada en tabla\r");
     [listOfCreatedFunctionsTableView reloadData];
     
     [addGraphicButton setEnabled:NO];
+    [selectParamBField setEnabled:NO];
+    [selectParamNField setEnabled:NO];
     
     [selectListFuncComboBox deselectItemAtIndex:[selectListFuncComboBox indexOfSelectedItem]];
     [selectGraphicNameField setStringValue:@""];
@@ -290,10 +294,28 @@ objectValueForItemAtIndex:(NSInteger)index
         [drawGraphicButton setEnabled:YES];
         [modifyGraphicButton setEnabled:YES];
         [deleteGraphicButton setEnabled:YES];
+        
+        NSMutableArray *array = [modelInPanel arrayListGraphics];
+        
+        [showFuncField setStringValue:[[array objectAtIndex:aRowSelected] function] ];
+        [showNameGraphicField setStringValue:[[array objectAtIndex:aRowSelected] funcName] ];
+        [showParamAField setFloatValue:[[array objectAtIndex:aRowSelected] paramA] ];
+        [showParamBField setFloatValue:[[array objectAtIndex:aRowSelected] paramB] ];
+        [showParamNField setFloatValue:[[array objectAtIndex:aRowSelected] paramN] ];
+        [showColorGraphicField setColor:[[array objectAtIndex:aRowSelected] colour] ];
+
+
     } else {
         [drawGraphicButton setEnabled:NO];
         [modifyGraphicButton setEnabled:NO];
         [deleteGraphicButton setEnabled:NO];
+        
+        [showFuncField setStringValue:@""];
+        [showNameGraphicField setStringValue:@""];
+        [showParamAField setStringValue:@""];
+        [showParamBField setStringValue:@""];
+        [showParamNField setStringValue:@""];
+        [showColorGraphicField setColor: [NSColor blueColor]];
     }
      
 }
@@ -309,16 +331,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     return cadena;
 }
 
-/* CAMPO NO EDITABLE, HAY QUE DARLE AL BOTON MODIFICAR
+
 // Permite editar los campos de las filas de la tabla
 -(void) tableView:(NSTableView *)tableView
    setObjectValue:(nullable id)object
    forTableColumn:(nullable NSTableColumn *)tableColumn
               row:(NSInteger)row
 {
-    
+    GraphicsClass *grafic = [[modelInPanel arrayListGraphics] objectAtIndex:row];
+    [[modelInPanel arrayListGraphics] setObject:object atIndexedSubscript:row];
+    //NSLog(@"Texto Antiguo (%@) - Texto nuevo(%@)\r", cadena, object);
 }
-*/
+
 
 // Devuelve el numero de columnas de la tabla
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
@@ -346,9 +370,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
+-(IBAction)showPanel:(id)sender
+{
+    if(!panelModController)
+        panelModController = [[PanelModificationController alloc] init];
+    
+    NSLog(@"panel %@\r", panelModController);
+    [panelModController showWindow:self];
+}
+
 -(IBAction)deleteGraphic:(id)sender
 {
+    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    [listOfCreatedFunctionsTableView abortEditing]; // Orden que deniega la edición al usuario (Es necesrio en el caso en el que el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
+    if (aRowSelected == -1)
+        return;
     
+    [[modelInPanel arrayListGraphics] removeObjectAtIndex:aRowSelected];
+    NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
+    [listOfCreatedFunctionsTableView reloadData];
 }
 
 -(IBAction)selectDrawingRange:(id)sender

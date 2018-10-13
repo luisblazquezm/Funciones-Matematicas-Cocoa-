@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		291A0135217208CF00212DF6 /* GraphicsClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 291A0134217208CF00212DF6 /* GraphicsClass.m */; };
+		291A01392172623800212DF6 /* PanelModificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 291A01372172623800212DF6 /* PanelModificationController.m */; };
+		291A013A2172623800212DF6 /* PanelModificationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 291A01382172623800212DF6 /* PanelModificationController.xib */; };
 		294D1A6E21712A45001AC69F /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A6C21712A45001AC69F /* PanelController.m */; };
 		294D1A6F21712A45001AC69F /* PanelController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294D1A6D21712A45001AC69F /* PanelController.xib */; };
 		294D1A7221712A57001AC69F /* PanelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A7121712A57001AC69F /* PanelModel.m */; };
@@ -21,6 +23,9 @@
 /* Begin PBXFileReference section */
 		291A0133217208CF00212DF6 /* GraphicsClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsClass.h; sourceTree = "<group>"; };
 		291A0134217208CF00212DF6 /* GraphicsClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsClass.m; sourceTree = "<group>"; };
+		291A01362172623800212DF6 /* PanelModificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelModificationController.h; sourceTree = "<group>"; };
+		291A01372172623800212DF6 /* PanelModificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelModificationController.m; sourceTree = "<group>"; };
+		291A01382172623800212DF6 /* PanelModificationController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelModificationController.xib; sourceTree = "<group>"; };
 		294D1A6B21712A45001AC69F /* PanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
 		294D1A6C21712A45001AC69F /* PanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
 		294D1A6D21712A45001AC69F /* PanelController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelController.xib; sourceTree = "<group>"; };
@@ -76,6 +81,9 @@
 				29C927A9216A809400E43BA8 /* Controller.m */,
 				294D1A6B21712A45001AC69F /* PanelController.h */,
 				294D1A6C21712A45001AC69F /* PanelController.m */,
+				291A01362172623800212DF6 /* PanelModificationController.h */,
+				291A01372172623800212DF6 /* PanelModificationController.m */,
+				291A01382172623800212DF6 /* PanelModificationController.xib */,
 				294D1A6D21712A45001AC69F /* PanelController.xib */,
 				294D1A7021712A57001AC69F /* PanelModel.h */,
 				294D1A7121712A57001AC69F /* PanelModel.m */,
@@ -147,6 +155,7 @@
 			files = (
 				29C9279B216A7FF700E43BA8 /* Assets.xcassets in Resources */,
 				294D1A6F21712A45001AC69F /* PanelController.xib in Resources */,
+				291A013A2172623800212DF6 /* PanelModificationController.xib in Resources */,
 				29C9279E216A7FF700E43BA8 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,6 +170,7 @@
 				294D1A6E21712A45001AC69F /* PanelController.m in Sources */,
 				291A0135217208CF00212DF6 /* GraphicsClass.m in Sources */,
 				29C927A1216A7FF700E43BA8 /* main.m in Sources */,
+				291A01392172623800212DF6 /* PanelModificationController.m in Sources */,
 				29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */,
 				294D1A7221712A57001AC69F /* PanelModel.m in Sources */,
 				29C927AA216A809400E43BA8 /* Controller.m in Sources */,
