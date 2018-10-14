@@ -30,7 +30,7 @@
 
 @implementation PanelController
 
-//NSString *PanelChangeTableNotification = @"PanelChangeTable";
+NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
 //extern NSString *PanelDisableIndexesFunctionNotification;
 
 /* --------------------------- INICIALIZADORES ---------------------- */
@@ -299,6 +299,7 @@ objectValueForItemAtIndex:(NSInteger)index
         
         [showFuncField setStringValue:[[array objectAtIndex:aRowSelected] function] ];
         [showNameGraphicField setStringValue:[[array objectAtIndex:aRowSelected] funcName] ];
+        NSLog(@"Parametro B: %f\r", paramB);
         [showParamAField setFloatValue:[[array objectAtIndex:aRowSelected] paramA] ];
         [showParamBField setFloatValue:[[array objectAtIndex:aRowSelected] paramB] ];
         [showParamNField setFloatValue:[[array objectAtIndex:aRowSelected] paramN] ];
@@ -338,7 +339,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
    forTableColumn:(nullable NSTableColumn *)tableColumn
               row:(NSInteger)row
 {
-    GraphicsClass *grafic = [[modelInPanel arrayListGraphics] objectAtIndex:row];
+    GraphicsClass *graffic = [[modelInPanel arrayListGraphics] objectAtIndex:row];
     [[modelInPanel arrayListGraphics] setObject:object atIndexedSubscript:row];
     //NSLog(@"Texto Antiguo (%@) - Texto nuevo(%@)\r", cadena, object);
 }
@@ -367,6 +368,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 -(IBAction)modifyGraphic:(id)sender
 {
+    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    
+    NSLog(@"Fila seleccionada %ld\r", aRowSelected);
+    
+    if (aRowSelected != -1) {
+        NSMutableArray *array = [modelInPanel arrayListGraphics];
+        GraphicsClass *graphicToModify = [array objectAtIndex:aRowSelected];
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:graphicToModify
+                                                                     forKey:@"graphicToModify"];
+        
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc postNotificationName:PanelModifyGraphicNotification
+                          object:self
+                        userInfo:notificationInfo];
+    }
     
 }
 

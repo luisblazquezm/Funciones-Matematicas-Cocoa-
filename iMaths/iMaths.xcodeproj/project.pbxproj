@@ -81,17 +81,17 @@
 				29C927A9216A809400E43BA8 /* Controller.m */,
 				294D1A6B21712A45001AC69F /* PanelController.h */,
 				294D1A6C21712A45001AC69F /* PanelController.m */,
+				294D1A6D21712A45001AC69F /* PanelController.xib */,
 				291A01362172623800212DF6 /* PanelModificationController.h */,
 				291A01372172623800212DF6 /* PanelModificationController.m */,
 				291A01382172623800212DF6 /* PanelModificationController.xib */,
-				294D1A6D21712A45001AC69F /* PanelController.xib */,
 				294D1A7021712A57001AC69F /* PanelModel.h */,
 				294D1A7121712A57001AC69F /* PanelModel.m */,
+				291A0133217208CF00212DF6 /* GraphicsClass.h */,
+				291A0134217208CF00212DF6 /* GraphicsClass.m */,
 				29C9279F216A7FF700E43BA8 /* Info.plist */,
 				29C927A0216A7FF700E43BA8 /* main.m */,
 				29C927A2216A7FF700E43BA8 /* iMaths.entitlements */,
-				291A0133217208CF00212DF6 /* GraphicsClass.h */,
-				291A0134217208CF00212DF6 /* GraphicsClass.m */,
 			);
 			path = iMaths;
 			sourceTree = "<group>";

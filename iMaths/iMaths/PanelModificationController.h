@@ -7,7 +7,22 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class GraphicsClass;
 
-@interface PanelModificationController : NSWindowController
+@interface PanelModificationController : NSWindowController <NSWindowDelegate>
+{
+    IBOutlet NSTextField *newFunction;
+    IBOutlet NSTextField *newName;
+    IBOutlet NSTextField *newParamA;
+    IBOutlet NSTextField *newParamB;
+    IBOutlet NSTextField *newParamN;
+    IBOutlet NSColorWell *newColour;
+    IBOutlet NSButton *confirmChanges;
+    IBOutlet NSButton *cancelChanges;
+}
 
 @end
+
+-(void)handleModifyGraphic:(NSNotification *)aNotification;
+-(IBAction)confirmNewGraphic:(id)sender;
+-(IBAction)cancelNewGraphic:(id)sender;
