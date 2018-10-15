@@ -14,6 +14,7 @@
     NSString *function;
     float paramA;
     float paramB;
+    float paramC;
     float paramN;
     NSColor *colour;
 }
@@ -24,7 +25,18 @@
 @property (nonatomic) NSString *function;
 @property (nonatomic) float paramA;
 @property (nonatomic) float paramB;
+@property (nonatomic) float paramC;
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
+
+/* Constructor */
+
+-(id) initWithGraphicName: (NSString *) graphic_Name
+                 function: (NSString *) graphic_Function
+                   paramA: (float) graphic_ParamA
+                   paramB: (float) graphic_ParamB
+                   paramC: (float) graphic_ParamC
+                   paramN: (float) graphic_ParamN
+                   colour: (NSColor *) graphic_Colour;
 
 @end

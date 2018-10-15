@@ -31,14 +31,14 @@
 @implementation PanelController
 
 NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
-//extern NSString *PanelDisableIndexesFunctionNotification;
+extern NSString *PanelNewGraphicNotification;
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
 /*!
-* @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
-* @return id, puntero genérico.
-*/
+ * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
+ * @return id, puntero genérico.
+ */
 -(id)init
 {
     if (![super initWithWindowNibName:@"PanelController"])
@@ -53,17 +53,17 @@ NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
  * @param  window .Ventana panelController.
  * @return instancetype.
  */
--(instancetype)initWithWindow:(NSWindow *)window
+-(instancetype) initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
     if (self){
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init];
-        //NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-        //[nc addObserver:self
-               // selector:@selector(handlePanelChange:)
-               // name:PanelDisableIndexesFunctionNotification
-               // object:nil];
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc addObserver:self
+               selector:@selector(handleNewGraphic:)
+                   name:PanelNewGraphicNotification
+                 object:nil];
     }
     
     return self;
@@ -73,7 +73,7 @@ NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
  * @brief  Realiza una operación al cargar el fichero NIB
  */
 
-- (void)awakeFromNib
+-(void) awakeFromNib
 {
     [modelInPanel initializeArrayListFunctions];       // Inicializa el array del modelo de funciones
     [selectListFuncComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]]; // Añade esas funciones al ComboBox
@@ -86,7 +86,7 @@ NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
  * @param  sender Objeto ventana.
  * @return BOOL, respuesta del usuario al mensaje de cierre.
  */
--(BOOL)windowShouldClose:(NSWindow *)sender
+-(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
     
@@ -107,7 +107,8 @@ NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
 /*!
  * @brief  Manejador de inicialización del panel al ser cargado del fichero NIB .
  */
-- (void)windowDidLoad {
+-(void) windowDidLoad
+{
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
@@ -119,69 +120,41 @@ NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
 
 /* SI EL CONTENIDO CAMBIA DINAMICAMENTE (ES DECIR AÑADIMOS NUEVAS FUNCIONES)
  * tambien habria que pasarlo a Editable porque solo se puede seleccionar
-- (void)comboBoxWillPopUp:(NSNotification *)notification
+ - (void)comboBoxWillPopUp:(NSNotification *)notification
+ {
+ [[modelInPanel arrayListFunctions] ]
+ }
+ 
+ 
+ - (NSString *)comboBox:(NSComboBox *)comboBox
+ completedString:(NSString *)string
+ {
+ int z = 0;
+ 
+ for (int i = 0; i < NUM_PARAMETERS; i++) {
+ if ([[[modelInPanel arrayListFunctions] objectAtIndex:i ] containsString:string] ){
+ z = i;
+ }
+ }
+ 
+ return [[modelInPanel arrayListFunctions] objectAtIndex:z ];
+ }
+ 
+ - (id)comboBox:(NSComboBox *)comboBox
+ objectValueForItemAtIndex:(NSInteger)index
+ {
+ return [[modelInPanel arrayListFunctions] objectAtIndex:index];
+ }
+ 
+ - (NSInteger)numberOfItemsInComboBox:(NSComboBox *)comboBox
+ {
+ return [[modelInPanel arrayListFunctions] count];
+ }
+ */
+
+
+-(IBAction) selectNewGraphic:(id)sender
 {
-    [[modelInPanel arrayListFunctions] ]
-}
-
-
-- (NSString *)comboBox:(NSComboBox *)comboBox
-       completedString:(NSString *)string
-{
-    int z = 0;
-    
-    for (int i = 0; i < NUM_PARAMETERS; i++) {
-        if ([[[modelInPanel arrayListFunctions] objectAtIndex:i ] containsString:string] ){
-             z = i;
-        }
-    }
-    
-    return [[modelInPanel arrayListFunctions] objectAtIndex:z ];
-}
-
-- (id)comboBox:(NSComboBox *)comboBox
-objectValueForItemAtIndex:(NSInteger)index
-{
-    return [[modelInPanel arrayListFunctions] objectAtIndex:index];
-}
-
-- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)comboBox
-{
-    return [[modelInPanel arrayListFunctions] count];
-}
-*/
-
-
--(IBAction)selectNewGraphic:(id)sender
-{
-    
-    NSString *parametersN[] =
-    {
-        @"^n",
-        @"n^",
-        @"n*",
-        @"*n",
-        @"n+",
-        @"+n",
-        @"-n",
-        @"n-",
-        @"n/",
-        @"/n"
-    };
-    
-    NSString *parametersB[] =
-    {
-        @"^b",
-        @"b^",
-        @"b*",
-        @"*b",
-        @"b+",
-        @"+b",
-        @"-b",
-        @"b-",
-        @"b/",
-        @"/b"
-    };
     
     /*
      *--------- Definicion Funcion ------------
@@ -207,8 +180,8 @@ objectValueForItemAtIndex:(NSInteger)index
          */
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             
-            NSLog(@"Funcion %@ - Patron %@\r", function, parametersN[j]);
-            if ([function rangeOfString:parametersN[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
+            NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersN] objectAtIndex:j]);
+            if ([function rangeOfString:[[modelInPanel parametersN] objectAtIndex:j]                              options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamNField setEnabled:YES];
                 paramN = [selectParamNField floatValue];
                 break;
@@ -216,8 +189,8 @@ objectValueForItemAtIndex:(NSInteger)index
                 [selectParamNField setEnabled:NO];
             }
             
-            NSLog(@"Funcion %@ - Patron %@\r", function, parametersB[j]);
-            if ([function rangeOfString:parametersB[j] options:NSCaseInsensitiveSearch].location != NSNotFound){
+            NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersB] objectAtIndex:j]);
+            if ([function rangeOfString:[[modelInPanel parametersB] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [selectParamBField setEnabled:YES];
                 paramB = [selectParamBField floatValue];
                 break;
@@ -225,9 +198,18 @@ objectValueForItemAtIndex:(NSInteger)index
                 [selectParamBField setEnabled:NO];
             }
             
+            NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersC] objectAtIndex:j]);
+            if ([function rangeOfString:[[modelInPanel parametersC] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound){
+                [selectParamCField setEnabled:YES];
+                paramC = [selectParamCField floatValue];
+                break;
+            } else {
+                [selectParamCField setEnabled:NO];
+            }
+            
         }
         
-        NSLog(@"Parámetros introducidos correctamente A:%f B:%f N:%f\r", paramA, paramB, paramN);
+        NSLog(@"Parámetros introducidos correctamente A:%f B:%f C:%f N:%f\r", paramA, paramB, paramC, paramN);
     }
     
     /*
@@ -242,6 +224,7 @@ objectValueForItemAtIndex:(NSInteger)index
        (
         ([selectParamAField isEnabled] && [selectParamBField isEnabled] && paramA != 0 && paramB != 0) ||
         ([selectParamAField isEnabled] && [selectParamNField isEnabled] && paramA != 0 && paramN != 0) ||
+        ([selectParamAField isEnabled] && [selectParamBField isEnabled] && [selectParamCField isEnabled] && paramA != 0 && paramB != 0 && paramC != 0) ||
         ([selectParamAField isEnabled] && paramA != 0) )
        )
     {
@@ -251,10 +234,12 @@ objectValueForItemAtIndex:(NSInteger)index
         [addGraphicButton setEnabled:NO];
     }
     
-
+    
 }
 
--(IBAction)addNewGraphic:(id)sender
+
+
+-(IBAction) addNewGraphic:(id)sender
 {
     newGraphic = [[GraphicsClass alloc] init];
     
@@ -262,9 +247,10 @@ objectValueForItemAtIndex:(NSInteger)index
     [newGraphic setFuncName:name];
     [newGraphic setParamA:paramA];
     [newGraphic setParamB:paramB];
+    [newGraphic setParamC:paramC];
     [newGraphic setParamN:paramN];
     [newGraphic setColour:colour];
- 
+    
     [[modelInPanel arrayListGraphics] addObject:newGraphic];
     NSLog(@"Grafica nueva guardada en tabla\r");
     [listOfCreatedFunctionsTableView reloadData];
@@ -277,6 +263,7 @@ objectValueForItemAtIndex:(NSInteger)index
     [selectGraphicNameField setStringValue:@""];
     [selectParamAField setStringValue:@""];
     [selectParamBField setStringValue:@""];
+    [selectParamCField setStringValue:@""];
     [selectParamNField setStringValue:@""];
     
 }
@@ -302,10 +289,11 @@ objectValueForItemAtIndex:(NSInteger)index
         NSLog(@"Parametro B: %f\r", paramB);
         [showParamAField setFloatValue:[[array objectAtIndex:aRowSelected] paramA] ];
         [showParamBField setFloatValue:[[array objectAtIndex:aRowSelected] paramB] ];
+        [showParamCField setFloatValue:[[array objectAtIndex:aRowSelected] paramC] ];
         [showParamNField setFloatValue:[[array objectAtIndex:aRowSelected] paramN] ];
         [showColorGraphicField setColor:[[array objectAtIndex:aRowSelected] colour] ];
-
-
+        
+        
     } else {
         [drawGraphicButton setEnabled:NO];
         [modifyGraphicButton setEnabled:NO];
@@ -315,10 +303,11 @@ objectValueForItemAtIndex:(NSInteger)index
         [showNameGraphicField setStringValue:@""];
         [showParamAField setStringValue:@""];
         [showParamBField setStringValue:@""];
+        [showParamCField setStringValue:@""];
         [showParamNField setStringValue:@""];
         [showColorGraphicField setColor: [NSColor blueColor]];
     }
-     
+    
 }
 
 
@@ -339,20 +328,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
    forTableColumn:(nullable NSTableColumn *)tableColumn
               row:(NSInteger)row
 {
-    GraphicsClass *graffic = [[modelInPanel arrayListGraphics] objectAtIndex:row];
     [[modelInPanel arrayListGraphics] setObject:object atIndexedSubscript:row];
     //NSLog(@"Texto Antiguo (%@) - Texto nuevo(%@)\r", cadena, object);
 }
 
 
 // Devuelve el numero de columnas de la tabla
--(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+-(NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     return [[modelInPanel arrayListGraphics] count];
 }
 
 // En cuanto el usuario meta un solo carácter, el boton añadir se hará visible
--(IBAction)controlTextDidChange:(NSNotification *)obj;
+-(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
     NSString *cadena = [selectGraphicNameField stringValue];
     if ([cadena length] == 0){
@@ -361,14 +349,36 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
--(IBAction)drawGraphic:(id)sender
+-(IBAction) drawGraphic:(id)sender
 {
     
 }
 
--(IBAction)modifyGraphic:(id)sender
+-(IBAction) modifyGraphic:(id)sender
 {
-    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+
+    
+}
+
+-(void)handleNewGraphic:(NSNotification *)aNotification
+{
+    NSLog(@"Notificacion %@ recibida en handleNewGraphic\r", aNotification);
+    NSDictionary *notificationInfoModified = [aNotification userInfo];
+    GraphicsClass *graphic = [notificationInfoModified objectForKey:@"newGraphic"];
+    
+    [[modelInPanel arrayListGraphics] setObject:graphic atIndexedSubscript:aRowSelected];
+    [listOfCreatedFunctionsTableView reloadData];
+}
+
+-(IBAction) showPanel:(id)sender
+{
+    if(!panelModController)
+        panelModController = [[PanelModificationController alloc] init];
+    
+    NSLog(@"panel %@\r", panelModController);
+    [panelModController showWindow:self];
+    
+    aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
     
     NSLog(@"Fila seleccionada %ld\r", aRowSelected);
     
@@ -384,18 +394,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                         userInfo:notificationInfo];
     }
     
+    [listOfCreatedFunctionsTableView deselectRow:aRowSelected];
 }
 
--(IBAction)showPanel:(id)sender
-{
-    if(!panelModController)
-        panelModController = [[PanelModificationController alloc] init];
-    
-    NSLog(@"panel %@\r", panelModController);
-    [panelModController showWindow:self];
-}
-
--(IBAction)deleteGraphic:(id)sender
+-(IBAction) deleteGraphic:(id)sender
 {
     NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
     [listOfCreatedFunctionsTableView abortEditing]; // Orden que deniega la edición al usuario (Es necesrio en el caso en el que el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
@@ -407,12 +409,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [listOfCreatedFunctionsTableView reloadData];
 }
 
--(IBAction)selectDrawingRange:(id)sender
+-(IBAction) selectDrawingRange:(id)sender
 {
-    NSInteger minX = [minRangeXField integerValue];
-    NSInteger minY = [minRangeYField integerValue];
-    NSInteger maxX = [maxRangeXField integerValue];
-    NSInteger maxY = [maxRangeYField integerValue];
+    //NSInteger minX = [minRangeXField integerValue];
+    //NSInteger minY = [minRangeYField integerValue];
+    //NSInteger maxX = [maxRangeXField integerValue];
+    //NSInteger maxY = [maxRangeYField integerValue];
 }
 
 @end

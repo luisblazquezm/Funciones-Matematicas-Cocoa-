@@ -16,6 +16,7 @@
 @implementation PanelModificationController
 
 extern NSString *PanelModifyGraphicNotification;
+NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
 
 /*!
  * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
@@ -65,7 +66,7 @@ extern NSString *PanelModifyGraphicNotification;
     if(respuesta == NSAlertDefaultReturn)
         return NO;
     else
-        [NSApp terminate:self];
+        //[NSApp terminate:self];
     return YES;
     
 }
@@ -79,13 +80,14 @@ extern NSString *PanelModifyGraphicNotification;
 -(void)handleModifyGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
-    NSDictionary *notificationInfoReceived = [aNotification userInfo];
-    GraphicsClass *graphic = [notificationInfoReceived objectForKey:@"graphicToModify"];
-    
+    NSDictionary *notificationInfoToModify = [aNotification userInfo];
+    GraphicsClass *graphic = [notificationInfoToModify objectForKey:@"graphicToModify"];
+        
     [newFunction setStringValue:[graphic function]];
     [newName setStringValue:[graphic funcName]];
     [newParamA setFloatValue:[graphic paramA]];
     [newParamB setFloatValue:[graphic paramB]];
+    [newParamC setFloatValue:[graphic paramC]];
     [newParamN setFloatValue:[graphic paramN]];
     [newColour setColor:[graphic colour]];
     
@@ -93,12 +95,30 @@ extern NSString *PanelModifyGraphicNotification;
 
 -(IBAction)confirmNewGraphic:(id)sender
 {
+    // OJOOOOO NO PERMITIR QUE EL USURIO MODIFIQUE EN PANEL PREFERENCIAS MIENTRAS ESTA ESTE ABIERTO PARA EVITAR QUE aRowSelected cambie
+    GraphicsClass *newGraphic = [[GraphicsClass alloc] initWithGraphicName:[newName stringValue]
+                                                               function:[newFunction stringValue]
+                                                                 paramA:[newParamA floatValue]
+                                                                 paramB:[newParamB floatValue]
+                                                                 paramC:[newParamC floatValue]
+                                                                 paramN:[newParamN floatValue]
+                                                                 colour:[newColour color]];
     
+    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:newGraphic
+                                                                 forKey:@"newGraphic"];
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:PanelNewGraphicNotification
+                      object:self
+                    userInfo:notificationInfo];
+    
+    // Cerrar el panel
 }
 
 -(IBAction)cancelNewGraphic:(id)sender
 {
-    
+    // Preguntar si desea guardar cambios y Cerrar el panel
+
 }
 
 

@@ -9,7 +9,7 @@
 #import "PanelModel.h"
 
 @implementation PanelModel
-@synthesize arrayListFunctions, arrayListGraphics;
+@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB;
 
 //NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
 
@@ -24,6 +24,45 @@
         NSLog(@"En init");
         arrayListFunctions = [[NSMutableArray alloc] init];
         arrayListGraphics = [[NSMutableArray alloc] init];
+        
+        parametersC = [[NSArray alloc] initWithObjects:
+                       @"^c",
+                       @"c^",
+                       @"c*",
+                       @"*c",
+                       @"c+",
+                       @"+c",
+                       @"-c",
+                       @"c-",
+                       @"c/",
+                       @"/c",
+                       nil];
+        
+        parametersB = [[NSArray alloc] initWithObjects:
+                       @"^b",
+                       @"b^",
+                       @"b*",
+                       @"*b",
+                       @"b+",
+                       @"+b",
+                       @"-b",
+                       @"b-",
+                       @"b/",
+                       @"/b",
+                        nil];
+        
+        parametersN = [[NSArray alloc] initWithObjects:
+                       @"^n",
+                       @"n^",
+                       @"n*",
+                       @"*n",
+                       @"n+",
+                       @"+n",
+                       @"-n",
+                       @"n-",
+                       @"n/",
+                       @"/n",
+                       nil];
     }
     
     return self;
@@ -48,17 +87,6 @@
         [arrayListFunctions addObject:defaultFunctions[i]];
     }
     
-    
-    /*
-    NSDictionary *functionsParametersDisabled = [NSDictionary dictionaryWithObjectsAndKeys:setIndexesFunctionsWithoutN,@"formulasSinN",
-                                     setIndexesFunctionsWithoutB,@"funcionesSinB",
-                                     nil];
-    
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelDisableIndexesFunctionNotification
-                      object:self
-                    userInfo:functionsParametersDisabled];
-     */
 }
 
 @end

@@ -15,14 +15,17 @@
     IBOutlet NSTextField *newName;
     IBOutlet NSTextField *newParamA;
     IBOutlet NSTextField *newParamB;
+    IBOutlet NSTextField *newParamC;
     IBOutlet NSTextField *newParamN;
     IBOutlet NSColorWell *newColour;
     IBOutlet NSButton *confirmChanges;
     IBOutlet NSButton *cancelChanges;
+    
 }
 
-@end
 
 -(void)handleModifyGraphic:(NSNotification *)aNotification;
 -(IBAction)confirmNewGraphic:(id)sender;
 -(IBAction)cancelNewGraphic:(id)sender;
+
+@end

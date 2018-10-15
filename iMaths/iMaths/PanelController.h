@@ -18,6 +18,7 @@
  *   - Ventana (NSWindowDelegate)
  *   - TextField (NSTextFieldDelegate, NSControlTextEditingDelegate)
  *   - TableView (NSTableViewDelegate, NSTableViewDataSource)
+ *   - ComboBox (NSComboBoxDelegate, NSComboBoxDataSource)
  */
 
 
@@ -41,6 +42,7 @@
     IBOutlet NSTextField *selectGraphicNameField;
     IBOutlet NSTextField *selectParamAField;      // Cambiar a formateador para solo introducir numeros y convertirlos a float con formato 0.00
     IBOutlet NSTextField *selectParamBField;
+    IBOutlet NSTextField *selectParamCField;
     IBOutlet NSTextField *selectParamNField;
     IBOutlet NSColorWell *selectColorGraphicButton;
     IBOutlet NSButton *addGraphicButton;         // Deshabilitado por defecto hasta que no se rellenen todos los campos
@@ -61,6 +63,7 @@
     IBOutlet NSTextField *showNameGraphicField;
     IBOutlet NSTextField *showParamAField;
     IBOutlet NSTextField *showParamBField;
+    IBOutlet NSTextField *showParamCField;
     IBOutlet NSTextField *showParamNField;
     IBOutlet NSColorWell *showColorGraphicField;
     
@@ -70,8 +73,12 @@
     NSString *function;
     float paramA;
     float paramB;
+    float paramC;
     float paramN;
     NSColor *colour;
+    
+    NSInteger aRowSelected;
+
 
 }
 
@@ -87,9 +94,10 @@
 -(IBAction)deleteGraphic:(id)sender;
 -(IBAction)selectDrawingRange:(id)sender;
 
-    /* Métodos otras Clases */
+    /* Métodos Panel Modificar */
 
 -(IBAction)showPanel:(id)sender;
+-(void)handleNewGraphic:(NSNotification *)aNotification;
 
 
 @end

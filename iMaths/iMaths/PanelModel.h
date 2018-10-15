@@ -10,16 +10,28 @@
 
 #define NUM_DEFAULT_FUNCTIONS 6
 
+//static const NSArray *parametersN;
+//static const NSArray *parametersB;
+//static const NSArray *parametersC;
+
 @interface PanelModel : NSObject
 {
     NSMutableArray *arrayListGraphics; // Array que contendra una serie de objetos de tipo Funcion
     NSMutableArray *arrayListFunctions; // Array que contendra las funciones a escoger para añadir una gráfica
+    NSArray *parametersB;
+    NSArray *parametersC;
+    NSArray *parametersN;
+
 }
 
 /* Getters y setters */
 
 @property (nonatomic) NSMutableArray *arrayListFunctions;
 @property (nonatomic) NSMutableArray *arrayListGraphics;
+@property (nonatomic) NSArray *parametersB;
+@property (nonatomic) NSArray *parametersC;
+@property (nonatomic) NSArray *parametersN;
+
 
 -(void)initializeArrayListFunctions;
 
