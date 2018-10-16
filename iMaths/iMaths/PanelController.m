@@ -20,6 +20,9 @@
  *       - windowDidLoad
  *   > Acciones Definicion Grafica
  *   > Acciones Parámetros Generales
+ *      > Acciones tabla
+ *      > Otros
+ *   >
  *
  */
 
@@ -31,8 +34,10 @@
 @implementation PanelController
 
 NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic"; // PanelController -> PanelModificationController
-extern NSString *PanelNewGraphicNotification; // PanelModificationController -> PanelController
 NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelController -> Controller
+
+extern NSString *PanelExportedGraphicNotification; // Controller -> PanelController
+extern NSString *PanelNewGraphicNotification; // PanelModificationController -> PanelController
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -64,6 +69,11 @@ NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelCont
         [nc addObserver:self
                selector:@selector(handleNewGraphic:)
                    name:PanelNewGraphicNotification
+                 object:nil];
+        
+        [nc addObserver:self
+               selector:@selector(handleExportedGraphic:)
+                   name:PanelExportedGraphicNotification
                  object:nil];
     }
     
@@ -154,6 +164,10 @@ NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelCont
  */
 
 
+/*!
+ * @brief  Almacena los parametros que va introduciendo el usuario
+ *         para activar el boton 'Añadir' y añadir una nueva grafica.
+ */
 -(IBAction) selectNewGraphic:(id)sender
 {
     
@@ -239,7 +253,9 @@ NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelCont
 }
 
 
-
+/*!
+ * @brief  Añade una nueva grafica a la tabla de Parámetros generales
+ */
 -(IBAction) addNewGraphic:(id)sender
 {
     newGraphic = [[GraphicsClass alloc] init];
@@ -284,7 +300,10 @@ NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelCont
 
 /* --------------------------- ACCIONES PARAMETROS GENERALES ---------------------- */
 
-// Si selecciona alguna fila, se habilita el botón eliminar. En caso contrario se deshabilita
+/*!
+ * @brief  Función que es notificada cada vez que se selecciona
+ *         una fila de la tabla.
+ */
 -(void) tableViewSelectionDidChange:(NSNotification *)notification
 {
     NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
@@ -324,7 +343,10 @@ NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelCont
 }
 
 
-// Añade el contenido del array en la fila correspondiente de la tabla
+/*!
+ * @brief  Devuelve el objeto del array que corresponde
+ *         con la fila seleccionda en la tabla
+ */
 -(id) tableView:(NSTableView *)tableView
 objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(NSInteger)row
@@ -335,7 +357,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 
-// Permite editar los campos de las filas de la tabla
+/*!
+ * @brief  Permite editar y sobreescribir el nombre del objeto
+ *         cuya fila ha sido seleccionada en la tabla.
+ */
 -(void) tableView:(NSTableView *)tableView
    setObjectValue:(nullable id)object
    forTableColumn:(nullable NSTableColumn *)tableColumn
@@ -346,13 +371,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 
-// Devuelve el numero de columnas de la tabla
+/*!
+ * @brief  Devuelve el numero de filas de la tabla
+ */
 -(NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
     return [[modelInPanel arrayListGraphics] count];
 }
 
-// En cuanto el usuario meta un solo carácter, el boton añadir se hará visible
+/*!
+ * @brief  Función que es notificada cada vez que se escribe
+ *         un caracter dentro del textField
+ */
 -(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
     NSString *cadena = [selectGraphicNameField stringValue];
@@ -362,17 +392,45 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
+/*!
+ * @brief  Representa la grafica seleccionada en la venta principal
+ */
 -(IBAction) drawGraphic:(id)sender
 {
     
 }
 
--(IBAction) modifyGraphic:(id)sender
+/*!
+ * @brief  Elimina la grafica seleccionada en la tabla
+ */
+-(IBAction) deleteGraphic:(id)sender
 {
-
+    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    [listOfCreatedFunctionsTableView abortEditing]; // Orden que deniega la edición al usuario (Es necesrio en el caso en el que el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
+    if (aRowSelected == -1)
+        return;
     
+    [[modelInPanel arrayListGraphics] removeObjectAtIndex:aRowSelected];
+    NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
+    [listOfCreatedFunctionsTableView reloadData];
 }
 
+/*!
+ * @brief  Muestra el panel de Modificación enviando la información correspondiente
+ *         al objeto que se desea modificar.
+ */
+-(IBAction) selectDrawingRange:(id)sender
+{
+    //NSInteger minX = [minRangeXField integerValue];
+    //NSInteger minY = [minRangeYField integerValue];
+    //NSInteger maxX = [maxRangeXField integerValue];
+    //NSInteger maxY = [maxRangeYField integerValue];
+}
+
+/*!
+ * @brief  Reescribe el contenido del objeto que ha sido modificado en el panel de Modificación
+ *         al confirmar su modificación en dicho panel.
+ */
 -(void) handleNewGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleNewGraphic\r", aNotification);
@@ -383,6 +441,23 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [listOfCreatedFunctionsTableView reloadData];
 }
 
+/*!
+ * @brief  Recoge la lista de graficas de un fichero enviada desde el panel principal Controller
+ */
+-(void) handleExportedGraphic:(NSNotification *)aNotification
+{
+    NSLog(@"Notificacion %@ recibida en handleExportedGraphic\r", aNotification);
+    NSDictionary *notificationInfoExported = [aNotification userInfo];
+    NSArray *array = [notificationInfoExported objectForKey:@"graphicsExported"];
+    
+    [[modelInPanel arrayListGraphics] addObjectsFromArray:array];
+    [listOfCreatedFunctionsTableView reloadData];
+}
+
+/*!
+ * @brief  Muestra el panel de Modificación enviando la información correspondiente
+ *         al objeto que se desea modificar.
+ */
 -(IBAction) showPanel:(id)sender
 {
     if(!panelModController)
@@ -410,24 +485,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [listOfCreatedFunctionsTableView deselectRow:aRowSelected];
 }
 
--(IBAction) deleteGraphic:(id)sender
-{
-    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
-    [listOfCreatedFunctionsTableView abortEditing]; // Orden que deniega la edición al usuario (Es necesrio en el caso en el que el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
-    if (aRowSelected == -1)
-        return;
-    
-    [[modelInPanel arrayListGraphics] removeObjectAtIndex:aRowSelected];
-    NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
-    [listOfCreatedFunctionsTableView reloadData];
-}
 
--(IBAction) selectDrawingRange:(id)sender
-{
-    //NSInteger minX = [minRangeXField integerValue];
-    //NSInteger minY = [minRangeYField integerValue];
-    //NSInteger maxX = [maxRangeXField integerValue];
-    //NSInteger maxY = [maxRangeYField integerValue];
-}
+
+
 
 @end

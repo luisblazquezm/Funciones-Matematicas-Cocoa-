@@ -8,24 +8,36 @@
 
 #import "Controller.h"
 #import "PanelController.h"
+#import "GraphicsClass.h"
 
 /* --------- Esquema metodos ---------
  *   > Tratamiento de ventana
  *       - windowShouldClose()
- *   > Representacion graficas
- *
+ *   > showPanel()
+ *   > dealloc()
+ *   > Exportar Lista de Graficas
+ *       - exportTableGraphicsAs()
+ *   > Importar Lista de Graficas
+ *       - handleExportGraphics()
+ *       - importTableGraphics()
+ *   > Exportar Grafica
+ *       - exportGraphicAs()
  */
 
 
 @implementation Controller
 
+/*(PanelController -> Controller) Manda una notificación cada vez que se añade una grafica a la tabla */
 extern NSString *PanelExportGraphicsNotification;
+/*(Controller -> PanelController) Manda una notificación cuando se importa el fichero del sistema */
+NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
+
+/* ---------------------------- TRATAMIENTO DE VENTANA ---------------------------- */
 
 /*!
  * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
  * @return id, puntero genérico.
  */
-
 -(id)init
 {
     self = [super init];
@@ -49,8 +61,7 @@ extern NSString *PanelExportGraphicsNotification;
  * @param  sender Objeto ventana.
  * @return BOOL, respuesta del usuario al mensaje de cierre.
  */
-
--(BOOL)windowShouldClose:(NSWindow *)sender
+-(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
     
@@ -68,7 +79,11 @@ extern NSString *PanelExportGraphicsNotification;
     
 }
 
--(IBAction)showPanel:(id)sender
+
+/*!
+ * @brief  Abre y muestra el panel especificado.
+ */
+-(IBAction) showPanel:(id)sender
 {
     if(!panelController)
         panelController = [[PanelController alloc] init];
@@ -80,12 +95,18 @@ extern NSString *PanelExportGraphicsNotification;
 /*!
  * @brief  Elimina el registro de objetos instanciados.
  */
--(void)dealloc
+-(void) dealloc
 {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
 }
 
+/* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
+
+/*!
+ * @brief  Recoge la lista de graficas a exportar de la tabla en Preferencias
+ *         cada vez que se añade una grafica nueva.
+ */
 -(void) handleExportGraphics:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
@@ -95,14 +116,17 @@ extern NSString *PanelExportGraphicsNotification;
     enableExportingFlag = YES;
 }
 
+/*!
+ * @brief  Exporta en un fichero XML o CSV las graficas dentro de la tabla del panel Preferencias
+ */
 -(IBAction) exportTableGraphicsAs:(id)sender
 {
     if (enableExportingFlag){
         NSLog(@"Exportar HABILITADO\r");
-
+        
         NSSavePanel *save = [NSSavePanel savePanel];
-        [save setAllowedFileTypes:[NSArray arrayWithObjects:@"txt", @"pdf", nil]];
-        [save setAllowsOtherFileTypes:NO];
+        [save setAllowedFileTypes:[NSArray arrayWithObjects:@"xml", @"csv", nil]];
+        [save setAllowsOtherFileTypes:YES];
         
         [save setTitle:@"Informative text."];
         [save setMessage:@"Message text."];
@@ -112,17 +136,49 @@ extern NSString *PanelExportGraphicsNotification;
         NSError *error = nil;
         NSLog(@"Ventana Desplegada %ld\r", result);
         
-        if (result == NSModalResponseOK)
-        {
-
-            NSString *selectedFile = [[save URL] path];
-            NSString *content = [arrayToExport componentsJoinedByString:@" "];
+        if (result == NSModalResponseOK) {
             
-            [content writeToFile:selectedFile
-                      atomically:NO
-                        encoding:NSUTF8StringEncoding
-                           error:&error];
+            selectedFile = [[save URL] path];
+            /* EN XML */
+            if (![[NSFileManager defaultManager] fileExistsAtPath:selectedFile]) {
+                [[NSFileManager defaultManager] createFileAtPath: selectedFile contents:nil attributes:nil];
+                NSLog(@"Route creato");
+            }
+            
+            NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
+            
+            for (GraphicsClass *graphic in arrayToExport){
+                [writeString appendString:[NSString stringWithFormat:@"%@#%@#%f#%f#%f#%f#%@\n",
+                                           [graphic funcName],
+                                           [graphic function],
+                                           [graphic paramA],
+                                           [graphic paramB],
+                                           [graphic paramC],
+                                           [graphic paramN],
+                                           [[graphic colour] colorNameComponent] ]];
+            }
+            
+            NSFileHandle *handle;
+            handle = [NSFileHandle fileHandleForWritingAtPath: selectedFile ];
+            //say to handle where's the file fo write
+            [handle truncateFileAtOffset:[handle seekToEndOfFile]];
+            //position handle cursor to the end of file
+            [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
+            
+        } else if(result == NSModalResponseCancel) {
+            NSLog(@"doSaveAs we have a Cancel button");
+            return;
+        } else {
+            NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
+            return;
         }
+        
+        NSURL *urlDirectory = [save directoryURL];
+        NSString *saveDirectory = [urlDirectory absoluteString];
+        NSLog(@"doSaveAs directory = %@", saveDirectory);
+        
+        NSString * saveFilename = [save representedFilename];
+        NSLog(@"doSaveAs filename = %@", saveFilename);
         
         if (error) {
             // This is one way to handle the error, as an example
@@ -131,10 +187,105 @@ extern NSString *PanelExportGraphicsNotification;
     } else {
         return;// Poner un mensaje de error o algo asi
     }
-
+    
 }
 
--(IBAction)exportGraphicAs:(id)sender
+/* ---------------------------- IMPORTAR LISTA DE GRAFICAS ---------------------------- */
+
+/*!
+ * @brief  Carga la lista de graficas de un fichero en el sistema
+ *         y las envia al panel Preferencias para cargarlas en la tabla.
+ */
+
+-(IBAction) importTableGraphics:(id)sender
+{
+    NSOpenPanel *open = [NSOpenPanel openPanel];
+    NSInteger result = [open runModal];
+    NSError *error = nil;
+    
+    GraphicsClass *graphicExported;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSString *name = [[NSString alloc] init];
+    NSString *func = [[NSString alloc] init];
+    float a = 0;
+    float b = 0;
+    float c = 0;
+    float n = 0;
+    NSString *color = [[NSString alloc] init];
+    
+    if (result == NSModalResponseOK) {
+        
+        /* En XML */
+        
+        //NSData* data = [NSData dataWithContentsOfFile:selectedFile];
+        //convert the bytes from the file into a string
+        NSLog(@"Abriendo en %@\r", [open URL]);
+        NSString* imported = [NSString stringWithContentsOfURL:[open URL]
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:&error]  ;
+        
+        NSLog(@"Recogido %@\n", imported);
+        
+        //split the string around newline characters to create an array
+        NSString* delimiter = @"\n";
+        NSArray* items = [imported componentsSeparatedByString:delimiter];
+        
+        for (NSString *item in items){
+            NSLog(@"Objeto recuperado: %@\n", item);
+            NSArray *foo = [item componentsSeparatedByString: @"#"];
+            name = [foo objectAtIndex: 0];
+            NSLog(@"Nombre %@",name);
+            func = [foo objectAtIndex: 1];
+            NSLog(@"Func %@",func);
+
+            a = [[foo objectAtIndex: 2] floatValue];
+            b = [[foo objectAtIndex: 3] floatValue];
+            c = [[foo objectAtIndex: 4] floatValue];
+            n = [[foo objectAtIndex: 5] floatValue];
+            color = [foo objectAtIndex: 6];
+            graphicExported = [[GraphicsClass alloc] initWithGraphicName:name
+                                                               function:func
+                                                                 paramA:a
+                                                                 paramB:b
+                                                                 paramC:c
+                                                                 paramN:n
+                                                                 colour:nil];
+            [array addObject:graphicExported];
+        }
+        
+
+        
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
+                                                                     forKey:@"graphicsExported"];
+        
+        NSLog(@"A enviar %@\r", array);
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc postNotificationName:PanelExportedGraphicNotification
+                          object:self
+                        userInfo:notificationInfo];
+        NSLog(@"Información enviada\r");
+
+    } else if(result == NSModalResponseCancel) {
+        NSLog(@"doSaveAs we have a Cancel button");
+        return;
+    } else {
+        NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
+        return;
+    }
+    
+    if (error) {
+        // This is one way to handle the error, as an example
+        [NSApp presentError:error];
+    }
+    
+}
+
+/* ---------------------------- EXPORTAR GRAFICA ---------------------------- */
+
+/*!
+ * @brief  Exporta en una imagen la grafica representada en esta ventana
+ */
+-(IBAction) exportGraphicAs:(id)sender
 {
     
 }

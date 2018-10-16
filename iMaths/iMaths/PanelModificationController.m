@@ -9,6 +9,20 @@
 #import "PanelModificationController.h"
 #import "GraphicsClass.h"
 
+/* --------- Esquema metodos ---------
+ *   > Inicializadores
+ *       - init()
+ *       - initWithWindow()
+ *   > Tratamiento de ventana
+ *       - windowShouldClose()
+ *       - windowDidLoad()
+ *   > Acciones de modificación
+ *       - handleModifyGraphic()
+ *   > Tratamiento de botones de modificación
+ *       - confirmNewGraphic()
+ *       - cancelNewGraphic()
+ */
+
 @interface PanelModificationController ()
 
 @end
@@ -18,11 +32,13 @@
 extern NSString *PanelModifyGraphicNotification;
 NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
 
+/* --------------------------- INICIALIZADORES ---------------------- */
+
 /*!
  * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
  * @return id, puntero genérico.
  */
--(id)init
+-(id) init
 {
     if (![super initWithWindowNibName:@"PanelModificationController"])
         return nil;
@@ -36,7 +52,7 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
  * @param  window .Ventana panelController.
  * @return instancetype.
  */
--(instancetype)initWithWindow:(NSWindow *)window
+-(instancetype) initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
     if (self){
@@ -53,7 +69,7 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
 }
 
 
--(BOOL)windowShouldClose:(NSWindow *)sender
+-(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
     
@@ -71,13 +87,16 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
     
 }
 
-- (void)windowDidLoad {
+- (void) windowDidLoad {
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
--(void)handleModifyGraphic:(NSNotification *)aNotification
+/* --------------------------- ACCIONES DE MODIFICACION ---------------------- */
+
+
+-(void) handleModifyGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
     NSDictionary *notificationInfoToModify = [aNotification userInfo];
@@ -93,7 +112,11 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
     
 }
 
--(IBAction)confirmNewGraphic:(id)sender
+
+/* --------------------------- TRATMIENTO DE BOTONES DE MODIFICACION ---------------------- */
+
+
+-(IBAction) confirmNewGraphic:(id)sender
 {
     // OJOOOOO NO PERMITIR QUE EL USURIO MODIFIQUE EN PANEL PREFERENCIAS MIENTRAS ESTA ESTE ABIERTO PARA EVITAR QUE aRowSelected cambie
     GraphicsClass *newGraphic = [[GraphicsClass alloc] initWithGraphicName:[newName stringValue]
@@ -115,7 +138,7 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
     // Cerrar el panel
 }
 
--(IBAction)cancelNewGraphic:(id)sender
+-(IBAction) cancelNewGraphic:(id)sender
 {
     // Preguntar si desea guardar cambios y Cerrar el panel
 

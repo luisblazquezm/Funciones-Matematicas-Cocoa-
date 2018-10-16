@@ -90,7 +90,6 @@
     /* Métodos Parámetros Generales */
 
 -(IBAction)drawGraphic:(id)sender;
--(IBAction)modifyGraphic:(id)sender;
 -(IBAction)deleteGraphic:(id)sender;
 -(IBAction)selectDrawingRange:(id)sender;
 

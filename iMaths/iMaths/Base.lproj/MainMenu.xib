@@ -36,13 +36,19 @@
                                     <action selector="showPanel:" target="dQG-0K-aIn" id="qfm-s1-H3D"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save Table of Graphics As..." keyEquivalent="S" id="3dY-Gx-GRe">
+                            <menuItem title="Import Table of Graphics" id="eV3-U0-yXj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importTableGraphics:" target="dQG-0K-aIn" id="qYu-oc-DBd"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Table of Graphics As..." keyEquivalent="S" id="3dY-Gx-GRe">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save Graphic As..." id="owA-RF-4fm">
+                            <menuItem title="Export Graphic As..." id="owA-RF-4fm">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
@@ -91,7 +97,7 @@
                             </menuItem>
                             <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
                                 <connections>
-                                    <action selector="doOpen:" target="08V-Bk-xSV" id="dfP-ft-wFW"/>
+                                    <action selector="openTableGraphic:" target="dQG-0K-aIn" id="5Si-aF-5rM"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Open Recent" id="tXI-mr-wws">
@@ -120,7 +126,7 @@
                             </menuItem>
                             <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
                                 <connections>
-                                    <action selector="doSaveAs:" target="08V-Bk-xSV" id="tp5-J1-pFK"/>
+                                    <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="Xf4-T5-Gf2"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Revert to Saved" keyEquivalent="r" id="KaW-ft-85H">
@@ -739,6 +745,5 @@
             <point key="canvasLocation" x="79" y="317"/>
         </window>
         <customObject id="dQG-0K-aIn" customClass="Controller"/>
-        <customObject id="08V-Bk-xSV" customClass="SaveMenuController"/>
     </objects>
 </document>
