@@ -84,19 +84,21 @@
 
     /* Métodos Definicion de la Grafica */
 
--(IBAction)selectNewGraphic:(id)sender;
--(IBAction)addNewGraphic:(id)sender;
+-(IBAction) selectNewGraphic:(id)sender;
+-(IBAction) addNewGraphic:(id)sender;
 
     /* Métodos Parámetros Generales */
 
--(IBAction)drawGraphic:(id)sender;
--(IBAction)deleteGraphic:(id)sender;
--(IBAction)selectDrawingRange:(id)sender;
+-(IBAction) drawGraphic:(id)sender;
+-(IBAction) deleteGraphic:(id)sender;
+-(IBAction) selectDrawingRange:(id)sender;
 
     /* Métodos Panel Modificar */
 
--(IBAction)showPanel:(id)sender;
--(void)handleNewGraphic:(NSNotification *)aNotification;
+-(IBAction) showPanel:(id)sender;
+-(void) handleNewGraphic:(NSNotification *)aNotification;
+
+-(void) handleExportedGraphic:(NSNotification *)aNotification;
 
 
 @end

@@ -25,6 +25,7 @@
 
 
 -(void)handleModifyGraphic:(NSNotification *)aNotification;
+
 -(IBAction)confirmNewGraphic:(id)sender;
 -(IBAction)cancelNewGraphic:(id)sender;
 

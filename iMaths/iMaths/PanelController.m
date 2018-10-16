@@ -36,8 +36,8 @@
 NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic"; // PanelController -> PanelModificationController
 NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelController -> Controller
 
-extern NSString *PanelExportedGraphicNotification; // Controller -> PanelController
 extern NSString *PanelNewGraphicNotification; // PanelModificationController -> PanelController
+                                              // Controller -> PanelController
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -66,15 +66,13 @@ extern NSString *PanelNewGraphicNotification; // PanelModificationController -> 
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        
         [nc addObserver:self
                selector:@selector(handleNewGraphic:)
                    name:PanelNewGraphicNotification
                  object:nil];
         
-        [nc addObserver:self
-               selector:@selector(handleExportedGraphic:)
-                   name:PanelExportedGraphicNotification
-                 object:nil];
+
     }
     
     return self;
@@ -428,31 +426,35 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 /*!
- * @brief  Reescribe el contenido del objeto que ha sido modificado en el panel de Modificación
- *         al confirmar su modificación en dicho panel.
+ * @brief  (Si viene de la tabla de Modificacion) Reescribe el contenido del objeto que ha sido modificado
+ *         en el panel de Modificación al confirmar su modificación en dicho panel.
+ *
+ *         (Si viene del panel principal) Recoge la lista de graficas de un fichero
+ *         enviada desde el panel principal Controller
  */
 -(void) handleNewGraphic:(NSNotification *)aNotification
 {
-    NSLog(@"Notificacion %@ recibida en handleNewGraphic\r", aNotification);
-    NSDictionary *notificationInfoModified = [aNotification userInfo];
-    GraphicsClass *graphic = [notificationInfoModified objectForKey:@"newGraphic"];
+    NSLog(@"Notificacion %@ recibida en handleNewOrExportedGraphic\r", aNotification);
+    NSDictionary *notificationInfo = [aNotification userInfo];
+    GraphicsClass *graphic = [notificationInfo objectForKey:@"newGraphic"];
+    NSArray *array = [notificationInfo objectForKey:@"graphicsExported"];
     
-    [[modelInPanel arrayListGraphics] setObject:graphic atIndexedSubscript:aRowSelected];
-    [listOfCreatedFunctionsTableView reloadData];
+    if (graphic != nil){
+        [[modelInPanel arrayListGraphics] setObject:graphic atIndexedSubscript:aRowSelected];
+        [listOfCreatedFunctionsTableView reloadData];
+    }
+    
+    if (array != nil){
+        [[modelInPanel arrayListGraphics] addObjectsFromArray:array];
+        [listOfCreatedFunctionsTableView reloadData];
+    }
+    
 }
 
 /*!
- * @brief  Recoge la lista de graficas de un fichero enviada desde el panel principal Controller
+ * @brief
  */
--(void) handleExportedGraphic:(NSNotification *)aNotification
-{
-    NSLog(@"Notificacion %@ recibida en handleExportedGraphic\r", aNotification);
-    NSDictionary *notificationInfoExported = [aNotification userInfo];
-    NSArray *array = [notificationInfoExported objectForKey:@"graphicsExported"];
-    
-    [[modelInPanel arrayListGraphics] addObjectsFromArray:array];
-    [listOfCreatedFunctionsTableView reloadData];
-}
+
 
 /*!
  * @brief  Muestra el panel de Modificación enviando la información correspondiente

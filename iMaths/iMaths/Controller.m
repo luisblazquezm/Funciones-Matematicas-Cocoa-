@@ -30,7 +30,7 @@
 /*(PanelController -> Controller) Manda una notificación cada vez que se añade una grafica a la tabla */
 extern NSString *PanelExportGraphicsNotification;
 /*(Controller -> PanelController) Manda una notificación cuando se importa el fichero del sistema */
-NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
+extern NSString *PanelNewGraphicNotification;
 
 /* ---------------------------- TRATAMIENTO DE VENTANA ---------------------------- */
 
@@ -125,8 +125,8 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
         NSLog(@"Exportar HABILITADO\r");
         
         NSSavePanel *save = [NSSavePanel savePanel];
-        [save setAllowedFileTypes:[NSArray arrayWithObjects:@"xml", @"csv", nil]];
-        [save setAllowsOtherFileTypes:YES];
+        NSArray *zAryOfExtensions = [NSArray arrayWithObject:@"txt"];
+        [save setAllowedFileTypes:zAryOfExtensions];
         
         [save setTitle:@"Informative text."];
         [save setMessage:@"Message text."];
@@ -155,15 +155,17 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
                                            [graphic paramB],
                                            [graphic paramC],
                                            [graphic paramN],
-                                           [[graphic colour] colorNameComponent] ]];
+                                           [graphic colour] ]];
             }
             
-            NSFileHandle *handle;
-            handle = [NSFileHandle fileHandleForWritingAtPath: selectedFile ];
-            //say to handle where's the file fo write
-            [handle truncateFileAtOffset:[handle seekToEndOfFile]];
-            //position handle cursor to the end of file
-            [handle writeData:[writeString dataUsingEncoding:NSUTF8StringEncoding]];
+            NSLog(@"Cadena a enviar %@\n", writeString);
+            BOOL zBoolResult = [writeString writeToURL:[save URL]
+                                             atomically:NO
+                                               encoding:NSASCIIStringEncoding
+                                                  error:NULL];
+            if (!zBoolResult) {
+                NSLog(@"writeUsingSavePanel failed");
+            }
             
         } else if(result == NSModalResponseCancel) {
             NSLog(@"doSaveAs we have a Cancel button");
@@ -212,6 +214,7 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
     float c = 0;
     float n = 0;
     NSString *color = [[NSString alloc] init];
+    int i = 0;
     
     if (result == NSModalResponseOK) {
         
@@ -223,7 +226,7 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
         NSString* imported = [NSString stringWithContentsOfURL:[open URL]
                                                      encoding:NSUTF8StringEncoding
                                                         error:&error]  ;
-        
+
         NSLog(@"Recogido %@\n", imported);
         
         //split the string around newline characters to create an array
@@ -237,8 +240,8 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
             NSLog(@"Nombre %@",name);
             func = [foo objectAtIndex: 1];
             NSLog(@"Func %@",func);
-
             a = [[foo objectAtIndex: 2] floatValue];
+            NSLog(@"Param A %f", a);
             b = [[foo objectAtIndex: 3] floatValue];
             c = [[foo objectAtIndex: 4] floatValue];
             n = [[foo objectAtIndex: 5] floatValue];
@@ -251,6 +254,10 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
                                                                  paramN:n
                                                                  colour:nil];
             [array addObject:graphicExported];
+            ++i;
+            
+            if ([items count] == (i+1)) // OJO esto es porque siempre coge una linea en blanco y la toma como otro string más
+                break;
         }
         
 
@@ -260,7 +267,7 @@ NSString *PanelExportedGraphicNotification = @"PanelExportedGraphic";
         
         NSLog(@"A enviar %@\r", array);
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-        [nc postNotificationName:PanelExportedGraphicNotification
+        [nc postNotificationName:PanelNewGraphicNotification
                           object:self
                         userInfo:notificationInfo];
         NSLog(@"Información enviada\r");
