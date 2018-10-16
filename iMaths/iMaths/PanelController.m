@@ -30,8 +30,9 @@
 
 @implementation PanelController
 
-NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
-extern NSString *PanelNewGraphicNotification;
+NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic"; // PanelController -> PanelModificationController
+extern NSString *PanelNewGraphicNotification; // PanelModificationController -> PanelController
+NSString *PanelExportGraphicsNotification = @"PanelExportGraphics"; // PanelController -> Controller
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -99,7 +100,7 @@ extern NSString *PanelNewGraphicNotification;
     if(respuesta == NSAlertDefaultReturn)
         return NO;
     else
-        [NSApp terminate:self];
+        //[NSApp terminate:self];
     return YES;
     
 }
@@ -266,6 +267,18 @@ extern NSString *PanelNewGraphicNotification;
     [selectParamCField setStringValue:@""];
     [selectParamNField setStringValue:@""];
     
+    // Envia una notificación al controlador principal con el contenido del arrayDeGraficas del Modelo
+    // En cuanto se añada la primera grafica ya estará disponible la opcion de exportar los datos.
+    // Cada vez que se añade una grafica nueva envia la nueva grafica al controlador para guardar el contenido de toda la tabla
+    
+    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:[modelInPanel arrayListGraphics]
+                                                                 forKey:@"listOfGraphicsToExport"];
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:PanelExportGraphicsNotification
+                      object:self
+                    userInfo:notificationInfo];
+    
 }
 
 
@@ -360,7 +373,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
--(void)handleNewGraphic:(NSNotification *)aNotification
+-(void) handleNewGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleNewGraphic\r", aNotification);
     NSDictionary *notificationInfoModified = [aNotification userInfo];

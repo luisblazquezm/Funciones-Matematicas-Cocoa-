@@ -12,9 +12,15 @@
 @interface Controller : NSObject <NSWindowDelegate>
 {
     PanelController *panelController;
+    
+    NSMutableArray *arrayToExport;
+    BOOL enableExportingFlag;
 }
 
 -(IBAction)showPanel:(id)sender;
+-(void)handleExportGraphics:(NSNotification *)aNotification;
+-(IBAction)exportTableGraphicsAs:(id)sender;
+-(IBAction)exportGraphicAs:(id)sender;
 
 @end
 

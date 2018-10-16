@@ -36,6 +36,18 @@
                                     <action selector="showPanel:" target="dQG-0K-aIn" id="qfm-s1-H3D"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Save Table of Graphics As..." keyEquivalent="S" id="3dY-Gx-GRe">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save Graphic As..." id="owA-RF-4fm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -79,7 +91,7 @@
                             </menuItem>
                             <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
                                 <connections>
-                                    <action selector="openDocument:" target="-1" id="bVn-NM-KNZ"/>
+                                    <action selector="doOpen:" target="08V-Bk-xSV" id="dfP-ft-wFW"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Open Recent" id="tXI-mr-wws">
@@ -108,7 +120,7 @@
                             </menuItem>
                             <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
                                 <connections>
-                                    <action selector="saveDocumentAs:" target="-1" id="mDf-zr-I0C"/>
+                                    <action selector="doSaveAs:" target="08V-Bk-xSV" id="tp5-J1-pFK"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Revert to Saved" keyEquivalent="r" id="KaW-ft-85H">
@@ -682,7 +694,7 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="100" y="551"/>
+            <point key="canvasLocation" x="101" y="625"/>
         </menu>
         <window title="iMaths" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
@@ -722,10 +734,11 @@
                 </subviews>
             </view>
             <connections>
-                <outlet property="delegate" destination="SCP-yE-C91" id="Mm5-NC-GBh"/>
+                <outlet property="delegate" destination="dQG-0K-aIn" id="HOn-xP-tI9"/>
             </connections>
+            <point key="canvasLocation" x="79" y="317"/>
         </window>
-        <customObject id="SCP-yE-C91" customClass="Controller"/>
         <customObject id="dQG-0K-aIn" customClass="Controller"/>
+        <customObject id="08V-Bk-xSV" customClass="SaveMenuController"/>
     </objects>
 </document>
