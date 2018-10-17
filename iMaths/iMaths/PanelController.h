@@ -78,6 +78,9 @@
     NSColor *colour;
     
     NSInteger aRowSelected;
+    NSInteger previousSelectedRow;
+    BOOL functionSelectedFlag;
+    BOOL BisEnabled ,CisEnabled ,NisEnabled;
 
 
 }
@@ -97,8 +100,6 @@
 
 -(IBAction) showPanel:(id)sender;
 -(void) handleNewGraphic:(NSNotification *)aNotification;
-
--(void) handleExportedGraphic:(NSNotification *)aNotification;
 
 
 @end

@@ -59,22 +59,22 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Definición de la gráfica" identifier="" id="6Ie-FJ-LhB">
-                                <view key="view" id="FYB-A6-gfh">
-                                    <rect key="frame" x="10" y="33" width="133" height="0.0"/>
+                                <view key="view" ambiguous="YES" id="FYB-A6-gfh">
+                                    <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vmn-zi-pnA">
-                                            <rect key="frame" x="10" y="-367" width="636" height="245"/>
+                                            <rect key="frame" x="10" y="31" width="636" height="245"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Definición Función" identifier="" id="mhF-rm-ebC">
-                                                    <view key="view" ambiguous="YES" id="bH1-la-hhW">
-                                                        <rect key="frame" x="10" y="33" width="195" height="0.0"/>
+                                                    <view key="view" id="bH1-la-hhW">
+                                                        <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRq-XP-p54">
-                                                                <rect key="frame" x="38" y="-80" width="152" height="17"/>
+                                                                <rect key="frame" x="38" y="119" width="152" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Seleccione una funcion: " id="aho-ec-9wi">
                                                                     <font key="font" metaFont="system"/>
@@ -83,7 +83,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
-                                                                <rect key="frame" x="206" y="-147" width="306" height="22"/>
+                                                                <rect key="frame" x="206" y="52" width="306" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bm3-Nx-E0R">
                                                                     <font key="font" metaFont="system"/>
@@ -96,7 +96,7 @@
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
-                                                                <rect key="frame" x="133" y="-142" width="57" height="17"/>
+                                                                <rect key="frame" x="133" y="57" width="57" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nombre:" id="L2h-EN-0fu">
                                                                     <font key="font" metaFont="system"/>
@@ -105,7 +105,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2xj-hz-Fql">
-                                                                <rect key="frame" x="206" y="-85" width="309" height="26"/>
+                                                                <rect key="frame" x="206" y="114" width="309" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="XJH-Lt-7zX">
                                                                     <font key="font" metaFont="system"/>
@@ -122,7 +122,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Parámetros" identifier="" id="0Ns-VD-9y9">
-                                                    <view key="view" id="17J-E6-GC2">
+                                                    <view key="view" ambiguous="YES" id="17J-E6-GC2">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -180,7 +180,7 @@
                                                                 </textFieldCell>
                                                                 <connections>
                                                                     <action selector="selectNewGraphic:" target="-2" id="5Wq-rh-vr7"/>
-                                                                    <outlet property="delegate" destination="-2" id="oVZ-HV-4Dw"/>
+                                                                    <outlet property="delegate" destination="-2" id="8GE-dT-BbP"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tMT-v8-zn1">
@@ -245,7 +245,7 @@
                                             </tabViewItems>
                                         </tabView>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ofs-UC-afN">
-                                            <rect key="frame" x="552" y="-398" width="93" height="32"/>
+                                            <rect key="frame" x="552" y="0.0" width="93" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Añadir" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4f4-Dv-wf3">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -256,7 +256,7 @@
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bl7-mp-VQ2">
-                                            <rect key="frame" x="310" y="-62" width="4" height="17"/>
+                                            <rect key="frame" x="310" y="336" width="4" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="FcQ-5U-UNs">
                                                 <font key="font" metaFont="system"/>
@@ -265,7 +265,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Auk-yV-QLy">
-                                            <rect key="frame" x="310" y="-62" width="37" height="17"/>
+                                            <rect key="frame" x="310" y="336" width="37" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="8hB-wQ-gdw">
                                                 <font key="font" metaFont="system"/>
@@ -277,7 +277,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Parámetros generales" identifier="" id="Zrr-Ff-mkK">
-                                <view key="view" ambiguous="YES" id="K7l-d6-r50">
+                                <view key="view" id="K7l-d6-r50">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
