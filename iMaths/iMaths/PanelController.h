@@ -81,6 +81,8 @@
     NSInteger previousSelectedRow;
     BOOL functionSelectedFlag;
     BOOL BisEnabled ,CisEnabled ,NisEnabled;
+    
+    NSNumberFormatter *formatter;
 
 
 }

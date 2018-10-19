@@ -13,6 +13,7 @@
 		294D1A6E21712A45001AC69F /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A6C21712A45001AC69F /* PanelController.m */; };
 		294D1A6F21712A45001AC69F /* PanelController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294D1A6D21712A45001AC69F /* PanelController.xib */; };
 		294D1A7221712A57001AC69F /* PanelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A7121712A57001AC69F /* PanelModel.m */; };
+		29565F772179171800656608 /* ParametersNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 29565F762179171800656608 /* ParametersNumberFormatter.m */; };
 		29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C92798216A7FF500E43BA8 /* AppDelegate.m */; };
 		29C9279B216A7FF700E43BA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29C9279A216A7FF700E43BA8 /* Assets.xcassets */; };
 		29C9279E216A7FF700E43BA8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C9279C216A7FF700E43BA8 /* MainMenu.xib */; };
@@ -31,6 +32,8 @@
 		294D1A6D21712A45001AC69F /* PanelController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelController.xib; sourceTree = "<group>"; };
 		294D1A7021712A57001AC69F /* PanelModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelModel.h; sourceTree = "<group>"; };
 		294D1A7121712A57001AC69F /* PanelModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelModel.m; sourceTree = "<group>"; };
+		29565F752179171800656608 /* ParametersNumberFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParametersNumberFormatter.h; sourceTree = "<group>"; };
+		29565F762179171800656608 /* ParametersNumberFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParametersNumberFormatter.m; sourceTree = "<group>"; };
 		29C92794216A7FF500E43BA8 /* iMaths.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMaths.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29C92797216A7FF500E43BA8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		29C92798216A7FF500E43BA8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -82,6 +85,8 @@
 				294D1A6B21712A45001AC69F /* PanelController.h */,
 				294D1A6C21712A45001AC69F /* PanelController.m */,
 				294D1A6D21712A45001AC69F /* PanelController.xib */,
+				29565F762179171800656608 /* ParametersNumberFormatter.m */,
+				29565F752179171800656608 /* ParametersNumberFormatter.h */,
 				291A01362172623800212DF6 /* PanelModificationController.h */,
 				291A01372172623800212DF6 /* PanelModificationController.m */,
 				291A01382172623800212DF6 /* PanelModificationController.xib */,
@@ -174,6 +179,7 @@
 				29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */,
 				294D1A7221712A57001AC69F /* PanelModel.m in Sources */,
 				29C927AA216A809400E43BA8 /* Controller.m in Sources */,
+				29565F772179171800656608 /* ParametersNumberFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

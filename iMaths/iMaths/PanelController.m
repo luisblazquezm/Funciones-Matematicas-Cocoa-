@@ -10,6 +10,7 @@
 #import "PanelModel.h"
 #import "GraphicsClass.h"
 #import "PanelModificationController.h"
+#import "ParametersNumberFormatter.h"
 
 /* --------- Esquema metodos ---------
  *   > Inicializadores
@@ -69,6 +70,8 @@ extern NSString *PanelNewGraphicNotification;
     if (self){
         NSLog(@"En init Panel");
         modelInPanel = [[PanelModel alloc] init]; // Instancia del Modelo
+        //formatter = [[ParametersNumberFormatter alloc] init];
+        
         functionSelectedFlag = NO;      // Flag que indica si se ha seleccionado o no una fila del ComboBox
         previousSelectedRow = -1;
         BisEnabled = NO;
@@ -99,10 +102,31 @@ extern NSString *PanelNewGraphicNotification;
     // Añade esas funciones al ComboBox
     [selectListFuncComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
     
+    [formatter setLocale:[NSLocale currentLocale]];// this ensures the right separator behavior
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [formatter setUsesGroupingSeparator:YES];
+    [formatter setDecimalSeparator:@"."];
+    
+    //[[selectParamAField cell] setFormatter:formatter];
+    //[[selectParamBField cell] setFormatter:formatter];
+    //[[selectParamCField cell] setFormatter:formatter];
+    //[[selectParamNField cell] setFormatter:formatter];
+
+    
+    //[selectParamAField setFormatter:formatter];
+    //[selectParamBField setFormatter:formatter];
+    //[selectParamCField setFormatter:formatter];
+    //[selectParamNField setFormatter:formatter];
+    
     [selectParamAField setEnabled:NO];
     [selectParamBField setEnabled:NO];
     [selectParamCField setEnabled:NO];
     [selectParamNField setEnabled:NO];
+    
+    [drawGraphicButton setEnabled:NO];
+    [modifyGraphicButton setEnabled:NO];
+    [deleteGraphicButton setEnabled:NO];
+    
 }
 
 /* --------------------------- TRATAMIENTO DE VENTANAS ---------------------- */
@@ -352,11 +376,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 -(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
 
-    // Comprueba que no se introduzca una grafica con un nombre vacio
-    NSString *cadena = [selectGraphicNameField stringValue];
-    if ([cadena length] == 0){
-        [addGraphicButton setEnabled:NO];
-    }
+    
+    //NSString *regex = @"[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)";
+    //NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    //int lengthField;
+    //NSString *mystring;
     
     /*
      *--------- Definicion Funcion ------------
@@ -366,6 +390,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     NSLog(@"Funcion %@ escogida\r", function);
     
     if ([function length] != 0) {
+        // Comprueba que no se introduzca una grafica con un nombre vacio
+        NSString *cadena = [selectGraphicNameField stringValue];
+        if ([cadena length] == 0){
+            [addGraphicButton setEnabled:NO];
+        }
+        
         name = [selectGraphicNameField stringValue];
         NSLog(@"Nombre Funcion %@\r", name);
         
@@ -374,6 +404,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
          */
         
         if(functionSelectedFlag){
+            
             [selectParamAField setEnabled:YES];
             paramA = [selectParamAField floatValue];
             
@@ -426,7 +457,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                 
             }// End of if-else
 
-            
             if (BisEnabled)
                 paramB = [selectParamBField floatValue];
             
@@ -435,6 +465,42 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
             
             if (NisEnabled)
                 paramN = [selectParamNField floatValue];
+            
+            
+            /*
+            if ([obj object] == selectParamAField ||
+                [obj object] == selectParamBField ||
+                [obj object] == selectParamCField ||
+                [obj object] == selectParamNField){
+                
+                NSLog(@"Entro para %@\n",[obj object]);
+                
+                lengthField = (int)[[obj object] length];
+                mystring = [[obj object] stringValue];
+                
+                if (lengthField > 0) {
+                    // Error, input not matching! Remove last added character.
+                    if (![pred evaluateWithObject:mystring]) {
+                        NSLog(@"Not OK\n");
+                        int len = lengthField-((lengthField-1 == 3) ? 2 : 1);
+                        [[obj object] substringWithRange:NSMakeRange(0, len)];
+                        // Now checks if the new length, i.e. the length when the last digit has been deleted is 3, which means that the decimal dot is the last character. If so remove 2 instead of only 1 character!
+                    } else { // The string is valid.
+                        NSLog(@"OK\n");
+                        if (BisEnabled)
+                            paramB = [selectParamBField floatValue];
+                        
+                        if (CisEnabled)
+                            paramC = [selectParamCField floatValue];
+                        
+                        if (NisEnabled)
+                            paramN = [selectParamNField floatValue];
+                    }
+                }
+            }
+            */
+            
+
             
             NSLog(@"Parámetros introducidos correctamente A:%f B:%f C:%f N:%f\r", paramA, paramB, paramC, paramN);
         }
@@ -469,6 +535,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     }
     
 }
+
+
 
 /*!
  * @brief  Representa la grafica seleccionada en la venta principal

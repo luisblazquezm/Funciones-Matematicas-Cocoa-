@@ -70,11 +70,11 @@
                                             <tabViewItems>
                                                 <tabViewItem label="Definición Función" identifier="" id="mhF-rm-ebC">
                                                     <view key="view" id="bH1-la-hhW">
-                                                        <rect key="frame" x="10" y="33" width="616" height="199"/>
+                                                        <rect key="frame" x="10" y="33" width="195" height="0.0"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRq-XP-p54">
-                                                                <rect key="frame" x="38" y="119" width="152" height="17"/>
+                                                                <rect key="frame" x="38" y="-80" width="152" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Seleccione una funcion: " id="aho-ec-9wi">
                                                                     <font key="font" metaFont="system"/>
@@ -83,7 +83,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
-                                                                <rect key="frame" x="206" y="52" width="306" height="22"/>
+                                                                <rect key="frame" x="206" y="-147" width="306" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bm3-Nx-E0R">
                                                                     <font key="font" metaFont="system"/>
@@ -96,7 +96,7 @@
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
-                                                                <rect key="frame" x="133" y="57" width="57" height="17"/>
+                                                                <rect key="frame" x="133" y="-142" width="57" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nombre:" id="L2h-EN-0fu">
                                                                     <font key="font" metaFont="system"/>
@@ -105,7 +105,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2xj-hz-Fql">
-                                                                <rect key="frame" x="206" y="114" width="309" height="26"/>
+                                                                <rect key="frame" x="206" y="-85" width="309" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="XJH-Lt-7zX">
                                                                     <font key="font" metaFont="system"/>
@@ -155,6 +155,7 @@
                                                                 <connections>
                                                                     <action selector="selectNewGraphic:" target="-2" id="BH3-pT-hjz"/>
                                                                     <outlet property="delegate" destination="-2" id="2aV-qW-AgH"/>
+                                                                    <outlet property="formatter" destination="5tn-Vn-aQa" id="uI9-gI-LM1"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="zpy-wz-jYz">
@@ -168,6 +169,7 @@
                                                                 <connections>
                                                                     <action selector="selectNewGraphic:" target="-2" id="ojA-bb-saL"/>
                                                                     <outlet property="delegate" destination="-2" id="PNT-xw-6eV"/>
+                                                                    <outlet property="formatter" destination="5tn-Vn-aQa" id="CKg-fi-6if"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="aqj-FX-itO">
@@ -181,6 +183,7 @@
                                                                 <connections>
                                                                     <action selector="selectNewGraphic:" target="-2" id="5Wq-rh-vr7"/>
                                                                     <outlet property="delegate" destination="-2" id="8GE-dT-BbP"/>
+                                                                    <outlet property="formatter" destination="5tn-Vn-aQa" id="6vA-iD-MP4"/>
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tMT-v8-zn1">
@@ -212,6 +215,7 @@
                                                                 <connections>
                                                                     <action selector="selectNewGraphic:" target="-2" id="EhK-np-qop"/>
                                                                     <outlet property="delegate" destination="-2" id="NFl-bF-j4X"/>
+                                                                    <outlet property="formatter" destination="5tn-Vn-aQa" id="nJI-dp-cCh"/>
                                                                 </connections>
                                                             </textField>
                                                         </subviews>
@@ -286,7 +290,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" ambiguous="YES" id="KDh-jh-4c3">
                                                 <rect key="frame" x="1" y="0.0" width="361" height="156"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="KVw-fh-xhi" id="3Nn-Oh-TKh">
                                                         <rect key="frame" x="0.0" y="0.0" width="361" height="133"/>
@@ -647,6 +651,8 @@
             </connections>
             <point key="canvasLocation" x="243" y="237"/>
         </window>
+        <customObject id="5tn-Vn-aQa" customClass="ParametersNumberFormatter"/>
+        <numberFormatter formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="aCH-vk-nse"/>
         <userDefaultsController representsSharedInstance="YES" id="RYK-CP-rcm"/>
     </objects>
 </document>
