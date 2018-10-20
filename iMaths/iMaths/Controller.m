@@ -47,7 +47,7 @@ extern NSString *PanelNewGraphicNotification;
         NSLog(@"En init");
         enableExportingFlag = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
-        
+        graphicToRepresent = [[GraphicsClass alloc] init];
         arrayToExport = [[NSMutableArray alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
@@ -134,7 +134,6 @@ extern NSString *PanelNewGraphicNotification;
     if (graphic != nil) {
         graphicToRepresent = graphic;
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
-        graphicToRepresent = [[GraphicsClass alloc] init];
         [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
     }
@@ -146,11 +145,11 @@ extern NSString *PanelNewGraphicNotification;
         bounds.size.height = [h floatValue];
         bounds.size.width = [w floatValue];
     
-        if (graphicToRepresent != nil) {
+        //if (graphicToRepresent != nil) {
             [graphicToRepresent drawInRect:bounds withGraphicsContext:ctx];
-        } else {
-            NSLog(@"Controller:handleExportAndDrawGraphics: Error variable a nil");
-        }
+        //} else {
+        //    NSLog(@"Controller:handleExportAndDrawGraphics: Error variable a nil");
+        //}
 
         NSLog(@"Grafica Representada");
     }
