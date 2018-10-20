@@ -83,8 +83,6 @@
     BOOL BisEnabled ,CisEnabled ,NisEnabled;
     
     NSNumberFormatter *formatter;
-
-
 }
 
     /* Métodos Definicion de la Grafica */

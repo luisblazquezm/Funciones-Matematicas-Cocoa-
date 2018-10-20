@@ -33,6 +33,10 @@
 @property (nonatomic) NSArray *parametersN;
 
 
+    /* Metodo de inicialización del array de funciones del ComboBox */
+
 -(void)initializeArrayListFunctions;
+
+    /* Metodos relacionados con la representacion de graficas */
 
 @end

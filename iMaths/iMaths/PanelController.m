@@ -35,14 +35,16 @@
 @implementation PanelController
 
 // PanelController -> PanelModificationController (Cuando se modifica una grafica de la lista de graficas de la tabla)
-NSString *PanelModifyGraphicNotification = @"PanelModifyGraphic";
+NSString *PanelModifyGraphicNotification = @"ModifyGraphic";
 
 // PanelController -> Controller (Cuando se exporta la lista de graficas de la tabla)
-NSString *PanelExportGraphicsNotification = @"PanelExportGraphics";
+// PanelController -> Controller (Cuando se pasa a dibujar la grafica)
+NSString *PanelExportAndDrawGraphicsNotification = @"ExportAndDrawGraphics";
 
 // PanelModificationController -> PanelController (Cuando se modifica una grafica de la tabla)
 // Controller -> PanelController (Cuando se importa una nueva grafica)
 extern NSString *PanelNewGraphicNotification;
+
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -281,7 +283,7 @@ extern NSString *PanelNewGraphicNotification;
                                                                  forKey:@"listOfGraphicsToExport"];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelExportGraphicsNotification
+    [nc postNotificationName:PanelExportAndDrawGraphicsNotification
                       object:self
                     userInfo:notificationInfo];
     
@@ -539,11 +541,35 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 
 /*!
- * @brief  Representa la grafica seleccionada en la venta principal
+ * @brief  Manda una notificación al metodo drawRect de la clase "GraphicsView" para poder representar la
+ *         grafica seleccionada en la venta principal.
  */
 -(IBAction) drawGraphic:(id)sender
 {
+    aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
     
+    NSLog(@"Fila seleccionada %ld\r", aRowSelected);
+    
+    if (aRowSelected != -1) {
+        NSMutableArray *array = [modelInPanel arrayListGraphics];
+        GraphicsClass *graphicToRepresent = [array objectAtIndex:aRowSelected];
+        float varXMax = [maxRangeXField floatValue];
+        float varXMin = [minRangeXField floatValue];
+        float varYMax = [maxRangeYField floatValue];
+        float varYMin = [minRangeYField floatValue];
+        
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:graphicToRepresent,@"graphicToRepresent",
+                                         varXMax,@"varXMax",
+                                         varXMin,@"varXMin",
+                                         varYMax,@"varYMax",
+                                         varYMin,@"varYMin",
+                                         nil];
+        
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc postNotificationName:PanelExportAndDrawGraphicsNotification
+                          object:self
+                        userInfo:notificationInfo];
+    }
 }
 
 /*!
@@ -599,14 +625,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
-/*!
- * @brief
- */
-
 
 /*!
- * @brief  Muestra el panel de Modificación enviando la información correspondiente
- *         al objeto que se desea modificar.
+ * @brief  Muestra el panel de Modificación enviando la información acerca
+ *         del objeto que se desea modificar.
  */
 -(IBAction) showPanel:(id)sender
 {
@@ -634,9 +656,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
     [listOfCreatedFunctionsTableView deselectRow:aRowSelected];
 }
-
-
-
 
 
 @end

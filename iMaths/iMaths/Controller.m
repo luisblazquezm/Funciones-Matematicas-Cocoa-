@@ -9,12 +9,14 @@
 #import "Controller.h"
 #import "PanelController.h"
 #import "GraphicsClass.h"
+#import "GraphicView.h"
 
 /* --------- Esquema metodos ---------
  *   > Tratamiento de ventana
  *       - windowShouldClose()
  *   > showPanel()
  *   > dealloc()
+ *   > Dibujar grafica
  *   > Exportar Lista de Graficas
  *       - exportTableGraphicsAs()
  *   > Importar Lista de Graficas
@@ -28,7 +30,7 @@
 @implementation Controller
 
 /*(PanelController -> Controller) Manda una notificación cada vez que se añade una grafica a la tabla */
-extern NSString *PanelExportGraphicsNotification;
+extern NSString *PanelExportAndDrawGraphicsNotification;
 /*(Controller -> PanelController) Manda una notificación cuando se importa el fichero del sistema */
 extern NSString *PanelNewGraphicNotification;
 
@@ -44,11 +46,14 @@ extern NSString *PanelNewGraphicNotification;
     if (self){
         NSLog(@"En init");
         enableExportingFlag = NO;
+        graphicRepresentationView = [[GraphicView alloc] init];
+        graphicToRepresent = [[GraphicsClass alloc] init];
+        
         arrayToExport = [[NSMutableArray alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
-               selector:@selector(handleExportGraphics:)
-                   name:PanelExportGraphicsNotification
+               selector:@selector(handleExportAndDrawGraphics:)
+                   name:PanelExportAndDrawGraphicsNotification
                  object:nil];
     }
     
@@ -101,20 +106,58 @@ extern NSString *PanelNewGraphicNotification;
     [nc removeObserver:self];
 }
 
-/* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
+/* ---------------------------- DIBUJAR GRAFICA ---------------------------- */
 
 /*!
  * @brief  Recoge la lista de graficas a exportar de la tabla en Preferencias
  *         cada vez que se añade una grafica nueva.
  */
--(void) handleExportGraphics:(NSNotification *)aNotification
+-(void) handleExportAndDrawGraphics:(NSNotification *)aNotification
 {
-    NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
-    NSDictionary *notificationInfoToModify = [aNotification userInfo];
-    arrayToExport = [notificationInfoToModify objectForKey:@"listOfGraphicsToExport"];
+    NSLog(@"Notificacion %@ recibida en handleExportAndDrawGraphic\r", aNotification);
+    NSDictionary *notificationInfo = [aNotification userInfo];
     
-    enableExportingFlag = YES;
+    arrayToExport = [notificationInfo objectForKey:@"listOfGraphicsToExport"];
+    
+    GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
+    
+    NSNumber *oX = [notificationInfo objectForKey:@"OriginX"];
+    NSNumber *oY = [notificationInfo objectForKey:@"OriginY"];
+    NSNumber *h = [notificationInfo objectForKey:@"Height"];
+    NSNumber *w = [notificationInfo objectForKey:@"Width"];
+    NSGraphicsContext *ctx = [notificationInfo objectForKey:@"GraphicContext"];
+    
+
+    
+    if (arrayToExport != nil) {
+        enableExportingFlag = YES;
+    }
+    
+    if (graphic != nil) {
+        graphicToRepresent = graphic;
+        NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
+        [graphicRepresentationView setNeedsDisplay:YES];
+        // De aqui llama al drawRect de la clase "GraphicView"
+    }
+    
+    if (oX != nil) {
+        NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
+        NSRect bounds;
+        bounds.origin.x = [oX integerValue];
+        bounds.origin.y = [oY integerValue];
+        bounds.size.height = [h integerValue];
+        bounds.size.width = [w integerValue];
+        
+        
+        // Cada vez que se añade una grafica se llama a esta notificacion
+        // Y hay que redibujar las graficas ya dibujadas anteriormente y la que se acaba de añadir
+        // Cada una dentro del mismo contexto grafico (Las anteriores cambian del contexto grafico en el que estaban al ACTUAL que acaba de cambiar debido a la adición de la nueva gráfica)
+        [graphicToRepresent drawInRect:bounds withGraphicsContext:ctx];
+    }
+
 }
+
+/* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
 
 /*!
  * @brief  Exporta en un fichero XML o CSV las graficas dentro de la tabla del panel Preferencias

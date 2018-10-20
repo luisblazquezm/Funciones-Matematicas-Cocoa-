@@ -30,7 +30,7 @@
 @implementation PanelModificationController
 
 extern NSString *PanelModifyGraphicNotification;
-NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
+NSString *PanelNewGraphicNotification = @"NewGraphic";
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 

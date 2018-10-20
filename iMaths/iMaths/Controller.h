@@ -9,27 +9,44 @@
 #import <Cocoa/Cocoa.h>
 @class PanelController;
 @class GraphicsClass;
+@class GraphicView;
 
 @interface Controller : NSObject <NSWindowDelegate>
 {
+    /* Variables relacionadas con PanelController*/
+    
     PanelController *panelController;
+    
+    /* Variables de uso para Exportar e Importar */
     
     NSMutableArray *arrayToExport;
     BOOL enableExportingFlag; // No permite exportar hasta que no haya llegado la notificación del Panel
     NSString *selectedFile;
+    
+    /* Variables relacionadas con GraphicView */
+    
+    // Outlet conectado por target-action a la vista donde se representará la gráfica.
+    IBOutlet GraphicView *graphicRepresentationView;
+    GraphicsClass *graphicToRepresent;
 }
 
 -(IBAction) showPanel:(id)sender;
 
-/* Metodos para exportar una lista de gráficas de la tabla */
+    /* Metodos para exportar una lista de gráficas de la tabla */
+
 -(IBAction) exportTableGraphicsAs:(id)sender;
 
-/* Metodos para importar una lista de graficas y cargarlas en la tabla de preferencias */
--(IBAction) importTableGraphics:(id)sender;
--(void) handleExportGraphics:(NSNotification *)aNotification;
+    /* Metodos para importar una lista de graficas y cargarlas en la tabla de preferencias */
 
-/* Metodos para exportar una gráfica de la tabla */
+-(IBAction) importTableGraphics:(id)sender;
+-(void) handleExportAndDrawGraphics:(NSNotification *)aNotification; // Tambien es el que recibe la notificación para dibujar
+
+    /* Metodos para exportar una gráfica de la tabla */
+
 -(IBAction) exportGraphicAs:(id)sender;
+
+    /* Metodo para dibujar las graficas en el CustomView */
+
 
 @end
 

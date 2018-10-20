@@ -17,9 +17,11 @@
     float paramC;
     float paramN;
     NSColor *colour;
+    
+    NSBezierPath *poly;
 }
 
-/* Getters y setters */
+    /* Getters y setters */
 
 @property (nonatomic) NSString *funcName;
 @property (nonatomic) NSString *function;
@@ -29,7 +31,7 @@
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
 
-/* Constructor */
+    /* Constructor */
 
 -(id) initWithGraphicName: (NSString *) graphic_Name
                  function: (NSString *) graphic_Function
@@ -38,5 +40,11 @@
                    paramC: (float) graphic_ParamC
                    paramN: (float) graphic_ParamN
                    colour: (NSColor *) graphic_Colour;
+
+    /* Metodos para representar graficas */
+
+-(float) valueOfYAt:(float)x;
+-(void) drawInRect:(NSRect)b
+withGraphicsContext:(NSGraphicsContext*)ctx;
 
 @end
