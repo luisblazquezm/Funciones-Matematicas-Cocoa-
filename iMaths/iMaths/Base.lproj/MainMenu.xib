@@ -711,28 +711,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="511" height="385"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HHA-0V-ppS">
-                        <rect key="frame" x="181" y="207" width="150" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Gráfica no seleccionada" id="DX9-6n-gYg">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rAU-jM-Iay">
-                        <rect key="frame" x="41" y="182" width="431" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Por favor, pulse iMaths-Propiedades para configurar una nueva gráfica" id="6YU-5K-mqo">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ytn-lX-lsB" customClass="GraphicView">
-                        <rect key="frame" x="20" y="20" width="471" height="333"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    </customView>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bzv-SN-Esn">
                         <rect key="frame" x="468" y="355" width="25" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -741,6 +719,10 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ytn-lX-lsB" customClass="GraphicView">
+                        <rect key="frame" x="20" y="20" width="471" height="333"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </customView>
                 </subviews>
             </view>
             <connections>
@@ -750,8 +732,7 @@
         </window>
         <customObject id="dQG-0K-aIn" customClass="Controller">
             <connections>
-                <outlet property="graphicRepresentation" destination="Ytn-lX-lsB" id="6DQ-cQ-3yI"/>
-                <outlet property="graphicRepresentationView" destination="Ytn-lX-lsB" id="Zm8-Ox-yq2"/>
+                <outlet property="graphicRepresentationView" destination="Ytn-lX-lsB" id="QKU-Kp-pcE"/>
             </connections>
         </customObject>
     </objects>

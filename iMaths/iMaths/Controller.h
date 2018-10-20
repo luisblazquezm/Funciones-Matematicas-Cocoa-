@@ -39,13 +39,16 @@
     /* Metodos para importar una lista de graficas y cargarlas en la tabla de preferencias */
 
 -(IBAction) importTableGraphics:(id)sender;
+
+    /* Metodo para dibujar las graficas en el CustomView */
+
 -(void) handleExportAndDrawGraphics:(NSNotification *)aNotification; // Tambien es el que recibe la notificación para dibujar
 
     /* Metodos para exportar una gráfica de la tabla */
 
 -(IBAction) exportGraphicAs:(id)sender;
 
-    /* Metodo para dibujar las graficas en el CustomView */
+
 
 
 @end

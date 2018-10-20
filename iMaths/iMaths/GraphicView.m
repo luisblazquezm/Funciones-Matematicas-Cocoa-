@@ -13,7 +13,7 @@
 
 extern NSString *PanelExportAndDrawGraphicsNotification;
 
--(id)initWithFrame:(NSRect)frameRect
+-(instancetype)initWithFrame:(NSRect)frameRect
 {
     NSLog(@"En init with frame");
     self = [super initWithFrame:frameRect];

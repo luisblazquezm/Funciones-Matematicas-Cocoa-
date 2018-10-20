@@ -243,6 +243,7 @@ extern NSString *PanelNewGraphicNotification;
  */
 -(IBAction) addNewGraphic:(id)sender
 {
+    
     newGraphic = [[GraphicsClass alloc] initWithGraphicName:name
                                                    function:function
                                                      paramA:paramA
@@ -314,8 +315,7 @@ extern NSString *PanelNewGraphicNotification;
         [showParamBField setFloatValue:[[array objectAtIndex:aRowSelected] paramB] ];
         [showParamCField setFloatValue:[[array objectAtIndex:aRowSelected] paramC] ];
         [showParamNField setFloatValue:[[array objectAtIndex:aRowSelected] paramN] ];
-        [showColorGraphicField setColor:[[array objectAtIndex:aRowSelected] colour] ];
-        
+        [showColorGraphicField takeColorFrom:selectColorGraphicButton];
         
     } else {
         [drawGraphicButton setEnabled:NO];
@@ -511,7 +511,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
          *--------- Apariencia ------------
          */
         
-        colour = [selectColorGraphicButton color];
+        colour = [selectColorGraphicButton objectValue];
         NSLog(@"Apariencia introducida correctamente color: %@\r", colour);
     }
     
@@ -652,6 +652,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         [nc postNotificationName:PanelModifyGraphicNotification
                           object:self
                         userInfo:notificationInfo];
+        
     }
     
     [listOfCreatedFunctionsTableView deselectRow:aRowSelected];

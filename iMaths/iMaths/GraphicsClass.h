@@ -18,6 +18,9 @@
     float paramN;
     NSColor *colour;
     
+    float *terms;
+    int termCount;
+    NSColor *color;
     NSBezierPath *poly;
 }
 
@@ -43,8 +46,8 @@
 
     /* Metodos para representar graficas */
 
--(float) valueOfYAt:(float)x;
+//-(float) valueOfYAt:(float)x;
+-(float) valueAt:(float)x;
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx;
-
 @end

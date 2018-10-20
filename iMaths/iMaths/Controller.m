@@ -47,7 +47,6 @@ extern NSString *PanelNewGraphicNotification;
         NSLog(@"En init");
         enableExportingFlag = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
-        graphicToRepresent = [[GraphicsClass alloc] init];
         
         arrayToExport = [[NSMutableArray alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -121,13 +120,12 @@ extern NSString *PanelNewGraphicNotification;
     
     GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
     
+    NSRect bounds;
     NSNumber *oX = [notificationInfo objectForKey:@"OriginX"];
     NSNumber *oY = [notificationInfo objectForKey:@"OriginY"];
     NSNumber *h = [notificationInfo objectForKey:@"Height"];
     NSNumber *w = [notificationInfo objectForKey:@"Width"];
     NSGraphicsContext *ctx = [notificationInfo objectForKey:@"GraphicContext"];
-    
-
     
     if (arrayToExport != nil) {
         enableExportingFlag = YES;
@@ -136,23 +134,25 @@ extern NSString *PanelNewGraphicNotification;
     if (graphic != nil) {
         graphicToRepresent = graphic;
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
+        graphicToRepresent = [[GraphicsClass alloc] init];
         [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
     }
     
-    if (oX != nil) {
+    if (oX != nil && oY != nil && h != nil && w != nil && ctx != nil) {
         NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
-        NSRect bounds;
         bounds.origin.x = [oX integerValue];
         bounds.origin.y = [oY integerValue];
-        bounds.size.height = [h integerValue];
-        bounds.size.width = [w integerValue];
-        
-        
-        // Cada vez que se añade una grafica se llama a esta notificacion
-        // Y hay que redibujar las graficas ya dibujadas anteriormente y la que se acaba de añadir
-        // Cada una dentro del mismo contexto grafico (Las anteriores cambian del contexto grafico en el que estaban al ACTUAL que acaba de cambiar debido a la adición de la nueva gráfica)
-        [graphicToRepresent drawInRect:bounds withGraphicsContext:ctx];
+        bounds.size.height = [h floatValue];
+        bounds.size.width = [w floatValue];
+    
+        if (graphicToRepresent != nil) {
+            [graphicToRepresent drawInRect:bounds withGraphicsContext:ctx];
+        } else {
+            NSLog(@"Controller:handleExportAndDrawGraphics: Error variable a nil");
+        }
+
+        NSLog(@"Grafica Representada");
     }
 
 }
