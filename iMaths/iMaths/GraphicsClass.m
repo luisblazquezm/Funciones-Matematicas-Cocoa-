@@ -7,7 +7,7 @@
 //
 
 #import "GraphicsClass.h"
-//#import <math.h>
+#import <math.h>
 
 #define RANDFLOAT() (random()%128/128.0)
 #define HOPS (500) // Numero de puntos
@@ -41,44 +41,41 @@ static NSRect funcRect = {-10, -10, 20 ,20}; //MAXIMO Y MINIMO DE EJES X E Y Y D
     return self;
 }
 
--(id) init
-{
-    NSLog(@"En init");
-    self = [super init];
-    if (!self) {
+-(float)valueAt:(float)x{
+    float result=0;
+    NSLog(@"Entro");
+    
+    result = [self paramA] * sinf( ([self paramB] * x) );
+
+    return result;
+}
+
+-(id)init{
+    NSLog(@"En init de GC");
+    self=[super init];
+    if(!self){
         return nil;
     }
-    
-    color = [NSColor greenColor];
+
     termCount = (random() % 3) + 2;
     terms = malloc(termCount * sizeof(float));
     
     for (int i = 0; i < termCount; i++) {
         terms[i] = 5.0 - (random() % 100)/10.0;
     }
-    poly = [[NSBezierPath alloc] init];
 
     return self;
 }
-
--(float) valueAt:(float)x
-{
-    float result = 0;
-    for (int i = 0; i < termCount; i++) {
-        //NSLog(@"(x * result) x = %f result = %f -> terms %f -> termCount %d\n",x, result, terms[i], termCount);
-        // Esto es como si fuera una funcion y = (y*x) + a o f(x) = x*y + a
-        result = (result * x) + terms[i];
-    }
-    
-    return result;
-}
-
-// Cada vez que se añade una grafica cambian los bounds b y el contexto grafico (uno para todas las graficas)
 
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx
 {
     NSPoint aPoint;
+    poly = [[NSBezierPath alloc] init];
+    color = [NSColor colorWithSRGBRed:RANDFLOAT()
+                                green:RANDFLOAT()
+                                 blue:RANDFLOAT()
+                                alpha:1.0];
     float distance = funcRect.size.width/HOPS; // Distancia entre las x (cuanto más grande más anchas serán las gráficas)
     
     [poly removeAllPoints];
@@ -97,16 +94,6 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     [tf concat];
     
     [poly setLineWidth:0.1];
-    NSLog(@"(AQUI)Nombre: %@ Funcion: %@ ParamA: %f ParamB: %f ParamC: %f ParamN: %f Color : %@ \n",[self funcName],
-          [self function],
-          [self paramA],
-          [self paramB],
-          [self paramC],
-          [self paramN],
-          [self colour]);
-    if (paramA != 0)
-        color = [NSColor redColor];
-    NSLog(@"COLOR %@", color);
     [color setStroke];
     
     // Es como una regla de 3 a través de la cual se calcula el punto Y a partir de la x y de la función que nos den
@@ -118,13 +105,14 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     // Desde el punto de origen = -10 sumando 0.04 cada vez hasta 10 = -10 + 20 (origen de x + ancho)
     [poly moveToPoint:aPoint];
     while (aPoint.x <= funcRect.origin.x + funcRect.size.width) {
+        NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
         aPoint.y = [self valueAt:aPoint.x];
         [poly lineToPoint:aPoint];
         aPoint.x += distance;
     }
     
     [poly stroke];
-    [ctx restoreGraphicsState]; //------------------- Contexto gráfico
+    [ctx restoreGraphicsState];
 }
 
 /*

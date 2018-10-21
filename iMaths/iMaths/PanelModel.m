@@ -7,9 +7,10 @@
 //
 
 #import "PanelModel.h"
+#import "GraphicsClass.h"
 
 @implementation PanelModel
-@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB;
+@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , graphicToRepresent;
 
 //NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
 
@@ -24,6 +25,7 @@
         NSLog(@"En init");
         arrayListFunctions = [[NSMutableArray alloc] init];
         arrayListGraphics = [[NSMutableArray alloc] init];
+        graphicToRepresent = [[GraphicsClass alloc] init];
         
         parametersC = [[NSArray alloc] initWithObjects:
                        @"^c",

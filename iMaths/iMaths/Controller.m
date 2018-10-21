@@ -10,6 +10,7 @@
 #import "PanelController.h"
 #import "GraphicsClass.h"
 #import "GraphicView.h"
+#import "PanelModel.h"
 
 /* --------- Esquema metodos ---------
  *   > Tratamiento de ventana
@@ -47,7 +48,9 @@ extern NSString *PanelNewGraphicNotification;
         NSLog(@"En init");
         enableExportingFlag = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
-        graphicToRepresent = [[GraphicsClass alloc] init];
+        //graphicToRepresent = [[GraphicsClass alloc] init];
+        model = [[PanelModel alloc] init];
+        P = 1;
         arrayToExport = [[NSMutableArray alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
@@ -115,41 +118,37 @@ extern NSString *PanelNewGraphicNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleExportAndDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
-    
     arrayToExport = [notificationInfo objectForKey:@"listOfGraphicsToExport"];
-    
+
     GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
     
+    NSNumber *oX=[notificationInfo objectForKey:@"OrigenX"];
+    NSNumber *oY=[notificationInfo objectForKey:@"OrigenY"];
+    NSNumber *alt=[notificationInfo objectForKey:@"Altura"];
+    NSNumber *anch=[notificationInfo objectForKey:@"Ancho"];
+    NSGraphicsContext *ctx=[notificationInfo objectForKey:@"ContextoGrafico"];
     NSRect bounds;
-    NSNumber *oX = [notificationInfo objectForKey:@"OriginX"];
-    NSNumber *oY = [notificationInfo objectForKey:@"OriginY"];
-    NSNumber *h = [notificationInfo objectForKey:@"Height"];
-    NSNumber *w = [notificationInfo objectForKey:@"Width"];
-    NSGraphicsContext *ctx = [notificationInfo objectForKey:@"GraphicContext"];
+    bounds.origin.x=[oX integerValue];
+    bounds.origin.y=[oY integerValue];
+    bounds.size.height=[alt integerValue];
+    bounds.size.width=[anch integerValue];
     
     if (arrayToExport != nil) {
         enableExportingFlag = YES;
     }
     
-    if (graphic != nil) {
-        graphicToRepresent = graphic;
+    if (graphic != nil ) {
+        //graphicToRepresent = graphic;
+        [model setGraphicToRepresent:graphic ];
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
-        [graphicRepresentationView setNeedsDisplay:YES];
+         [graphicRepresentationView setNeedsDisplay:YES]; // EL ERROR ESTA AL LLAMAR AQUI
         // De aqui llama al drawRect de la clase "GraphicView"
     }
     
-    if (oX != nil && oY != nil && h != nil && w != nil && ctx != nil) {
+    if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
         NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
-        bounds.origin.x = [oX integerValue];
-        bounds.origin.y = [oY integerValue];
-        bounds.size.height = [h floatValue];
-        bounds.size.width = [w floatValue];
-    
-        //if (graphicToRepresent != nil) {
-            [graphicToRepresent drawInRect:bounds withGraphicsContext:ctx];
-        //} else {
-        //    NSLog(@"Controller:handleExportAndDrawGraphics: Error variable a nil");
-        //}
+        GraphicsClass *graphic = [model graphicToRepresent];
+        [graphic drawInRect:bounds withGraphicsContext:ctx];
 
         NSLog(@"Grafica Representada");
     }

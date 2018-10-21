@@ -6,7 +6,8 @@
 //  Copyright © 2018 Luis Blazquez Miñambres. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+@class GraphicsClass;
 
 #define NUM_DEFAULT_FUNCTIONS 6
 
@@ -21,6 +22,8 @@
     NSArray *parametersB;
     NSArray *parametersC;
     NSArray *parametersN;
+    
+    GraphicsClass *graphicToRepresent;
 
 }
 
@@ -31,6 +34,7 @@
 @property (nonatomic) NSArray *parametersB;
 @property (nonatomic) NSArray *parametersC;
 @property (nonatomic) NSArray *parametersN;
+@property (nonatomic) GraphicsClass *graphicToRepresent;
 
 
     /* Metodo de inicialización del array de funciones del ComboBox */

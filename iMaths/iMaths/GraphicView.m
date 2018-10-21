@@ -20,7 +20,6 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     if (self) {
         
     }
-    
     return self;
 }
 
@@ -28,39 +27,31 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     
-    // Drawing code here.
+    // Drawing code here
     NSLog(@"En drawRect");
-    NSRect bounds = [self bounds];          // Dimensiones de la vista
-    [[NSColor whiteColor] set];             // Fondo de la vista de color blanco
-    [NSBezierPath fillRect:bounds];         // Rellena el bezierPath con los limites de la vista
-    NSGraphicsContext *ctx = [NSGraphicsContext currentContext]; // Contexto grafico actual
+    NSRect bounds=[self bounds];
+    if (P == 0){
+    [[NSColor whiteColor]set];
+    [NSBezierPath fillRect:bounds];
+    NSGraphicsContext *ctx=[NSGraphicsContext currentContext];
+    NSInteger origenX=bounds.origin.x;
+    NSInteger origenY=bounds.origin.y;
+    float altura=bounds.size.height;
+    float ancho=bounds.size.width;
+    NSNumber *oX = [[NSNumber alloc]initWithInteger:origenX];
+    NSNumber *oY = [[NSNumber alloc]initWithInteger:origenY];
+    NSNumber *alt = [[NSNumber alloc]initWithFloat:altura];
+    NSNumber *anch = [[NSNumber alloc]initWithFloat:ancho];
+        
+        NSLog(@"En drawRect : %@ %@ %@ %@",oX, oY, alt, anch);
+        
     
-    // Dimensiones de la ventana
-    // Puntos x e y de la esquina inferior izquierda
-    // Y altura y anchura
-    NSInteger origX = bounds.origin.x;
-    NSInteger origY = bounds.origin.y;
-    float height = bounds.size.height;
-    float width = bounds.size.width;
-    
-    NSNumber *oX = [[NSNumber alloc]initWithInteger:origX];
-    NSNumber *oY = [[NSNumber alloc]initWithInteger:origY];
-    NSNumber *h = [[NSNumber alloc]initWithFloat:height];
-    NSNumber *w = [[NSNumber alloc]initWithFloat:width];
-    
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:ctx,@"GraphicContext",
-                                                                     oX,@"OriginX",
-                                                                     oY,@"OriginY",
-                                                                     h,@"Height",
-                                                                     w,@"Width",
-                                                                     nil];
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelExportAndDrawGraphicsNotification
-                      object:self
-                    userInfo:info];
+    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys:ctx,@"ContextoGrafico",oX,@"OrigenX",oY,@"OrigenY",alt,@"Altura",anch,@"Ancho",nil];
+    NSNotificationCenter *nc=[NSNotificationCenter defaultCenter];
+    [nc postNotificationName:PanelExportAndDrawGraphicsNotification object:self userInfo:info];
     
     NSLog(@"Enviada la información al Contolador");
-    
+    }
 }
 
 @end

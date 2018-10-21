@@ -10,6 +10,7 @@
 @class PanelController;
 @class GraphicsClass;
 @class GraphicView;
+@class PanelModel;
 
 @interface Controller : NSObject <NSWindowDelegate>
 {
@@ -27,7 +28,8 @@
     
     // Outlet conectado por target-action a la vista donde se representará la gráfica.
     IBOutlet GraphicView *graphicRepresentationView;
-    GraphicsClass *graphicToRepresent;
+    PanelModel *model;
+    int P;
 }
 
 -(IBAction) showPanel:(id)sender;
