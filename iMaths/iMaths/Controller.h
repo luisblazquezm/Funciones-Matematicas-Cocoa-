@@ -29,7 +29,7 @@
     // Outlet conectado por target-action a la vista donde se representará la gráfica.
     IBOutlet GraphicView *graphicRepresentationView;
     PanelModel *model;
-    int P;
+
 }
 
 -(IBAction) showPanel:(id)sender;

@@ -9,7 +9,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface GraphicView : NSView
-{
-    int P;
-}
+
 @end

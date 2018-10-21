@@ -50,7 +50,7 @@ extern NSString *PanelNewGraphicNotification;
         graphicRepresentationView = [[GraphicView alloc] init];
         //graphicToRepresent = [[GraphicsClass alloc] init];
         model = [[PanelModel alloc] init];
-        P = 1;
+
         arrayToExport = [[NSMutableArray alloc] init];
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
@@ -137,7 +137,7 @@ extern NSString *PanelNewGraphicNotification;
         enableExportingFlag = YES;
     }
     
-    if (graphic != nil ) {
+    if (graphic != nil) {
         //graphicToRepresent = graphic;
         [model setGraphicToRepresent:graphic ];
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");

@@ -30,7 +30,6 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     // Drawing code here
     NSLog(@"En drawRect");
     NSRect bounds=[self bounds];
-    if (P == 0){
     [[NSColor whiteColor]set];
     [NSBezierPath fillRect:bounds];
     NSGraphicsContext *ctx=[NSGraphicsContext currentContext];
@@ -42,16 +41,15 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     NSNumber *oY = [[NSNumber alloc]initWithInteger:origenY];
     NSNumber *alt = [[NSNumber alloc]initWithFloat:altura];
     NSNumber *anch = [[NSNumber alloc]initWithFloat:ancho];
-        
-        NSLog(@"En drawRect : %@ %@ %@ %@",oX, oY, alt, anch);
-        
-    
-    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys:ctx,@"ContextoGrafico",oX,@"OrigenX",oY,@"OrigenY",alt,@"Altura",anch,@"Ancho",nil];
+
+    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys:ctx,@"ContextoGrafico",oX
+                        ,@"OrigenX",oY
+                        ,@"OrigenY",alt
+                        ,@"Altura",anch
+                        ,@"Ancho"
+                        ,nil];
     NSNotificationCenter *nc=[NSNotificationCenter defaultCenter];
     [nc postNotificationName:PanelExportAndDrawGraphicsNotification object:self userInfo:info];
-    
-    NSLog(@"Enviada la información al Contolador");
-    }
 }
 
 @end
