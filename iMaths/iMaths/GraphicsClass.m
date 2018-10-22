@@ -82,99 +82,184 @@ static NSRect funcRect = {-10, -10, 20 ,20}; //MAXIMO Y MINIMO DE EJES X E Y Y D
 withGraphicsContext:(NSGraphicsContext*)ctx
 {
     NSPoint aPoint;
+    int counter = 0;
     
     // IMPORTANTE: esto está aqui porque no se llama al init cuando nuestra grafica llama a este metodo
-    poly = [[NSBezierPath alloc] init];
-    color = [self colour];
+    funcBezier = [[NSBezierPath alloc] init];
+    axisXBezier = [[NSBezierPath alloc] init];
+    axisYBezier = [[NSBezierPath alloc] init];
+    pointsAxisXBezier = [[NSBezierPath alloc] init];
+    pointsAxisYBezier = [[NSBezierPath alloc] init];
+    
+    colorGraphic = [self colour];
+    colorAxis  = [NSColor blackColor];
     
     float distance = funcRect.size.width/HOPS;
     
-    [poly removeAllPoints];
+    // Cuando se añade una nueva grafica se borra la anterior
+    [funcBezier removeAllPoints];
     [ctx saveGraphicsState]; //------------------- Contexto gráfico
-    
 
-    NSAffineTransform *tf = [NSAffineTransform transform];
-    [tf translateXBy:b.size.width/2 yBy:b.size.height/2];   // 2º Mult* por la matriz de Transformación Afín
-    [tf scaleXBy:b.size.width/funcRect.size.width           // 1º Ancho y Alto / Escala (funcRect)
-             yBy:b.size.height/funcRect.size.height];
-    [tf concat];
-    
-    [poly setLineWidth:0.1];
-    [color setStroke];
-    
-    aPoint.x = funcRect.origin.x;
-    aPoint.y = [self valueAt:aPoint.x];
-    //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
-    
-    [poly moveToPoint:aPoint];
-    while (aPoint.x <= funcRect.origin.x + funcRect.size.width) {
-        //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
-        aPoint.y = [self valueAt:aPoint.x];
-        [poly lineToPoint:aPoint];
-        aPoint.x += distance;
-    }
-    
-    [poly stroke];
-    [ctx restoreGraphicsState];
-}
-
-/*
--(float) valueOfYAt:(float)x //Si no funciona con el self probar con graphics
-{
-    float resultY = 0;
-
-    if ([[self function] isEqualToString:@"a*sen(b*x)"]) {
-        resultY = [self paramA] * sinf( ([self paramB] * x) );
-    } else if ([[self function] isEqualToString:@"a*x+b"]) {
-        resultY = [self paramA] * x + [self paramB];
-    } else if ([[self function] isEqualToString:@"a*cos(b*x)"]) {
-        resultY = [self paramA] * cosf( ([self paramB] * x) );
-    } else if ([[self function] isEqualToString:@"a*x^2+b*x+c"]) {
-        resultY = [self paramA] * powf(x, 2) + [self paramB] * x + [self paramC];
-    } else if ([[self function] isEqualToString:@"a*x^n"]) {
-        resultY = [self paramA] * pow(x, [self paramN]);
-    } else { // @"a/(b*x)"
-        resultY = [self paramA] / ([self paramB] * x);
-    }
-    
-    return resultY;
-}
-
-// Cada vez que se añade una grafica cambian los bounds b y el contexto grafico (uno para todas las graficas)
-
--(void) drawInRect:(NSRect)b
-withGraphicsContext:(NSGraphicsContext*)ctx
-{
-    NSLog(@"En drawInRect withGraphicsContext");
-    NSPoint aPoint;
-    float distance = funcRect.size.width/HOPS;
-    
-    //[poly removeAllPoints];
-    [ctx saveGraphicsState]; //------------------- Contexto gráfico
-    
         NSAffineTransform *tf = [NSAffineTransform transform];
-        [tf translateXBy:b.size.width/2 yBy:b.size.height/2];
+        // 2º Mult* por la matriz de Transformación Afín
+        [tf translateXBy:b.size.width/2
+                     yBy:b.size.height/2];
+        // 1º Ancho y Alto / Escala (funcRect)
         [tf scaleXBy:b.size.width/funcRect.size.width
                  yBy:b.size.height/funcRect.size.height];
         [tf concat];
     
-        [poly setLineWidth:0.1];
-        [[self colour] setStroke];
-        NSLog(@"Color %@ Funcion %@\n", [self colour], [self function]);
-        aPoint.x =  funcRect.origin.x;
-        aPoint.y = -448.600006;//[self valueOfYAt:aPoint.x];
-        NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+        /* -------------- Dibujo de los ejes --------------- */
     
-        [poly moveToPoint:aPoint];
+                            // * EJE X *
+    
+        [axisXBezier setLineWidth:0.1];
+        [colorAxis setStroke];
+    
+        aPoint.x = funcRect.origin.x;
+        aPoint.y = 0;
+        //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+    
+        [axisXBezier moveToPoint:aPoint];
         while (aPoint.x <= funcRect.origin.x + funcRect.size.width) {
-            aPoint.y = [self valueOfYAt:aPoint.x];
-            [poly lineToPoint:aPoint];
+            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
+            aPoint.y = 0;
+            [axisXBezier lineToPoint:aPoint];
             aPoint.x += distance;
         }
     
-        [poly stroke];
-    [ctx restoreGraphicsState]; //------------------- Contexto gráfico
+        [axisXBezier stroke];
+    
+                            // * EJE Y *
+    
+        [axisYBezier setLineWidth:0.1];
+        [colorAxis setStroke];
+    
+        // Comienza en el punto minimo de Y (abajo) y dibuja la raya hasta el punto maximo (la altura)
+        aPoint.x = 0;
+        aPoint.y = funcRect.origin.y;
+        //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+    
+        [axisYBezier moveToPoint:aPoint];
+        while (aPoint.y <= funcRect.origin.y + funcRect.size.height) {
+            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
+            aPoint.x = 0;
+            [axisYBezier lineToPoint:aPoint];
+            aPoint.y += distance;
+        }
+    
+        [axisYBezier stroke];
+    
+        /* -------------- Dibujo de los puntos de los ejes --------------- */
+    
+                            // * EJE X (POSITIVO) *
+    
+        [pointsAxisXBezier setLineWidth:0.1];
+        [colorAxis setStroke];
+    
+        aPoint.x = 0;
+        aPoint.y = 0.3;
+        // Si lo hago desde el punto x minimo hasta el punto x maximo (anchura) se mueven los ejes al redimensionar la ventana
+        // Por eso hago la primera mitad positiva y luego la negativa de x e y
+        [pointsAxisXBezier moveToPoint:aPoint];
+    
+        while (aPoint.x <= (funcRect.size.width/2))  { // aPoint.y = 0.3 => -0.3
+            counter++;
+            NSLog(@"PointPositivo: %f %f ", aPoint.x, aPoint.y);
+            aPoint.x += 0.5;
+            aPoint.y = 0;
+            [pointsAxisXBezier moveToPoint:aPoint];
+            if (counter == 5) {
+                aPoint.y = 0.6;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                aPoint.y = -0.6;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                counter = 0;
+            } else {
+                aPoint.y = 0.3;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                aPoint.y = -0.3;
+                [pointsAxisXBezier lineToPoint:aPoint];
+            }
+        }
+        
+        [pointsAxisXBezier stroke];
+    
+                            // * EJE X (NEGATIVO) *
+    
+        [pointsAxisXBezier setLineWidth:0.1];
+        [colorAxis setStroke];
+    
+        aPoint.x = 0;
+        aPoint.y = 0.3;
+        [pointsAxisXBezier moveToPoint:aPoint];
+    
+        counter = 0;
+        while (aPoint.x >= (funcRect.size.width/2))  {
+            counter++;
+            NSLog(@"PointNegativo: %f %f ", aPoint.x, aPoint.y);
+            aPoint.x -= 0.5;
+            aPoint.y = 0;
+            [pointsAxisXBezier moveToPoint:aPoint];
+            if (counter == 5) {
+                aPoint.y = 0.6;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                aPoint.y = -0.6;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                counter = 0;
+            } else {
+                aPoint.y = 0.3;
+                [pointsAxisXBezier lineToPoint:aPoint];
+                aPoint.y = -0.3;
+                [pointsAxisXBezier lineToPoint:aPoint];
+            }
+        }
+    
+        [pointsAxisXBezier stroke];
+    
+                            // * EJE Y (POSITIVO) *
+    
+        [pointsAxisYBezier setLineWidth:0.1];
+        [colorAxis setStroke];
+    
+        // Comienza en el punto minimo de Y (abajo) y dibuja la raya hasta el punto maximo (la altura)
+        aPoint.x = 0;
+        aPoint.y = funcRect.origin.y;
+        //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+    
+        [pointsAxisYBezier moveToPoint:aPoint];
+        while (aPoint.y <= funcRect.origin.y + funcRect.size.height) {
+            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
+            aPoint.x = 0;
+            [axisYBezier lineToPoint:aPoint];
+            aPoint.y += distance;
+        }
+    
+        [pointsAxisYBezier stroke];
+    
+                            // * EJE Y (NEGATIVO) *
+    
+        /* -------------- Dibujo de las graficas --------------- */
+    
+        [funcBezier setLineWidth:0.1];
+        [colorGraphic setStroke];
+    
+        aPoint.x = funcRect.origin.x;
+        aPoint.y = [self valueAt:aPoint.x];
+        //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+    
+        [funcBezier moveToPoint:aPoint];
+        while (aPoint.x <= funcRect.origin.x + funcRect.size.width) {
+            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
+            aPoint.y = [self valueAt:aPoint.x];
+            [funcBezier lineToPoint:aPoint];
+            aPoint.x += distance;
+        }
+    
+        [funcBezier stroke];
+    
+    [ctx restoreGraphicsState];
 }
- */
+
 
 @end

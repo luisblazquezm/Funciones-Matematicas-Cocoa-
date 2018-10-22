@@ -20,8 +20,11 @@
     
     float *terms;
     int termCount;
-    NSColor *color;
-    NSBezierPath *poly;
+    NSColor *colorGraphic;
+    NSColor *colorAxis;
+    NSBezierPath *funcBezier;
+    NSBezierPath *axisXBezier, *axisYBezier;
+    NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
 }
 
     /* Getters y setters */
@@ -48,8 +51,8 @@
 
     /* Metodos para representar graficas */
 
-//-(float) valueOfYAt:(float)x;
 -(float) valueAt:(float)x;
+
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx;
 @end

@@ -7,7 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class Controller;
 
 @interface GraphicView : NSView
-
+{
+    IBOutlet __weak Controller *controller;
+}
 @end

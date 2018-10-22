@@ -52,4 +52,9 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     [nc postNotificationName:PanelExportAndDrawGraphicsNotification object:self userInfo:info];
 }
 
+// mouseDown y luego (if delegateRespondsto.) se lo paso al delegate processMouseDown inBounds
+// mouseDragged seleccionas un area con el boton izquierdo y hace zoom
+// Matriz de transferencia en estos metodos
+// if(trackingMouse){ // el codigo //}
+
 @end
