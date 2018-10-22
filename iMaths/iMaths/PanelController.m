@@ -224,6 +224,19 @@ extern NSString *PanelNewGraphicNotification;
         functionSelectedFlag = NO;
     }
     
+    if (previousSelectedRow != selectedRow) {
+        [addGraphicButton setEnabled:NO];
+        [selectParamAField setEnabled:NO];
+        [selectParamBField setEnabled:NO];
+        [selectParamCField setEnabled:NO];
+        [selectParamNField setEnabled:NO];
+        [selectParamAField setStringValue:@""];
+        [selectParamBField setStringValue:@""];
+        [selectParamCField setStringValue:@""];
+        [selectParamNField setStringValue:@""];
+        functionSelectedFlag = NO;
+    }
+    
 }
 
 /*!

@@ -9,7 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PanelController">
             <connections>
                 <outlet property="addFuncButton" destination="Ofs-UC-afN" id="uO8-7e-72q"/>
-                <outlet property="addGraphicButton" destination="Ofs-UC-afN" id="9JH-wc-6vg"/>
+                <outlet property="addGraphicButton" destination="Ofs-UC-afN" id="xzP-H5-JM3"/>
                 <outlet property="deleteFunctionButton" destination="DiB-cU-mEc" id="6sQ-KX-u6x"/>
                 <outlet property="deleteGraphicButton" destination="DiB-cU-mEc" id="ngq-pG-1QP"/>
                 <outlet property="drawFunctionButton" destination="c3y-Ez-Abz" id="dkK-p4-2Ld"/>
@@ -59,7 +59,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Definición de la gráfica" identifier="" id="6Ie-FJ-LhB">
-                                <view key="view" id="FYB-A6-gfh">
+                                <view key="view" ambiguous="YES" id="FYB-A6-gfh">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -69,12 +69,12 @@
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Definición Función" identifier="" id="mhF-rm-ebC">
-                                                    <view key="view" id="bH1-la-hhW">
-                                                        <rect key="frame" x="10" y="33" width="195" height="0.0"/>
+                                                    <view key="view" ambiguous="YES" id="bH1-la-hhW">
+                                                        <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRq-XP-p54">
-                                                                <rect key="frame" x="38" y="-80" width="152" height="17"/>
+                                                                <rect key="frame" x="38" y="119" width="152" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Seleccione una funcion: " id="aho-ec-9wi">
                                                                     <font key="font" metaFont="system"/>
@@ -83,7 +83,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sbx-tU-Qz3">
-                                                                <rect key="frame" x="206" y="-147" width="306" height="22"/>
+                                                                <rect key="frame" x="206" y="52" width="306" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bm3-Nx-E0R">
                                                                     <font key="font" metaFont="system"/>
@@ -96,7 +96,7 @@
                                                                 </connections>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1H7-SA-7ED">
-                                                                <rect key="frame" x="133" y="-142" width="57" height="17"/>
+                                                                <rect key="frame" x="133" y="57" width="57" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nombre:" id="L2h-EN-0fu">
                                                                     <font key="font" metaFont="system"/>
@@ -105,7 +105,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2xj-hz-Fql">
-                                                                <rect key="frame" x="206" y="-85" width="309" height="26"/>
+                                                                <rect key="frame" x="206" y="114" width="309" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="XJH-Lt-7zX">
                                                                     <font key="font" metaFont="system"/>
@@ -222,7 +222,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Apariencia" identifier="" id="xXT-P1-HLP">
-                                                    <view key="view" ambiguous="YES" id="yoK-ad-pEL">
+                                                    <view key="view" id="yoK-ad-pEL">
                                                         <rect key="frame" x="10" y="33" width="616" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -281,7 +281,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Parámetros generales" identifier="" id="Zrr-Ff-mkK">
-                                <view key="view" ambiguous="YES" id="K7l-d6-r50">
+                                <view key="view" id="K7l-d6-r50">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
