@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "561925313.979825"
+            timestampString = "561931306.220081"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
-            landmarkName = "-drawInRect:withGraphicsContext:"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "561925313.979932"
+            timestampString = "561931306.22016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "-drawInRect:withGraphicsContext:"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,28 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "561925313.9799891"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "-drawInRect:withGraphicsContext:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iMaths/GraphicsClass.m"
-            timestampString = "561925313.980038"
+            timestampString = "561931306.220219"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "198"
             endingLineNumber = "198"
-            landmarkName = "-drawInRect:withGraphicsContext:"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,12 +58,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "561925313.9800839"
+            timestampString = "561931306.220275"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "-drawInRect:withGraphicsContext:"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iMaths/GraphicsClass.m"
+            timestampString = "561931306.220329"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

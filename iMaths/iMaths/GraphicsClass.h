@@ -18,8 +18,8 @@
     float paramN;
     NSColor *colour;
     
-    float *terms;
-    int termCount;
+    NSRect funcRect;
+    
     NSColor *colorGraphic;
     NSColor *colorAxis;
     NSBezierPath *funcBezier;
@@ -54,5 +54,6 @@
 -(float) valueAt:(float)x;
 
 -(void) drawInRect:(NSRect)b
-withGraphicsContext:(NSGraphicsContext*)ctx;
+withGraphicsContext:(NSGraphicsContext*)ctx
+          andLimits:(NSRect)limit;
 @end

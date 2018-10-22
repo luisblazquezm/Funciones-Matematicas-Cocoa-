@@ -256,6 +256,7 @@ extern NSString *PanelNewGraphicNotification;
  */
 -(IBAction) addNewGraphic:(id)sender
 {
+    colour = [selectColorGraphicButton color];
     
     newGraphic = [[GraphicsClass alloc] initWithGraphicName:name
                                                    function:function
@@ -404,7 +405,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     function = [selectListFuncComboBox stringValue];
     NSLog(@"Funcion %@ escogida\r", function);
     
-    if ([function length] != 0) {
+    if ([function length] > 0) {
         // Comprueba que no se introduzca una grafica con un nombre vacio
         NSString *cadena = [selectGraphicNameField stringValue];
         if ([cadena length] == 0){
@@ -524,7 +525,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
          *--------- Apariencia ------------
          */
         
-        colour = [selectColorGraphicButton objectValue];
+        // LLama al metodo observeValueForKeyPath cada vez que se cambia el color del colorWell
+        [selectColorGraphicButton addObserver:self
+                                   forKeyPath:@"color"
+                                      options:0
+                                      context:nil];
         NSLog(@"Apariencia introducida correctamente color: %@\r", colour);
     }
     
@@ -551,7 +556,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 }
 
-
+/*!
+ * @brief  Metodo que es llamado cada vez que se produce un cambio en el color del del outlet 'colorWell'
+ */
+-(void) observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context
+{
+    if ([keyPath isEqualToString:@"color"]){
+        colour = [selectColorGraphicButton color];
+    }
+}
 
 /*!
  * @brief  Manda una notificación al metodo drawRect de la clase "GraphicsView" para poder representar la
@@ -559,6 +575,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  */
 -(IBAction) drawGraphic:(id)sender
 {
+    float varXMax = 0, varXMin = 0, varYMax = 0, varYMin = 0;
     aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
     
     NSLog(@"Fila seleccionada %ld\r", aRowSelected);
@@ -566,22 +583,50 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     if (aRowSelected != -1) {
         NSMutableArray *array = [modelInPanel arrayListGraphics];
         GraphicsClass *graphicToRepresent = [array objectAtIndex:aRowSelected];
-        float varXMax = [maxRangeXField floatValue];
-        float varXMin = [minRangeXField floatValue];
-        float varYMax = [maxRangeYField floatValue];
-        float varYMin = [minRangeYField floatValue];
+        
+        NSLog(@"minX: %f minY: %f maxX: %f maxY: %f",[minRangeXField floatValue],
+                                                      [minRangeYField floatValue],
+                                                      [maxRangeXField floatValue],
+                                                      [maxRangeYField floatValue]);
+        
+        if ([maxRangeXField floatValue] != 0 ||
+            [maxRangeYField floatValue] != 0 ||
+            [minRangeXField floatValue] != 0 ||
+            [minRangeYField floatValue] != 0){
+                varXMax = [maxRangeXField floatValue];
+                varXMin = [minRangeXField floatValue];
+                varYMax = [maxRangeYField floatValue];
+                varYMin = [minRangeYField floatValue];
+        }
+        
+        NSLog(@"VAR minX: %f minY: %f maxX: %f maxY: %f",varXMin,
+              varYMin,
+              varXMax,
+              varYMax);
+        
+        NSNumber *XMax = [[NSNumber alloc]initWithFloat:varXMax];
+        NSNumber *XMin = [[NSNumber alloc]initWithFloat:varXMin];
+        NSNumber *YMax = [[NSNumber alloc]initWithFloat:varYMax];
+        NSNumber *YMin = [[NSNumber alloc]initWithFloat:varYMin];
+        
+        [minRangeXField setStringValue:@""];
+        [maxRangeXField setStringValue:@""];
+        [minRangeYField setStringValue:@""];
+        [maxRangeYField setStringValue:@""];
         
         NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:graphicToRepresent,@"graphicToRepresent",
-                                         varXMax,@"varXMax",
-                                         varXMin,@"varXMin",
-                                         varYMax,@"varYMax",
-                                         varYMin,@"varYMin",
+                                         XMax,@"XMax",
+                                         XMin,@"XMin",
+                                         YMax,@"YMax",
+                                         YMin,@"YMin",
                                          nil];
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc postNotificationName:PanelExportAndDrawGraphicsNotification
                           object:self
                         userInfo:notificationInfo];
+        
+
     }
 }
 
@@ -606,10 +651,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  */
 -(IBAction) selectDrawingRange:(id)sender
 {
-    //NSInteger minX = [minRangeXField integerValue];
-    //NSInteger minY = [minRangeYField integerValue];
-    //NSInteger maxX = [maxRangeXField integerValue];
-    //NSInteger maxY = [maxRangeYField integerValue];
+    //varXMin = [minRangeXField integerValue];
+    //varYMin = [minRangeYField integerValue];
+    //varXMax = [maxRangeXField integerValue];
+    //varYMax = [maxRangeYField integerValue];
 }
 
 /*!
@@ -671,5 +716,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [listOfCreatedFunctionsTableView deselectRow:aRowSelected];
 }
 
+- (void)dealloc
+{
+    [selectColorGraphicButton removeObserver:self forKeyPath:@"color"];
+}
 
 @end

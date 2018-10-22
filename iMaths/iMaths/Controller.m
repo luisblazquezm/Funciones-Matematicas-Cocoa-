@@ -121,34 +121,60 @@ extern NSString *PanelNewGraphicNotification;
     arrayToExport = [notificationInfo objectForKey:@"listOfGraphicsToExport"];
 
     GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
+    NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
+    NSNumber *YMin = [notificationInfo objectForKey:@"YMin"];
+    NSNumber *XMax = [notificationInfo objectForKey:@"XMax"];
+    NSNumber *YMax = [notificationInfo objectForKey:@"YMax"];
     
     NSNumber *oX=[notificationInfo objectForKey:@"OrigenX"];
     NSNumber *oY=[notificationInfo objectForKey:@"OrigenY"];
     NSNumber *alt=[notificationInfo objectForKey:@"Altura"];
     NSNumber *anch=[notificationInfo objectForKey:@"Ancho"];
     NSGraphicsContext *ctx=[notificationInfo objectForKey:@"ContextoGrafico"];
-    NSRect bounds;
-    bounds.origin.x=[oX integerValue];
-    bounds.origin.y=[oY integerValue];
-    bounds.size.height=[alt integerValue];
-    bounds.size.width=[anch integerValue];
     
+
+    
+    // Activa el flag que habilita la opcion de exportar el array de la tabla del PanelController
     if (arrayToExport != nil) {
         enableExportingFlag = YES;
     }
     
-    if (graphic != nil) {
+    // Activa el metodo setNeedsDisplay para poder representar los ajustes de la vista 'CustomView' en el drawRect
+    if (graphic != nil && XMin != nil && XMax != nil && YMin != nil && YMax != nil) {
         //graphicToRepresent = graphic;
+        limit.origin.x = [XMin integerValue];
+        limit.origin.y = [YMin integerValue];
+        limit.size.width = [XMax integerValue];
+        limit.size.height = [YMax integerValue];
+        
+        NSLog(@"Limits Controller: oX: %f oY: %f width: %f height: %f", limit.origin.x,
+              limit.origin.y,
+              limit.size.width,
+              limit.size.height);
+        
         [model setGraphicToRepresent:graphic ];
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
-         [graphicRepresentationView setNeedsDisplay:YES]; // EL ERROR ESTA AL LLAMAR AQUI
+        [graphicRepresentationView setNeedsDisplay:YES]; // EL ERROR ESTA AL LLAMAR AQUI
         // De aqui llama al drawRect de la clase "GraphicView"
     }
     
+    
+    // Modela la representación de los objetos que se visualizarán dentro del 'Custom View': ejes, graficas,...
     if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
+
+        bounds.origin.x=[oX integerValue];
+        bounds.origin.y=[oY integerValue];
+        bounds.size.height=[alt integerValue];
+        bounds.size.width=[anch integerValue];
+        
+        NSLog(@"Limits Controller: oX: %f oY: %f width: %f height: %f", limit.origin.x,
+              limit.origin.y,
+              limit.size.width,
+              limit.size.height);
+        
         NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
         GraphicsClass *graphic = [model graphicToRepresent];
-        [graphic drawInRect:bounds withGraphicsContext:ctx];
+        [graphic drawInRect:bounds withGraphicsContext:ctx andLimits:limit];
 
         NSLog(@"Grafica Representada");
     }

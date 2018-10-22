@@ -11,7 +11,7 @@
 
 #define RANDFLOAT() (random()%128/128.0)
 #define HOPS (500) // Numero de puntos
-static NSRect funcRect = {-10, -10, 20 ,20}; //MAXIMO Y MINIMO DE EJES X E Y Y DONDE ESTA LA ESQUINA INFERIOR IZQUIERDA
+
 
 @implementation GraphicsClass
 @synthesize funcName, function, paramA, paramB, paramC, paramN, colour;
@@ -43,17 +43,27 @@ static NSRect funcRect = {-10, -10, 20 ,20}; //MAXIMO Y MINIMO DE EJES X E Y Y D
 
 -(id)init{
     NSLog(@"En init de GC");
-    self=[super init];
+    self = [super init];
     if(!self){
         return nil;
     }
     
-    termCount = (random() % 3) + 2;
-    terms = malloc(termCount * sizeof(float));
+    //MAXIMO Y MINIMO DE EJES X E Y Y DONDE ESTA LA ESQUINA INFERIOR IZQUIERDA
+    funcRect.origin.x = -10;
+    funcRect.origin.y = -10;
+    funcRect.size.width = 20;
+    funcRect.size.height = 20;
     
-    for (int i = 0; i < termCount; i++) {
-        terms[i] = 5.0 - (random() % 100)/10.0;
-    }
+    // IMPORTANTE: esto está aqui porque no se llama al init cuando nuestra grafica llama a este metodo
+    funcBezier = [[NSBezierPath alloc] init];
+    axisXBezier = [[NSBezierPath alloc] init];
+    axisYBezier = [[NSBezierPath alloc] init];
+    pointsAxisXBezier = [[NSBezierPath alloc] init];
+    pointsAxisYBezier = [[NSBezierPath alloc] init];
+    
+    
+    colorGraphic = [self colour];
+    colorAxis  = [NSColor blackColor];
     
     return self;
 }
@@ -80,21 +90,14 @@ static NSRect funcRect = {-10, -10, 20 ,20}; //MAXIMO Y MINIMO DE EJES X E Y Y D
 
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx
+          andLimits:(NSRect)limit
 {
     NSPoint aPoint;
     int counter = 0;
     float lineWidth = 0.1;
     float spacePoints = 0.3;
     
-    // IMPORTANTE: esto está aqui porque no se llama al init cuando nuestra grafica llama a este metodo
-    funcBezier = [[NSBezierPath alloc] init];
-    axisXBezier = [[NSBezierPath alloc] init];
-    axisYBezier = [[NSBezierPath alloc] init];
-    pointsAxisXBezier = [[NSBezierPath alloc] init];
-    pointsAxisYBezier = [[NSBezierPath alloc] init];
-    
-    colorGraphic = [self colour];
-    colorAxis  = [NSColor blackColor];
+    [self init];
     
     float distance = funcRect.size.width/HOPS;
     
@@ -286,6 +289,33 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         /* -------------- Dibujo de las graficas --------------- */
     
         if ([[self function] length] > 0){
+            
+            NSLog(@"Limits: oX: %f oY: %f width: %f height: %f", limit.origin.x,
+                  limit.origin.y,
+                  limit.size.width,
+                  limit.size.height);
+            NSLog(@"Anterior FunRect: oX: %f oY: %f width: %f height: %f", funcRect.origin.x,
+                  funcRect.origin.y,
+                  funcRect.size.width,
+                  funcRect.size.height);
+            
+            if (limit.origin.x != 0)
+                funcRect.origin.x = limit.origin.x;
+            
+            if (limit.origin.y != 0)
+                funcRect.origin.y = limit.origin.y;
+            
+            if (limit.size.width != 0)
+                funcRect.size.width = limit.size.width;
+            
+            if (limit.size.height != 0)
+                funcRect.size.height = limit.size.height;
+            
+            NSLog(@"Nuevo FunRect: oX: %f oY: %f width: %f height: %f", funcRect.origin.x,
+                  funcRect.origin.y,
+                  funcRect.size.width,
+                  funcRect.size.height);
+            
             [funcBezier setLineWidth:lineWidth];
             [colorGraphic setStroke];
         

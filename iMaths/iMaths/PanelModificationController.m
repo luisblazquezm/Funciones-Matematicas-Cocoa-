@@ -57,7 +57,8 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
     self = [super initWithWindow:window];
     if (self){
         NSLog(@"En init PanelModification");
-        //modelInPanel = [[PanelModel alloc] init];
+        changesNotSavedFlag = YES;
+        windowLog = window;
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
                selector:@selector(handleModifyGraphic:)
@@ -140,8 +141,31 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
 
 -(IBAction) cancelNewGraphic:(id)sender
 {
-    // Preguntar si desea guardar cambios y Cerrar el panel
+    NSInteger respuesta;
+    if (!changesNotSavedFlag) {
+        respuesta = NSRunAlertPanel(@"Cambios realizados no guardados",
+                                    @"Los cambios no se han guardado. ¿Está seguro de que desea cerrar la ventana?.",
+                                    @"No.Guardar y cerrar panel",
+                                    @"No.Cancelar salida del panel",
+                                    @"Si.Cerrar panel",
+                                    nil);
+        NSLog(@"NSAlertDefaultReturn %@", NSAlertDefaultReturn);
+        if(respuesta == NSAlertDefaultReturn) {
+            [self windowShouldClose:windowLog];
+         } else if (respuesta == NSAlertSecondButtonReturn) {
+            [];
+            return YES;
+         } else if (respuesta == NSAlertThirdButtonReturn) {
+             
+         }
+    } else {
+        
+    }
+}
 
+-(IBAction) controlTextDidChange:(NSNotification *)obj
+{
+    changesNotSavedFlag = NO;
 }
 
 

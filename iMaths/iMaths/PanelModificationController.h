@@ -20,6 +20,9 @@
     IBOutlet NSColorWell *newColour;
     IBOutlet NSButton *confirmChanges;
     IBOutlet NSButton *cancelChanges;
+    
+    bool changesNotSavedFlag;
+    NSWindow *windowLog;
 }
 
 
