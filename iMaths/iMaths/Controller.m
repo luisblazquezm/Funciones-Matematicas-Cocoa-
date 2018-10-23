@@ -199,7 +199,6 @@ extern NSString *PanelNewGraphicNotification;
         
         [save setTitle:@"Informative text."];
         [save setMessage:@"Message text."];
-        [save runModal];
         
         NSInteger result = [save runModal];
         NSError *error = nil;
@@ -363,7 +362,78 @@ extern NSString *PanelNewGraphicNotification;
  */
 -(IBAction) exportGraphicAs:(id)sender
 {
+    NSLog(@"Exportar HABILITADO\r");
     
+    NSData *exportedData;
+    NSSavePanel *save = [NSSavePanel savePanel];
+    NSError *error;
+    
+    BOOL wasHidden = graphicRepresentationView.isHidden;
+    CGFloat wantedLayer = graphicRepresentationView.wantsLayer;
+    
+    graphicRepresentationView.hidden = NO;
+    graphicRepresentationView.wantsLayer = YES;
+    
+    NSImage *image = [[NSImage alloc] initWithSize:graphicRepresentationView.bounds.size];
+    [image lockFocus];
+    CGContextRef ctx = [NSGraphicsContext currentContext].graphicsPort;
+    [graphicRepresentationView.layer renderInContext:ctx];
+    [image unlockFocus];
+    
+    graphicRepresentationView.wantsLayer = wantedLayer;
+    graphicRepresentationView.hidden = wasHidden;
+    
+    
+    [save setAllowedFileTypes:[NSArray arrayWithObject:@"png"]];
+    
+    [save setTitle:@"Guardar Grafica como..."];
+    [save setMessage:@"Message text."];
+    
+    NSInteger result = [save runModal];
+    NSLog(@"Ventana Desplegada %ld\r", result);
+    
+    if (result == NSModalResponseOK) {
+        NSURL *fileURL = [save URL];
+        // Cache the reduced image
+        NSData *imageData = [image TIFFRepresentation];
+        NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:imageData];
+        NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:1.0] forKey:NSImageCompressionFactor];
+        imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
+        
+        if (exportedData == nil)
+            NSLog(@"ERROR");
+        
+        BOOL zBoolResult = [imageData writeToURL:fileURL
+                                            options:NSDataWritingAtomic
+                                              error:&error];
+        if (!zBoolResult) {
+            NSLog(@"%s: %@", __FUNCTION__, error);
+            NSLog(@"writeUsingSavePanel failed");
+        }
+        /*
+         //save as pdf, succeeded but with flaw
+         data = [self dataWithPDFInsideRect:[self frame]];
+         [data writeToFile:@"asd.pdf" atomically:YES];
+         */
+    } else if(result == NSModalResponseCancel) {
+        NSLog(@"doSaveAs we have a Cancel button");
+        return;
+    } else {
+        NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
+        return;
+    }
+    
+    NSURL *urlDirectory = [save directoryURL];
+    NSString *saveDirectory = [urlDirectory absoluteString];
+    NSLog(@"doSaveAs directory = %@", saveDirectory);
+    
+    NSString * saveFilename = [save representedFilename];
+    NSLog(@"doSaveAs filename = %@", saveFilename);
+    
+    if (error) {
+        // This is one way to handle the error, as an example
+        [NSApp presentError:error];
+    }
 }
 
 

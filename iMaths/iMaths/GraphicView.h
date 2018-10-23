@@ -19,6 +19,7 @@
     BOOL mouseDraggedFlag;
 }
 
-- (void)resetScaling;
+-(void) resetScaling;
+
 
 @end
