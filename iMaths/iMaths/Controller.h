@@ -28,10 +28,12 @@
     
     // Outlet conectado por target-action a la vista donde se representará la gráfica.
     IBOutlet GraphicView *graphicRepresentationView;
+    IBOutlet NSButton *resetZoom;
     PanelModel *model;
     
     NSRect limit;
     NSRect bounds;
+    BOOL graphicIsZoomed;
 
 }
 

@@ -91,4 +91,37 @@
     
 }
 
+/*
+-(void) createGraphic:(NSString*)functionName
+              withName:(NSString*)graphicName
+               paramA:(float)AGraphic
+               paramB:(float)BGraphic
+               paramC:(float)CGraphic
+               paramN:(float)NGraphic
+                color:(NSColor*)graphicColour
+{
+    GraphicsClass *graphic =[[GraphicsClass alloc] initWithGraphicName:graphicName
+                                                              function:functionName
+                                                                paramA:AGraphic
+                                                                paramB:BGraphic
+                                                                paramC:CGraphic
+                                                                paramN:NGraphic
+                                                                colour:graphicColour];
+    
+    [arrayListGraphics addObject:graphic];
+}
+
+
+-(void) drawGraphic:(id)sender
+{
+    
+}
+
+-(void) deleteGraphic:(NSNumber*)graphicDeletedIndex
+{
+    long index = [graphicDeletedIndex integerValue];
+    [arrayListGraphics removeObjectAtIndex:index];
+}
+ */
+
 @end

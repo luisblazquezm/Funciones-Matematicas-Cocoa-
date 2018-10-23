@@ -42,5 +42,17 @@
 -(void)initializeArrayListFunctions;
 
     /* Metodos relacionados con la representacion de graficas */
+/*
+-(void) createGraphic:(NSString*)functionName
+             withName:(NSString*)graphicName
+               paramA:(float)AGraphic
+               paramB:(float)BGraphic
+               paramC:(float)CGraphic
+               paramN:(float)NGraphic
+                color:(NSColor*)graphicColour;
+-(void) addGraphic:(id)sender;
+-(void) drawGraphic:(id)sender;
+-(void) deleteGraphic:(NSNumber*)graphicDeletedIndex;
+*/
 
 @end

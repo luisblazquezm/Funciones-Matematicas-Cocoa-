@@ -131,6 +131,7 @@ extern NSString *PanelNewGraphicNotification;
     NSNumber *alt=[notificationInfo objectForKey:@"Altura"];
     NSNumber *anch=[notificationInfo objectForKey:@"Ancho"];
     NSGraphicsContext *ctx=[notificationInfo objectForKey:@"ContextoGrafico"];
+    NSNumber *zoom = [notificationInfo objectForKey:@"graphicIsZoomed"];
     
 
     
@@ -166,6 +167,7 @@ extern NSString *PanelNewGraphicNotification;
         bounds.origin.y=[oY integerValue];
         bounds.size.height=[alt integerValue];
         bounds.size.width=[anch integerValue];
+        graphicIsZoomed = [zoom boolValue];
         
         NSLog(@"Limits Controller: oX: %f oY: %f width: %f height: %f", limit.origin.x,
               limit.origin.y,
@@ -174,7 +176,7 @@ extern NSString *PanelNewGraphicNotification;
         
         NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
         GraphicsClass *graphic = [model graphicToRepresent];
-        [graphic drawInRect:bounds withGraphicsContext:ctx andLimits:limit];
+        [graphic drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed];
 
         NSLog(@"Grafica Representada");
     }

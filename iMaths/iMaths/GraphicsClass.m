@@ -91,15 +91,20 @@
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
+           isZoomed:(BOOL)zoom
 {
     NSPoint aPoint;
     int counter = 0;
     float lineWidth = 0.1;
     float spacePoints = 0.3;
+    float width = 0;
     
     [self init];
     
     float distance = funcRect.size.width/HOPS;
+    
+    NSLog(@"Bounds: X: %f Y: %f WIDTH: %f HEIGHT: %f",b.origin.x
+          ,b.origin.y, b.size.width, b.size.height);
     
     // Cuando se añade una nueva grafica se borra la anterior
     [funcBezier removeAllPoints];
@@ -125,7 +130,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         aPoint.y = 0;
     
         [axisXBezier moveToPoint:aPoint];
-        while (aPoint.x <= b.size.width) {
+        while (aPoint.x <= funcRect.size.width + b.size.width) {
             //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
             aPoint.y = 0;
             [axisXBezier lineToPoint:aPoint];
@@ -144,7 +149,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         aPoint.y = funcRect.origin.y;
     
         [axisYBezier moveToPoint:aPoint];
-        while (aPoint.y <= b.size.height) {
+        while (aPoint.y <= funcRect.size.height + b.size.height) {
             //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
             aPoint.x = 0;
             [axisYBezier lineToPoint:aPoint];
@@ -166,7 +171,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         // Por eso hago la primera mitad positiva y luego la negativa de x e y
         [pointsAxisXBezier moveToPoint:aPoint];
     
-        while (aPoint.x <= (b.size.width/2))  { // aPoint.y = 0.3 => -0.3
+        while (aPoint.x <= funcRect.size.width + (b.size.width/2))  { // aPoint.y = 0.3 => -0.3
             counter++;
             //NSLog(@"PointPositivo: %f %f %f", aPoint.x, aPoint.y,(b.size.width/2) );
             aPoint.x += spacePoints;
@@ -198,7 +203,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [pointsAxisXBezier moveToPoint:aPoint];
 
         counter = 0;
-        while (aPoint.x >= (-(b.size.width/2)))  {
+        while (aPoint.x >= (-(funcRect.size.width)) + (-(b.size.width/2)))  {
             counter++;
             //NSLog(@"PointNegativo: %f %f ", aPoint.x, aPoint.y);
             aPoint.x -= spacePoints;
@@ -231,7 +236,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [pointsAxisYBezier moveToPoint:aPoint];
     
         counter = 0;
-        while (aPoint.y <= (b.size.height/2))  { // aPoint.y = 0.3 => -0.3
+        while (aPoint.y <= (funcRect.size.height) + (b.size.height/2))  { // aPoint.y = 0.3 => -0.3
             counter++;
             //NSLog(@"PointPositivoY: %f %f %f", aPoint.x, aPoint.y,(b.size.height/2) );
             aPoint.y += spacePoints;
@@ -263,7 +268,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [pointsAxisYBezier moveToPoint:aPoint];
     
         counter = 0;
-        while (aPoint.y >= (-(b.size.height/2)))  {
+        while (aPoint.y >= (-(funcRect.size.height)) + (-(b.size.height/2)))  {
             counter++;
             //NSLog(@"PointNegativoY: %f %f %f", aPoint.x, aPoint.y,(b.size.height/2) );
             aPoint.y -= spacePoints;
@@ -323,6 +328,12 @@ withGraphicsContext:(NSGraphicsContext*)ctx
             aPoint.y = [self valueAt:aPoint.x];
             //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
         
+            if (zoom) {
+                width = b.size.width;
+            } else {
+                width = funcRect.size.width;
+            }
+            
             [funcBezier moveToPoint:aPoint];
             while (aPoint.x <= funcRect.size.width) {
                 NSLog(@"Point: %f %f", aPoint.x, aPoint.y);

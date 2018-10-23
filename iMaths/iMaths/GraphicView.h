@@ -12,5 +12,13 @@
 @interface GraphicView : NSView
 {
     IBOutlet __weak Controller *controller;
+    bool mouseInBounds, trackingBoundsHit;
+    NSRect originalBoundsView, newBoundsView;
+    NSSize scaleSize;
+    BOOL graphicIsZoomed;
+    BOOL mouseDraggedFlag;
 }
+
+- (void)resetScaling;
+
 @end

@@ -388,7 +388,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  * @brief  Función que es notificada cada vez que se escribe
  *         un caracter dentro del textField
  */
-
 -(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
 
