@@ -151,10 +151,10 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
                                     nil);
         NSLog(@"NSAlertDefaultReturn %@", NSAlertDefaultReturn);
         if(respuesta == NSAlertDefaultReturn) {
-            [self windowShouldClose:windowLog];
+            //[self windowShouldClose:windowLog];
          } else if (respuesta == NSAlertSecondButtonReturn) {
-            [];
-            return YES;
+            //[];
+            //return YES;
          } else if (respuesta == NSAlertThirdButtonReturn) {
              
          }
