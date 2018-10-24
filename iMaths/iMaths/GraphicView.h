@@ -17,6 +17,10 @@
     NSSize scaleSize;
     BOOL graphicIsZoomed;
     BOOL mouseDraggedFlag;
+    NSPoint quadrantDragged;
+    BOOL trackingCloseBoxHit, mouseInCloseBox;
+    NSPoint a, c;
+    float width, height;
 }
 
 -(void) resetScaling;

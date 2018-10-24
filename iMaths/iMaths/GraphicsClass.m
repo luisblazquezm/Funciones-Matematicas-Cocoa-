@@ -92,12 +92,14 @@
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
            isZoomed:(BOOL)zoom
+             w: (float)width
+                 h:(float)height
 {
     NSPoint aPoint;
     int counter = 0;
-    float lineWidth = 0.1;
-    float spacePoints = 0.3;
-    float width = 0;
+    float lineWidth = 0.1;   //
+    float spacePoints = 0.3; // Espacio entre las barras de los ejes
+    float widthP = 0;
     
     [self init];
     
@@ -110,15 +112,31 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     [funcBezier removeAllPoints];
     [ctx saveGraphicsState]; //------------------- Contexto gráfico
 
+    if (width == 0){
         NSAffineTransform *tf = [NSAffineTransform transform];
-        // 2º Mult* por la matriz de Transformación Afín
+        // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
         [tf translateXBy:b.size.width/2
                      yBy:b.size.height/2];
         // 1º Ancho y Alto / Escala (funcRect)
         [tf scaleXBy:b.size.width/funcRect.size.width
                  yBy:b.size.height/funcRect.size.height];
         [tf concat];
-    
+        
+    } else {
+        
+        NSAffineTransform *tf = [NSAffineTransform transform];
+        NSLog(@"W: %f H: %f",width, height);
+        // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
+        [tf translateXBy:width
+                     yBy:height];
+        // 1º Ancho y Alto / Escala (funcRect)
+        [tf scaleXBy:width/10
+                 yBy:height/10];
+        [tf concat];
+        
+    }
+
+
         /* -------------- Dibujo de los ejes --------------- */
     
                             // * EJE X *
@@ -329,9 +347,9 @@ withGraphicsContext:(NSGraphicsContext*)ctx
             //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
         
             if (zoom) {
-                width = b.size.width;
+                widthP = b.size.width;
             } else {
-                width = funcRect.size.width;
+                widthP = funcRect.size.width;
             }
             
             [funcBezier moveToPoint:aPoint];

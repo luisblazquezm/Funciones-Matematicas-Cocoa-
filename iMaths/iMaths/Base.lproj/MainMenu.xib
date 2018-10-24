@@ -713,7 +713,7 @@
                 <subviews>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bzv-SN-Esn">
                         <rect key="frame" x="468" y="355" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I7S-RL-AES">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -745,7 +745,7 @@
             <connections>
                 <outlet property="delegate" destination="dQG-0K-aIn" id="HOn-xP-tI9"/>
             </connections>
-            <point key="canvasLocation" x="94.5" y="304.5"/>
+            <point key="canvasLocation" x="-50" y="176"/>
         </window>
         <customObject id="dQG-0K-aIn" customClass="Controller">
             <connections>

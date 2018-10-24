@@ -56,5 +56,7 @@
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
-          isZoomed:(BOOL)zoom;
+          isZoomed:(BOOL)zoom
+                 w: (float)width
+                 h:(float)height;
 @end

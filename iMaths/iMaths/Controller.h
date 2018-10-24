@@ -34,6 +34,7 @@
     NSRect limit;
     NSRect bounds;
     BOOL graphicIsZoomed;
+    float wid, heig;
 }
 
 -(IBAction) showPanel:(id)sender;

@@ -9,7 +9,8 @@
 #import "GraphicView.h"
 #import "GraphicsClass.h"
 static const NSSize unitSize = {1.0, 1.0};
-static const int zoom = 20;
+static const int zoomValueX = 40;
+static const int zoomValueY = 40;
 
 @implementation GraphicView
 
@@ -50,6 +51,8 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     NSNumber *alt = [[NSNumber alloc]initWithFloat:altura];
     NSNumber *anch = [[NSNumber alloc]initWithFloat:ancho];
     NSNumber *zoom = [[NSNumber alloc]initWithBool:graphicIsZoomed];
+    NSNumber *w = [[NSNumber alloc]initWithFloat:width];
+    NSNumber *h = [[NSNumber alloc]initWithFloat:height];
 
     NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys:
                         ctx,@"ContextoGrafico",
@@ -58,6 +61,8 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
                         alt,@"Altura",
                         anch,@"Ancho",
                         zoom,@"graphicIsZoomed",
+                        w,@"width",
+                        h,@"height",
                         nil];
     NSNotificationCenter *nc=[NSNotificationCenter defaultCenter];
     [nc postNotificationName:PanelExportAndDrawGraphicsNotification object:self userInfo:info];
@@ -68,48 +73,30 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
 // Matriz de transferencia en estos metodos
 // if(trackingMouse){ // el codigo //}
 
-- (void)mouseDragged:(NSEvent *)theEvent
-{
-    NSLog(@"En mouseDragged");
+- (void)mouseDown:(NSEvent *)theEvent {
+    // mouseInCloseBox and trackingCloseBoxHit are instance variables
+    a = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSRect bounds = [self frame];
+    NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",a.x, a.y, bounds.origin.x, bounds.origin.y);
+}
 
+- (void)mouseDragged:(NSEvent *)theEvent {
+    NSPoint b = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSRect bounds = [self frame];
+    NSLog(@"B(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",b.x, b.y, bounds.origin.x, bounds.origin.y);
+}
 
-    mouseDraggedFlag = YES;
+- (void)mouseUp:(NSEvent *)theEvent {
+    c = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSRect bounds = [self frame];
+    NSLog(@"C(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",c.x, c.y, bounds.origin.x, bounds.origin.y);
     
+    width = (c.x + a.x)/2;
+    height = (c.y + a.y)/2;
+
+    [self setNeedsDisplay:YES];
+
 }
-
-- (void)resetScaling;
-{
-    [self scaleUnitSquareToSize:[self convertSize:unitSize fromView:nil]];
-}
-
-- (void)mouseUp:(NSEvent *)theEvent
-{
-    if (mouseDraggedFlag){
-/* Dibujar los puntos de las graficas*/
-
-        
-        NSLog(@"Coordenadas Antes: X: %f Y: %f WIDTH: %f HEIGHT: %f",newBoundsView.origin.x
-              ,newBoundsView.origin.y, newBoundsView.size.width, newBoundsView.size.height);
-        
-        newBoundsView = [self bounds];
-        
-        newBoundsView.origin.x += zoom;
-        newBoundsView.origin.y += zoom;
-        
-        NSLog(@"Coordenadas Despues: X: %f Y: %f WIDTH: %f HEIGHT: %f",newBoundsView.origin.x
-              ,newBoundsView.origin.y, newBoundsView.size.width, newBoundsView.size.height);
-        [self setBoundsOrigin:newBoundsView.origin];
-        graphicIsZoomed = YES;
-    }
-}
-
-- (void)mouseDown:(NSEvent *)theEvent
-{
-    NSLog(@"En mouseDown");
-    
-        mouseDraggedFlag = NO;
-}
-
 
 
 @end
