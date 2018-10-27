@@ -64,6 +64,7 @@
     
     colorGraphic = [self colour];
     colorAxis  = [NSColor blackColor];
+
     
     return self;
 }
@@ -92,14 +93,13 @@
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
            isZoomed:(BOOL)zoom
-             w: (float)width
-                 h:(float)height
+             w:(float)width
+             h:(float)height
 {
     NSPoint aPoint;
     int counter = 0;
-    float lineWidth = 0.1;   //
+    float lineWidth = 0.1;   // Anchura de los ejes al dibujar
     float spacePoints = 0.3; // Espacio entre las barras de los ejes
-    float widthP = 0;
     
     [self init];
     
@@ -112,7 +112,8 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     [funcBezier removeAllPoints];
     [ctx saveGraphicsState]; //------------------- Contexto gráfico
 
-    if (width == 0){
+    if (!zoom){
+        zoomQuant = 10;
         NSAffineTransform *tf = [NSAffineTransform transform];
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
         [tf translateXBy:b.size.width/2
@@ -123,19 +124,21 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [tf concat];
         
     } else {
-        
+        zoomQuant += 10;
         NSAffineTransform *tf = [NSAffineTransform transform];
         NSLog(@"W: %f H: %f",width, height);
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
-        [tf translateXBy:width
-                     yBy:height];
+        NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
+        [tf translateXBy:height
+                     yBy:width];
         // 1º Ancho y Alto / Escala (funcRect)
-        [tf scaleXBy:width/10
-                 yBy:height/10];
+        [tf scaleXBy:zoomQuant
+                 yBy:zoomQuant];
         [tf concat];
         
     }
 
+    NSLog(@"Bounds Depsues: X: %f Y: %f W: %f H: %f", b.origin.x, b.origin.y, b.size.width, b.size.height);
 
         /* -------------- Dibujo de los ejes --------------- */
     
@@ -345,12 +348,6 @@ withGraphicsContext:(NSGraphicsContext*)ctx
             aPoint.x = funcRect.origin.x;
             aPoint.y = [self valueAt:aPoint.x];
             //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
-        
-            if (zoom) {
-                widthP = b.size.width;
-            } else {
-                widthP = funcRect.size.width;
-            }
             
             [funcBezier moveToPoint:aPoint];
             while (aPoint.x <= funcRect.size.width) {

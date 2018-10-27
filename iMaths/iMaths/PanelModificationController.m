@@ -29,8 +29,8 @@
 
 @implementation PanelModificationController
 
-extern NSString *PanelModifyGraphicNotification;
-NSString *PanelNewGraphicNotification = @"NewGraphic";
+extern NSString *ModifyGraphicNotification;
+NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -57,19 +57,20 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
     self = [super initWithWindow:window];
     if (self){
         NSLog(@"En init PanelModification");
-        changesNotSavedFlag = YES;
-        windowLog = window;
+        fieldsChanged = NO;
+        
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
                selector:@selector(handleModifyGraphic:)
-                   name:PanelModifyGraphicNotification
+                   name:ModifyGraphicNotification
                  object:nil];
     }
     
     return self;
 }
 
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 -(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
@@ -80,13 +81,15 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
                                 @"Si",
                                 nil);
     
-    if(respuesta == NSAlertDefaultReturn)
+    if(respuesta == NSAlertDefaultReturn) {
         return NO;
-    else
-        //[NSApp terminate:self];
-    return YES;
+    } else {
+        [NSApp stopModal];
+        return YES;
+    }
     
 }
+#pragma clang diagnostic pop
 
 - (void) windowDidLoad {
     [super windowDidLoad];
@@ -111,6 +114,9 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
     [newParamN setFloatValue:[graphic paramN]];
     [newColour setColor:[graphic colour]];
     
+    NSWindow *w = [self window];
+    [NSApp runModalForWindow:w];
+    
 }
 
 
@@ -132,40 +138,47 @@ NSString *PanelNewGraphicNotification = @"NewGraphic";
                                                                  forKey:@"newGraphic"];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelNewGraphicNotification
+    [nc postNotificationName:PanelGraphicModifiedNotification
                       object:self
                     userInfo:notificationInfo];
     
-    // Cerrar el panel
+    // Cierra el panel
+    [NSApp stopModal];
+    [self close];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 -(IBAction) cancelNewGraphic:(id)sender
 {
     NSInteger respuesta;
-    if (!changesNotSavedFlag) {
-        respuesta = NSRunAlertPanel(@"Cambios realizados no guardados",
-                                    @"Los cambios no se han guardado. ¿Está seguro de que desea cerrar la ventana?.",
-                                    @"No.Guardar y cerrar panel",
-                                    @"No.Cancelar salida del panel",
-                                    @"Si.Cerrar panel",
-                                    nil);
-        NSLog(@"NSAlertDefaultReturn %@", NSAlertDefaultReturn);
-        if(respuesta == NSAlertDefaultReturn) {
-            //[self windowShouldClose:windowLog];
-         } else if (respuesta == NSAlertSecondButtonReturn) {
-            //[];
-            //return YES;
-         } else if (respuesta == NSAlertThirdButtonReturn) {
-             
-         }
-    } else {
-        
-    }
+    respuesta = NSRunAlertPanel(@"Cambios realizados no guardados",
+                                @"¿Está seguro de que desea cerrar la ventana?",
+                                @"No. Guardar y cerrar panel",
+
+                                @"Si. Cerrar panel",
+                                nil);
+    
+    NSLog(@"NSAlertDefaultReturn %d", NSAlertDefaultReturn);
+    
+    if(respuesta == NSAlertDefaultReturn) { // No.Guardar y cerrar panel
+        if (fieldsChanged) {
+            [self confirmNewGraphic:sender];
+        } else {
+            [NSApp stopModal];
+            [self close];
+        }
+    } else if (respuesta == NSAlertSecondButtonReturn) {// Si.Cerrar panel
+         [NSApp stopModal];
+         [self close];
+     }
+    
 }
+#pragma clang diagnostic pop
 
 -(IBAction) controlTextDidChange:(NSNotification *)obj
 {
-    changesNotSavedFlag = NO;
+    fieldsChanged = YES;
 }
 
 

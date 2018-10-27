@@ -23,7 +23,7 @@
     float width, height;
 }
 
--(void) resetScaling;
+//-(void) resetScaling;
 
 
 @end

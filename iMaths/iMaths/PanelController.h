@@ -77,7 +77,7 @@
     float paramN;
     NSColor *colour;
     
-    NSInteger aRowSelected;
+    //NSInteger aRowSelected;
     NSInteger previousSelectedRow;
     BOOL functionSelectedFlag;
     BOOL BisEnabled ,CisEnabled ,NisEnabled;
@@ -85,10 +85,17 @@
     NSNumberFormatter *formatter;
 }
 
+-(void) deactivateFields;
+
     /* Métodos Definicion de la Grafica */
 
--(IBAction) selectNewGraphic:(id)sender;
+-(void) selectFunction;
+-(void) selectName;
+-(void) selectParameters;
+-(void) selectColour;
+-(void) checkAddGraphicIsAvailable;
 -(IBAction) addNewGraphic:(id)sender;
+//-(void) sendNotification:(NSString*) withContent:(NSObject);
 
     /* Métodos Parámetros Generales */
 
@@ -99,7 +106,9 @@
     /* Métodos Panel Modificar */
 
 -(IBAction) showPanel:(id)sender;
--(void) handleNewGraphic:(NSNotification *)aNotification;
+-(void) handleNewGraphicImported:(NSNotification *)aNotification;
+-(void) handleModelReceived:(NSNotification *)aNotification;
+-(void) handleGraphicModified:(NSNotification *)aNotification;
 
 
 @end

@@ -19,10 +19,9 @@
     PanelController *panelController;
     
     /* Variables de uso para Exportar e Importar */
-    
-    NSMutableArray *arrayToExport;
+
     BOOL enableExportingFlag; // No permite exportar hasta que no haya llegado la notificación del Panel
-    NSString *selectedFile;
+
     
     /* Variables relacionadas con GraphicView */
     
@@ -49,7 +48,7 @@
 
     /* Metodo para dibujar las graficas en el CustomView */
 
--(void) handleExportAndDrawGraphics:(NSNotification *)aNotification; // Tambien es el que recibe la notificación para dibujar
+-(void) handleDrawGraphics:(NSNotification *)aNotification; // Tambien es el que recibe la notificación para dibujar
 
     /* Metodos para exportar una gráfica de la tabla */
 

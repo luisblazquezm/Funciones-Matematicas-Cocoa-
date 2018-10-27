@@ -31,9 +31,17 @@
 @implementation Controller
 
 /*(PanelController -> Controller) Manda una notificación cada vez que se añade una grafica a la tabla */
-extern NSString *PanelExportAndDrawGraphicsNotification;
+extern NSString *DrawGraphicsNotification;
+
+extern NSString *ExportGraphicsNotification;
+
 /*(Controller -> PanelController) Manda una notificación cuando se importa el fichero del sistema */
-extern NSString *PanelNewGraphicNotification;
+NSString *NewGraphicImportedNotification = @"NewGraphicImported";
+
+/* (Controller -> PanelController) Manda una notificación con la instancia de la variable del modelo al resto de controladores*/
+NSString *SendModelNotification = @"SendModel";
+
+extern NSString *DrawRectCalledNotification;
 
 /* ---------------------------- TRATAMIENTO DE VENTANA ---------------------------- */
 
@@ -46,16 +54,21 @@ extern NSString *PanelNewGraphicNotification;
     self = [super init];
     if (self){
         NSLog(@"En init");
+        
         enableExportingFlag = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
-        //graphicToRepresent = [[GraphicsClass alloc] init];
         model = [[PanelModel alloc] init];
-
-        arrayToExport = [[NSMutableArray alloc] init];
+        
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self
-               selector:@selector(handleExportAndDrawGraphics:)
-                   name:PanelExportAndDrawGraphicsNotification
+               selector:@selector(handleDrawGraphics:)
+                   name:DrawGraphicsNotification
+                 object:nil];
+
+        
+        [nc addObserver:self
+               selector:@selector(handleDrawGraphics:)
+                   name:DrawRectCalledNotification
                  object:nil];
     }
     
@@ -68,6 +81,9 @@ extern NSString *PanelNewGraphicNotification;
  * @param  sender Objeto ventana.
  * @return BOOL, respuesta del usuario al mensaje de cierre.
  */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 -(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
@@ -85,7 +101,7 @@ extern NSString *PanelNewGraphicNotification;
     return YES;
     
 }
-
+#pragma clang diagnostic pop
 
 /*!
  * @brief  Abre y muestra el panel especificado.
@@ -97,6 +113,15 @@ extern NSString *PanelNewGraphicNotification;
     
     NSLog(@"panel %@\r", panelController);
     [panelController showWindow:self];
+    
+    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:model
+                                                                 forKey:@"model"];
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:SendModelNotification
+                      object:self
+                    userInfo:notificationInfo];
+    
 }
 
 /*!
@@ -108,24 +133,27 @@ extern NSString *PanelNewGraphicNotification;
     [nc removeObserver:self];
 }
 
+
+
 /* ---------------------------- DIBUJAR GRAFICA ---------------------------- */
 
 /*!
  * @brief  Recoge la lista de graficas a exportar de la tabla en Preferencias
  *         cada vez que se añade una grafica nueva.
  */
--(void) handleExportAndDrawGraphics:(NSNotification *)aNotification
+-(void) handleDrawGraphics:(NSNotification *)aNotification
 {
-    NSLog(@"Notificacion %@ recibida en handleExportAndDrawGraphic\r", aNotification);
+    NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
-    arrayToExport = [notificationInfo objectForKey:@"listOfGraphicsToExport"];
 
+    // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
     GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
     NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
     NSNumber *YMin = [notificationInfo objectForKey:@"YMin"];
     NSNumber *XMax = [notificationInfo objectForKey:@"XMax"];
     NSNumber *YMax = [notificationInfo objectForKey:@"YMax"];
     
+    // De la vista al controlador, se envia la información referente a las dimensiones de la vista, su contexto grafico y otros parametros referidos al zoom
     NSNumber *oX=[notificationInfo objectForKey:@"OrigenX"];
     NSNumber *oY=[notificationInfo objectForKey:@"OrigenY"];
     NSNumber *alt=[notificationInfo objectForKey:@"Altura"];
@@ -134,13 +162,6 @@ extern NSString *PanelNewGraphicNotification;
     NSNumber *zoom = [notificationInfo objectForKey:@"graphicIsZoomed"];
     NSNumber *w = [notificationInfo objectForKey:@"width"];
     NSNumber *h = [notificationInfo objectForKey:@"height"];
-    
-
-    
-    // Activa el flag que habilita la opcion de exportar el array de la tabla del PanelController
-    if (arrayToExport != nil) {
-        enableExportingFlag = YES;
-    }
     
     // Activa el metodo setNeedsDisplay para poder representar los ajustes de la vista 'CustomView' en el drawRect
     if (graphic != nil && XMin != nil && XMax != nil && YMin != nil && YMax != nil) {
@@ -189,79 +210,26 @@ extern NSString *PanelNewGraphicNotification;
 
 /* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
 
+/*
+-(void) handleExportGraphicsAvailable:(NSNotification *)aNotification
+{
+    NSLog(@"Notificacion %@ recibida en handleExportGraphicsAvailable\r", aNotification);
+    enableExportingFlag = YES; // NO hace falta notificaciones , basta con que haya un solo elemento en el array de graficas del modelo
+}
+*/
+
 /*!
  * @brief  Exporta en un fichero XML o CSV las graficas dentro de la tabla del panel Preferencias
  */
 -(IBAction) exportTableGraphicsAs:(id)sender
 {
-    if (enableExportingFlag){
-        NSLog(@"Exportar HABILITADO\r");
-        
-        NSSavePanel *save = [NSSavePanel savePanel];
-        NSArray *zAryOfExtensions = [NSArray arrayWithObject:@"txt"];
-        [save setAllowedFileTypes:zAryOfExtensions];
-        
-        [save setTitle:@"Informative text."];
-        [save setMessage:@"Message text."];
-        
-        NSInteger result = [save runModal];
-        NSError *error = nil;
-        NSLog(@"Ventana Desplegada %ld\r", result);
-        
-        if (result == NSModalResponseOK) {
-            
-            selectedFile = [[save URL] path];
-            /* EN XML */
-            if (![[NSFileManager defaultManager] fileExistsAtPath:selectedFile]) {
-                [[NSFileManager defaultManager] createFileAtPath: selectedFile contents:nil attributes:nil];
-                NSLog(@"Route creato");
-            }
-            
-            NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
-            
-            for (GraphicsClass *graphic in arrayToExport){
-                [writeString appendString:[NSString stringWithFormat:@"%@#%@#%f#%f#%f#%f#%@\n",
-                                           [graphic funcName],
-                                           [graphic function],
-                                           [graphic paramA],
-                                           [graphic paramB],
-                                           [graphic paramC],
-                                           [graphic paramN],
-                                           [graphic colour] ]];
-            }
-            
-            NSLog(@"Cadena a enviar %@\n", writeString);
-            BOOL zBoolResult = [writeString writeToURL:[save URL]
-                                             atomically:NO
-                                               encoding:NSASCIIStringEncoding
-                                                  error:NULL];
-            if (!zBoolResult) {
-                NSLog(@"writeUsingSavePanel failed");
-            }
-            
-        } else if(result == NSModalResponseCancel) {
-            NSLog(@"doSaveAs we have a Cancel button");
-            return;
-        } else {
-            NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
-            return;
-        }
-        
-        NSURL *urlDirectory = [save directoryURL];
-        NSString *saveDirectory = [urlDirectory absoluteString];
-        NSLog(@"doSaveAs directory = %@", saveDirectory);
-        
-        NSString * saveFilename = [save representedFilename];
-        NSLog(@"doSaveAs filename = %@", saveFilename);
-        
-        if (error) {
-            // This is one way to handle the error, as an example
-            [NSApp presentError:error];
-        }
-    } else {
-        return;// Poner un mensaje de error o algo asi
-    }
+    NSInteger numberOfGraphics = [model countOfArrayListGraphics];
     
+    if (numberOfGraphics > 0) {
+        NSLog(@"Exportar HABILITADO\r");
+        [model exportListOfGraphicsTo:@"txt"]; // title
+    }
+
 }
 
 /* ---------------------------- IMPORTAR LISTA DE GRAFICAS ---------------------------- */
@@ -273,89 +241,17 @@ extern NSString *PanelNewGraphicNotification;
 
 -(IBAction) importTableGraphics:(id)sender
 {
-    NSOpenPanel *open = [NSOpenPanel openPanel];
-    NSInteger result = [open runModal];
-    NSError *error = nil;
-    
-    GraphicsClass *graphicExported;
-    NSMutableArray *array = [[NSMutableArray alloc] init];
-    NSString *name = [[NSString alloc] init];
-    NSString *func = [[NSString alloc] init];
-    float a = 0;
-    float b = 0;
-    float c = 0;
-    float n = 0;
-    NSString *color = [[NSString alloc] init];
-    int i = 0;
-    
-    if (result == NSModalResponseOK) {
-        
-        /* En XML */
-        
-        //NSData* data = [NSData dataWithContentsOfFile:selectedFile];
-        //convert the bytes from the file into a string
-        NSLog(@"Abriendo en %@\r", [open URL]);
-        NSString* imported = [NSString stringWithContentsOfURL:[open URL]
-                                                     encoding:NSUTF8StringEncoding
-                                                        error:&error]  ;
 
-        NSLog(@"Recogido %@\n", imported);
-        
-        //split the string around newline characters to create an array
-        NSString* delimiter = @"\n";
-        NSArray* items = [imported componentsSeparatedByString:delimiter];
-        
-        for (NSString *item in items){
-            NSLog(@"Objeto recuperado: %@\n", item);
-            NSArray *foo = [item componentsSeparatedByString: @"#"];
-            name = [foo objectAtIndex: 0];
-            NSLog(@"Nombre %@",name);
-            func = [foo objectAtIndex: 1];
-            NSLog(@"Func %@",func);
-            a = [[foo objectAtIndex: 2] floatValue];
-            NSLog(@"Param A %f", a);
-            b = [[foo objectAtIndex: 3] floatValue];
-            c = [[foo objectAtIndex: 4] floatValue];
-            n = [[foo objectAtIndex: 5] floatValue];
-            color = [foo objectAtIndex: 6];
-            graphicExported = [[GraphicsClass alloc] initWithGraphicName:name
-                                                               function:func
-                                                                 paramA:a
-                                                                 paramB:b
-                                                                 paramC:c
-                                                                 paramN:n
-                                                                 colour:nil];
-            [array addObject:graphicExported];
-            ++i;
-            
-            if ([items count] == (i+1)) // OJO esto es porque siempre coge una linea en blanco y la toma como otro string más
-                break;
-        }
-        
-
-        
-        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
-                                                                     forKey:@"graphicsExported"];
-        
-        NSLog(@"A enviar %@\r", array);
-        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-        [nc postNotificationName:PanelNewGraphicNotification
-                          object:self
-                        userInfo:notificationInfo];
-        NSLog(@"Información enviada\r");
-
-    } else if(result == NSModalResponseCancel) {
-        NSLog(@"doSaveAs we have a Cancel button");
-        return;
-    } else {
-        NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
-        return;
-    }
+    NSMutableArray *array = [model importListOfGraphics];
+    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
+                                                                 forKey:@"graphicsImported"];
     
-    if (error) {
-        // This is one way to handle the error, as an example
-        [NSApp presentError:error];
-    }
+    //NSLog(@"A enviar %@\r", array);
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:NewGraphicImportedNotification
+                      object:self
+                    userInfo:notificationInfo];
+    //NSLog(@"Información enviada\r");
     
 }
 
@@ -366,78 +262,7 @@ extern NSString *PanelNewGraphicNotification;
  */
 -(IBAction) exportGraphicAs:(id)sender
 {
-    NSLog(@"Exportar HABILITADO\r");
-    
-    NSData *exportedData;
-    NSSavePanel *save = [NSSavePanel savePanel];
-    NSError *error;
-    
-    BOOL wasHidden = graphicRepresentationView.isHidden;
-    CGFloat wantedLayer = graphicRepresentationView.wantsLayer;
-    
-    graphicRepresentationView.hidden = NO;
-    graphicRepresentationView.wantsLayer = YES;
-    
-    NSImage *image = [[NSImage alloc] initWithSize:graphicRepresentationView.bounds.size];
-    [image lockFocus];
-    CGContextRef ctx = [NSGraphicsContext currentContext].graphicsPort;
-    [graphicRepresentationView.layer renderInContext:ctx];
-    [image unlockFocus];
-    
-    graphicRepresentationView.wantsLayer = wantedLayer;
-    graphicRepresentationView.hidden = wasHidden;
-    
-    
-    [save setAllowedFileTypes:[NSArray arrayWithObject:@"png"]];
-    
-    [save setTitle:@"Guardar Grafica como..."];
-    [save setMessage:@"Message text."];
-    
-    NSInteger result = [save runModal];
-    NSLog(@"Ventana Desplegada %ld\r", result);
-    
-    if (result == NSModalResponseOK) {
-        NSURL *fileURL = [save URL];
-        // Cache the reduced image
-        NSData *imageData = [image TIFFRepresentation];
-        NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:imageData];
-        NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:1.0] forKey:NSImageCompressionFactor];
-        imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
-        
-        if (exportedData == nil)
-            NSLog(@"ERROR");
-        
-        BOOL zBoolResult = [imageData writeToURL:fileURL
-                                            options:NSDataWritingAtomic
-                                              error:&error];
-        if (!zBoolResult) {
-            NSLog(@"%s: %@", __FUNCTION__, error);
-            NSLog(@"writeUsingSavePanel failed");
-        }
-        /*
-         //save as pdf, succeeded but with flaw
-         data = [self dataWithPDFInsideRect:[self frame]];
-         [data writeToFile:@"asd.pdf" atomically:YES];
-         */
-    } else if(result == NSModalResponseCancel) {
-        NSLog(@"doSaveAs we have a Cancel button");
-        return;
-    } else {
-        NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
-        return;
-    }
-    
-    NSURL *urlDirectory = [save directoryURL];
-    NSString *saveDirectory = [urlDirectory absoluteString];
-    NSLog(@"doSaveAs directory = %@", saveDirectory);
-    
-    NSString * saveFilename = [save representedFilename];
-    NSLog(@"doSaveAs filename = %@", saveFilename);
-    
-    if (error) {
-        // This is one way to handle the error, as an example
-        [NSApp presentError:error];
-    }
+    [model exportGraphicView:graphicRepresentationView To:@"png"];
 }
 
 

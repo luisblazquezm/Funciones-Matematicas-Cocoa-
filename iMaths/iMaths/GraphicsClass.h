@@ -25,6 +25,7 @@
     NSBezierPath *funcBezier;
     NSBezierPath *axisXBezier, *axisYBezier;
     NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
+    float zoomQuant;
 }
 
     /* Getters y setters */

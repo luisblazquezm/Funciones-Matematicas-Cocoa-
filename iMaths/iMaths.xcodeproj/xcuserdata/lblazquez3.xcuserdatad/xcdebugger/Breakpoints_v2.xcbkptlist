@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "562104469.020452"
+            timestampString = "562319854.008795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "-drawInRect:withGraphicsContext:andLimits:isZoomed:w:h:"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "562104469.0209709"
+            timestampString = "562319854.008858"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "-drawInRect:withGraphicsContext:andLimits:isZoomed:w:h:"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,23 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "562104469.021363"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "-drawInRect:withGraphicsContext:andLimits:isZoomed:w:h:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iMaths/GraphicsClass.m"
-            timestampString = "562104469.0217071"
+            timestampString = "562319854.008904"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "224"
@@ -74,12 +58,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicsClass.m"
-            timestampString = "562104469.022288"
+            timestampString = "562319854.008948"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
             landmarkName = "-drawInRect:withGraphicsContext:andLimits:isZoomed:w:h:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iMaths/GraphicsClass.m"
+            timestampString = "562319854.00899"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "-drawInRect:withGraphicsContext:andLimits:isZoomed:w:h:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iMaths/Controller.m"
+            timestampString = "562319854.009034"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "-handleDrawGraphics:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

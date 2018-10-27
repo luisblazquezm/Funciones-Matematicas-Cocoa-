@@ -8,25 +8,23 @@
 
 #import "GraphicView.h"
 #import "GraphicsClass.h"
-static const NSSize unitSize = {1.0, 1.0};
-static const int zoomValueX = 40;
-static const int zoomValueY = 40;
+//static const NSSize unitSize = {1.0, 1.0};
+//static const int zoomValueX = 40;
+//static const int zoomValueY = 40;
 
 @implementation GraphicView
 
 extern NSString *PanelExportAndDrawGraphicsNotification;
+NSString *DrawRectCalledNotification = @"DrawRect";
 
 -(id) initWithCoder:(NSCoder *)decoder
 {
     NSLog(@"En init with coder");
     self = [super initWithCoder:decoder];
     if (self) {
-        mouseInBounds = NO;
-        trackingBoundsHit = NO;
         originalBoundsView = [self bounds];
-        scaleSize.width = 1.0;
-        scaleSize.height = 1.0;
         graphicIsZoomed = NO;
+        mouseDraggedFlag = NO;
 
     }
     return self;
@@ -38,6 +36,7 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     
     // Drawing code here
     NSLog(@"En drawRect");
+    
     NSRect bounds=[self bounds];
     [[NSColor whiteColor]set];
     [NSBezierPath fillRect:bounds];
@@ -46,6 +45,8 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     NSInteger origenY=bounds.origin.y;
     float altura=bounds.size.height;
     float ancho=bounds.size.width;
+    
+    // Transformo las dimensiones numericas a NSNumber para poder pasarlas y enviarlas a traves de notificaciones
     NSNumber *oX = [[NSNumber alloc]initWithInteger:origenX];
     NSNumber *oY = [[NSNumber alloc]initWithInteger:origenY];
     NSNumber *alt = [[NSNumber alloc]initWithFloat:altura];
@@ -54,18 +55,19 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     NSNumber *w = [[NSNumber alloc]initWithFloat:width];
     NSNumber *h = [[NSNumber alloc]initWithFloat:height];
 
-    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys:
-                        ctx,@"ContextoGrafico",
-                        oX,@"OrigenX",
-                        oY,@"OrigenY",
-                        alt,@"Altura",
-                        anch,@"Ancho",
-                        zoom,@"graphicIsZoomed",
-                        w,@"width",
-                        h,@"height",
-                        nil];
+    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys: ctx,@"ContextoGrafico",
+                                                                    oX,@"OrigenX",
+                                                                    oY,@"OrigenY",
+                                                                    alt,@"Altura",
+                                                                    anch,@"Ancho",
+                                                                    zoom,@"graphicIsZoomed",
+                                                                    w,@"width",
+                                                                    h,@"height",
+                                                                    nil];
     NSNotificationCenter *nc=[NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelExportAndDrawGraphicsNotification object:self userInfo:info];
+    [nc postNotificationName:DrawRectCalledNotification
+                      object:self
+                    userInfo:info];
 }
 
 // mouseDown y luego (if delegateRespondsto.) se lo paso al delegate processMouseDown inBounds
@@ -74,16 +76,15 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
 // if(trackingMouse){ // el codigo //}
 
 - (void)mouseDown:(NSEvent *)theEvent {
-    // mouseInCloseBox and trackingCloseBoxHit are instance variables
     a = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     NSRect bounds = [self frame];
     NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",a.x, a.y, bounds.origin.x, bounds.origin.y);
+    mouseDraggedFlag = NO;
+    
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-    NSPoint b = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    NSRect bounds = [self frame];
-    NSLog(@"B(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",b.x, b.y, bounds.origin.x, bounds.origin.y);
+    mouseDraggedFlag = YES;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
@@ -91,10 +92,13 @@ extern NSString *PanelExportAndDrawGraphicsNotification;
     NSRect bounds = [self frame];
     NSLog(@"C(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",c.x, c.y, bounds.origin.x, bounds.origin.y);
     
-    width = (c.x + a.x)/2;
-    height = (c.y + a.y)/2;
+    if(mouseDraggedFlag){
+        width = (c.x + a.x)/2;
+        height = (c.y + a.y)/2;
+        graphicIsZoomed = YES;
+        [self setNeedsDisplay:YES];
+    }
 
-    [self setNeedsDisplay:YES];
 
 }
 

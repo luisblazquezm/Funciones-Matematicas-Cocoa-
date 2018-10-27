@@ -24,6 +24,8 @@
     NSArray *parametersN;
     
     GraphicsClass *graphicToRepresent;
+    
+    NSInteger rowSelectedToModify;
 
 }
 
@@ -35,6 +37,7 @@
 @property (nonatomic) NSArray *parametersC;
 @property (nonatomic) NSArray *parametersN;
 @property (nonatomic) GraphicsClass *graphicToRepresent;
+@property (nonatomic) NSInteger rowSelectedToModify;
 
 
     /* Metodo de inicialización del array de funciones del ComboBox */
@@ -42,7 +45,7 @@
 -(void)initializeArrayListFunctions;
 
     /* Metodos relacionados con la representacion de graficas */
-/*
+
 -(void) createGraphic:(NSString*)functionName
              withName:(NSString*)graphicName
                paramA:(float)AGraphic
@@ -51,8 +54,12 @@
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour;
 -(void) addGraphic:(id)sender;
--(void) drawGraphic:(id)sender;
--(void) deleteGraphic:(NSNumber*)graphicDeletedIndex;
-*/
+-(GraphicsClass*) graphicToDrawInPosition:(NSInteger)position;
+-(void) deleteGraphic:(NSInteger)graphicDeletedIndex;
+-(NSMutableArray*) importListOfGraphics;
+-(void) exportListOfGraphicsTo:(NSString*)typeFile;
+-(void) exportGraphicView:(NSView*)view To:(NSString*)extension;
+-(NSInteger) countOfArrayListGraphics;
+
 
 @end
