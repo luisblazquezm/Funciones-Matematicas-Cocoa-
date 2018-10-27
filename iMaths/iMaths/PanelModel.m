@@ -10,7 +10,7 @@
 #import "GraphicsClass.h"
 
 @implementation PanelModel
-@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , graphicToRepresent, rowSelectedToModify;
+@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , arrayOfGraphicsToRepresent, rowSelectedToModify;
 
 //NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
 
@@ -25,7 +25,7 @@
         NSLog(@"En init");
         arrayListFunctions = [[NSMutableArray alloc] init];
         arrayListGraphics = [[NSMutableArray alloc] init];
-        graphicToRepresent = [[GraphicsClass alloc] init];
+        arrayOfGraphicsToRepresent = [[NSArray alloc] init];
         
         parametersC = [[NSArray alloc] initWithObjects:
                        @"^c",
@@ -117,12 +117,13 @@
     
 }
 
--(GraphicsClass*) graphicToDrawInPosition:(NSInteger)position;
+-(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 {
-    return [arrayListGraphics objectAtIndex:position];
+    arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:indexArray];
+    
 }
 
--(void) deleteGraphic:(NSInteger)graphicDeletedIndex
+-(void) deleteGraphic:(NSInteger)graphicDeletedIndex;
 {
     [arrayListGraphics removeObjectAtIndex:graphicDeletedIndex];
 }

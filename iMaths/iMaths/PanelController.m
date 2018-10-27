@@ -203,6 +203,7 @@ extern NSString *SendModelNotification;
     
     // Añade esas funciones al ComboBox
     [selectListFuncComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
+    
 }
 
 
@@ -455,6 +456,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 -(void) selectParameters
 {
+    // Formateador que no deja introducir palabras salvo numeros float que contengan - o .
+    // Si se introduce un - despues de los numeros, varios puntos o varios menos, Estos se ignoran
+    NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"-1234567890."] invertedSet];
+    
+    // Creo varios arrays porque si creo uno general para todos los campos, lo que se escribiera en uno de ellos, se escribiría automaticamente en el resto.
+    NSArray<NSString*> *arrayParamA = [[selectParamAField stringValue] componentsSeparatedByCharactersInSet:charSet];
+        NSArray<NSString*> *arrayParamB = [[selectParamBField stringValue] componentsSeparatedByCharactersInSet:charSet];
+        NSArray<NSString*> *arrayParamC = [[selectParamCField stringValue] componentsSeparatedByCharactersInSet:charSet];
+        NSArray<NSString*> *arrayParamN = [[selectParamNField stringValue] componentsSeparatedByCharactersInSet:charSet];
+    
+    // Aplico el formateador de numeros negativos y positivos float a los campos de los parametros
+    [selectParamAField setStringValue:[arrayParamA  componentsJoinedByString:@""]];
+    [selectParamBField setStringValue:[arrayParamB  componentsJoinedByString:@""]];
+    [selectParamCField setStringValue:[arrayParamC  componentsJoinedByString:@""]];
+    [selectParamNField setStringValue:[arrayParamN  componentsJoinedByString:@""]];
     
     [selectParamAField setEnabled:YES];
     paramA = [selectParamAField floatValue];
@@ -593,40 +609,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         if(functionSelectedFlag){
 
             [self selectParameters];
-            
-            /*
-            if ([obj object] == selectParamAField ||
-                [obj object] == selectParamBField ||
-                [obj object] == selectParamCField ||
-                [obj object] == selectParamNField){
-                
-                NSLog(@"Entro para %@\n",[obj object]);
-                
-                lengthField = (int)[[obj object] length];
-                mystring = [[obj object] stringValue];
-                
-                if (lengthField > 0) {
-                    // Error, input not matching! Remove last added character.
-                    if (![pred evaluateWithObject:mystring]) {
-                        NSLog(@"Not OK\n");
-                        int len = lengthField-((lengthField-1 == 3) ? 2 : 1);
-                        [[obj object] substringWithRange:NSMakeRange(0, len)];
-                        // Now checks if the new length, i.e. the length when the last digit has been deleted is 3, which means that the decimal dot is the last character. If so remove 2 instead of only 1 character!
-                    } else { // The string is valid.
-                        NSLog(@"OK\n");
-                        if (BisEnabled)
-                            paramB = [selectParamBField floatValue];
-                        
-                        if (CisEnabled)
-                            paramC = [selectParamCField floatValue];
-                        
-                        if (NisEnabled)
-                            paramN = [selectParamNField floatValue];
-                    }
-                }
-            }
-            */
-            
+
         }
         
         /*
@@ -660,13 +643,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 -(IBAction) drawGraphic:(id)sender
 {
     float varXMax = 0, varXMin = 0, varYMax = 0, varYMin = 0;
-    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    //NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    NSMutableArray *graphicsToRepresent = [[NSMutableArray alloc] init];
+    NSIndexSet *rowsSelected = [[NSIndexSet alloc] init];
+    rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
     
-    NSLog(@"Fila seleccionada %ld\r", aRowSelected);
-    
-    if (aRowSelected != -1) {
-        GraphicsClass *graphicToRepresent = [modelInPanel graphicToDrawInPosition:aRowSelected];
-        
+    //NSLog(@"Filas seleccionada %ld\r", [rowsSelected ]);
+    NSLog(@"modelInPanel drawIndexes done");
+    [modelInPanel arrayOfGraphicToDrawInIndexes:rowsSelected];
+
         NSLog(@"minX: %f minY: %f maxX: %f maxY: %f",[minRangeXField floatValue],
                                                       [minRangeYField floatValue],
                                                       [maxRangeXField floatValue],
@@ -697,7 +682,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         [minRangeYField setStringValue:@""];
         [maxRangeYField setStringValue:@""];
         
-        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:graphicToRepresent,@"graphicToRepresent",
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:graphicsToRepresent,@"graphicsToRepresent",
                                          XMax,@"XMax",
                                          XMin,@"XMin",
                                          YMax,@"YMax",
@@ -710,7 +695,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                         userInfo:notificationInfo];
         
 
-    }
 }
 
 /*!

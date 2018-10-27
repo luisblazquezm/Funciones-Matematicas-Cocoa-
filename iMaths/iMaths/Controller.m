@@ -145,9 +145,10 @@ extern NSString *DrawRectCalledNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
+    NSArray *array = [[NSArray alloc] init];
 
     // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
-    GraphicsClass *graphic = [notificationInfo objectForKey:@"graphicToRepresent"];
+    //NSMutableArray *graphicsArray = [notificationInfo objectForKey:@"graphicsToRepresent"];
     NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
     NSNumber *YMin = [notificationInfo objectForKey:@"YMin"];
     NSNumber *XMax = [notificationInfo objectForKey:@"XMax"];
@@ -164,7 +165,7 @@ extern NSString *DrawRectCalledNotification;
     NSNumber *h = [notificationInfo objectForKey:@"height"];
     
     // Activa el metodo setNeedsDisplay para poder representar los ajustes de la vista 'CustomView' en el drawRect
-    if (graphic != nil && XMin != nil && XMax != nil && YMin != nil && YMax != nil) {
+    if (XMin != nil && XMax != nil && YMin != nil && YMax != nil) {
         //graphicToRepresent = graphic;
         limit.origin.x = [XMin integerValue];
         limit.origin.y = [YMin integerValue];
@@ -176,9 +177,9 @@ extern NSString *DrawRectCalledNotification;
               limit.size.width,
               limit.size.height);
         
-        [model setGraphicToRepresent:graphic ];
+        //[model setGraphicToRepresent:graphic ];
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
-        [graphicRepresentationView setNeedsDisplay:YES]; // EL ERROR ESTA AL LLAMAR AQUI
+        [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
     }
     
@@ -200,9 +201,16 @@ extern NSString *DrawRectCalledNotification;
               limit.size.height);
         
         NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
-        GraphicsClass *graphic = [model graphicToRepresent];
-        [graphic drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
-
+        array = [model arrayOfGraphicsToRepresent];
+        if ([array count] != 0) {
+            NSLog(@"Entre para dibujar");
+            for (GraphicsClass *g in array) {
+                [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
+            }
+        } else {
+            GraphicsClass *g = [[GraphicsClass alloc] init];
+            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
+        }
         NSLog(@"Grafica Representada");
     }
 

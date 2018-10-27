@@ -23,7 +23,7 @@
     NSArray *parametersC;
     NSArray *parametersN;
     
-    GraphicsClass *graphicToRepresent;
+    NSArray *arrayOfGraphicsToRepresent;
     
     NSInteger rowSelectedToModify;
 
@@ -36,7 +36,7 @@
 @property (nonatomic) NSArray *parametersB;
 @property (nonatomic) NSArray *parametersC;
 @property (nonatomic) NSArray *parametersN;
-@property (nonatomic) GraphicsClass *graphicToRepresent;
+@property (nonatomic) NSArray *arrayOfGraphicsToRepresent;
 @property (nonatomic) NSInteger rowSelectedToModify;
 
 
@@ -54,7 +54,7 @@
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour;
 -(void) addGraphic:(id)sender;
--(GraphicsClass*) graphicToDrawInPosition:(NSInteger)position;
+-(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 -(void) deleteGraphic:(NSInteger)graphicDeletedIndex;
 -(NSMutableArray*) importListOfGraphics;
 -(void) exportListOfGraphicsTo:(NSString*)typeFile;

@@ -10,37 +10,27 @@
 
 @implementation ParametersNumberFormatter
 
-/*
+
 - (BOOL)isPartialStringValid:(NSString*)partialString
             newEditingString:(NSString**)newString
             errorDescription:(NSString**)error
 {
+    NSLog(@"PartialString: %@",partialString);
+    
     if([partialString length] == 0) {
         return YES;
     }
     
     NSScanner* scanner = [NSScanner scannerWithString:partialString];
     
-    if ([partialString length] == 1 && [partialString characterAtIndex:0] == '-') {
-        NSLog(@"Menos detectado\n");
-        return YES;
-    } else if ([partialString length] > 1 && [partialString characterAtIndex:0] == '-'){
+    if(!([scanner scanInt:0] && [scanner isAtEnd])) {
+        NSBeep();
+        return NO;
     }
-    
-        if ([partialString containsString:@"."]){
-            if(!([scanner scanFloat:0] && [scanner isAtEnd])) {
-                NSBeep();
-                return NO;
-            }
-            
-            return YES;
-        }
-    }
-
     
     return YES;
 }
- */
+
 
 
 /*
