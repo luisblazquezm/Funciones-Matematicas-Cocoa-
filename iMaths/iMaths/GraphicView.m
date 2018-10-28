@@ -16,6 +16,7 @@
 
 extern NSString *PanelExportAndDrawGraphicsNotification;
 NSString *DrawRectCalledNotification = @"DrawRect";
+NSString *ShowLegendNotification = @"ShowLeyend";
 
 -(id) initWithCoder:(NSCoder *)decoder
 {
@@ -81,6 +82,18 @@ NSString *DrawRectCalledNotification = @"DrawRect";
     NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",a.x, a.y, bounds.origin.x, bounds.origin.y);
     mouseDraggedFlag = NO;
     
+    // Leyenda
+    NSNumber *Xleyend = [[NSNumber alloc]initWithFloat:a.x];
+    NSNumber *Yleyend = [[NSNumber alloc]initWithFloat:a.y];
+    
+    NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys: Xleyend,@"LeyendaX",
+                                                                   Yleyend,@"LeyendaY",
+                                                                   nil];
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc postNotificationName:ShowLegendNotification
+                      object:self
+                    userInfo:info];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {

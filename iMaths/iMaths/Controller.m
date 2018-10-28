@@ -43,6 +43,8 @@ NSString *SendModelNotification = @"SendModel";
 
 extern NSString *DrawRectCalledNotification;
 
+extern NSString *ShowLegendNotification;
+
 /* ---------------------------- TRATAMIENTO DE VENTANA ---------------------------- */
 
 /*!
@@ -56,6 +58,7 @@ extern NSString *DrawRectCalledNotification;
         NSLog(@"En init");
         
         enableExportingFlag = NO;
+        zoomIsRestored = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
         model = [[PanelModel alloc] init];
         
@@ -69,6 +72,12 @@ extern NSString *DrawRectCalledNotification;
         [nc addObserver:self
                selector:@selector(handleDrawGraphics:)
                    name:DrawRectCalledNotification
+                 object:nil];
+        
+        
+        [nc addObserver:self
+               selector:@selector(handleShowLegend:)
+                   name:ShowLegendNotification
                  object:nil];
     }
     
@@ -146,6 +155,7 @@ extern NSString *DrawRectCalledNotification;
     NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
     NSArray *array = [[NSArray alloc] init];
+    NSMutableString *s = [[NSMutableString alloc] init];
 
     // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
     //NSMutableArray *graphicsArray = [notificationInfo objectForKey:@"graphicsToRepresent"];
@@ -177,7 +187,7 @@ extern NSString *DrawRectCalledNotification;
               limit.size.width,
               limit.size.height);
         
-        //[model setGraphicToRepresent:graphic ];
+        zoomIsRestored = YES;
         NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
         [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
@@ -204,16 +214,41 @@ extern NSString *DrawRectCalledNotification;
         array = [model arrayOfGraphicsToRepresent];
         if ([array count] != 0) {
             NSLog(@"Entre para dibujar");
+            
+            if (zoomIsRestored)
+                graphicIsZoomed = NO;
+            
             for (GraphicsClass *g in array) {
                 [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
+                [s appendString:[g funcName]];
+                [s appendString:@":"];
+                [s appendString:[g function]];
+                [nameGraphLabel setHidden:NO];
+                [nameGraphLabel setStringValue:s];
             }
         } else {
             GraphicsClass *g = [[GraphicsClass alloc] init];
-            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
+            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:NO w:wid h:heig];
         }
         NSLog(@"Grafica Representada");
+        zoomIsRestored = NO;
     }
 
+}
+
+-(void) handleShowLegend:(NSNotification *)aNotification
+{
+    NSLog(@"Notificacion %@ recibida en handleShowLegend\r", aNotification);
+    NSDictionary *notificationInfo = [aNotification userInfo];
+    
+    NSNumber *X = [notificationInfo objectForKey:@"LeyendaX"];
+    NSNumber *Y = [notificationInfo objectForKey:@"LeyendaY"];
+    
+    int absX = fabsf([X floatValue]);
+    int absY = fabsf([Y floatValue]);
+    
+    [XLegendField setFloatValue:absX];
+    [YLegendField setFloatValue:absY];
 }
 
 /* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
@@ -273,5 +308,20 @@ extern NSString *DrawRectCalledNotification;
     [model exportGraphicView:graphicRepresentationView To:@"png"];
 }
 
+-(IBAction) showHelp:(id)sender
+{
+    [helpButton showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+-(IBAction) showLegend:(id)sender
+{
+    [legendButton showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+-(IBAction) restoreZoom:(id)sender
+{
+    zoomIsRestored = YES;
+    [graphicRepresentationView setNeedsDisplay:YES];
+}
 
 @end

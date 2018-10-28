@@ -10,7 +10,7 @@
 
 @implementation ParametersNumberFormatter
 
-
+/*
 - (BOOL)isPartialStringValid:(NSString*)partialString
             newEditingString:(NSString**)newString
             errorDescription:(NSString**)error
@@ -30,7 +30,7 @@
     
     return YES;
 }
-
+*/
 
 
 /*

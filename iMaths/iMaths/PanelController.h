@@ -67,6 +67,14 @@
     IBOutlet NSTextField *showParamNField;
     IBOutlet NSColorWell *showColorGraphicField;
     
+           // Botones de progreso
+    IBOutlet NSButton *functionDefProgressButton;
+    IBOutlet NSButton *parametersProgressButton;
+    IBOutlet NSButton *appearanceProgressButton;
+    IBOutlet NSTextField *functionDefLabel;
+    IBOutlet NSTextField *parametersLabel;
+    IBOutlet NSTextField *appearanceLabel;
+    
     /* Variables de instancia */
     
     NSString *name;
@@ -95,6 +103,7 @@
 -(void) selectColour;
 -(void) checkAddGraphicIsAvailable;
 -(IBAction) addNewGraphic:(id)sender;
+-(void) fomatterOnlyRealNumbers;
 //-(void) sendNotification:(NSString*) withContent:(NSObject);
 
     /* Métodos Parámetros Generales */

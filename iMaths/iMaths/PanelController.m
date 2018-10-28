@@ -123,23 +123,10 @@ extern NSString *SendModelNotification;
 -(void) awakeFromNib
 {
 
-    
-    [formatter setLocale:[NSLocale currentLocale]];// this ensures the right separator behavior
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    [formatter setUsesGroupingSeparator:YES];
-    [formatter setDecimalSeparator:@"."];
-    
-    //[[selectParamAField cell] setFormatter:formatter];
-    //[[selectParamBField cell] setFormatter:formatter];
-    //[[selectParamCField cell] setFormatter:formatter];
-    //[[selectParamNField cell] setFormatter:formatter];
+    [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+    [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+    [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
 
-    
-    //[selectParamAField setFormatter:formatter];
-    //[selectParamBField setFormatter:formatter];
-    //[selectParamCField setFormatter:formatter];
-    //[selectParamNField setFormatter:formatter];
-    
     [selectParamAField setEnabled:NO];
     [selectParamBField setEnabled:NO];
     [selectParamCField setEnabled:NO];
@@ -454,23 +441,47 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     NSLog(@"Nombre Funcion %@\r", name);
 }
 
--(void) selectParameters
+-(void) fomatterOnlyRealNumbers
 {
     // Formateador que no deja introducir palabras salvo numeros float que contengan - o .
     // Si se introduce un - despues de los numeros, varios puntos o varios menos, Estos se ignoran
     NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"-1234567890."] invertedSet];
     
     // Creo varios arrays porque si creo uno general para todos los campos, lo que se escribiera en uno de ellos, se escribiría automaticamente en el resto.
-    NSArray<NSString*> *arrayParamA = [[selectParamAField stringValue] componentsSeparatedByCharactersInSet:charSet];
-        NSArray<NSString*> *arrayParamB = [[selectParamBField stringValue] componentsSeparatedByCharactersInSet:charSet];
-        NSArray<NSString*> *arrayParamC = [[selectParamCField stringValue] componentsSeparatedByCharactersInSet:charSet];
-        NSArray<NSString*> *arrayParamN = [[selectParamNField stringValue] componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamA = [[selectParamAField stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamB = [[selectParamBField stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamC = [[selectParamCField stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamN = [[selectParamNField stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayXMin = [[minRangeXField stringValue]
+                                     componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayXMax = [[maxRangeXField stringValue]
+                                     componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayYMin = [[minRangeYField stringValue]
+                                     componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayYMax = [[maxRangeYField stringValue]
+                                     componentsSeparatedByCharactersInSet:charSet];
     
     // Aplico el formateador de numeros negativos y positivos float a los campos de los parametros
     [selectParamAField setStringValue:[arrayParamA  componentsJoinedByString:@""]];
     [selectParamBField setStringValue:[arrayParamB  componentsJoinedByString:@""]];
     [selectParamCField setStringValue:[arrayParamC  componentsJoinedByString:@""]];
     [selectParamNField setStringValue:[arrayParamN  componentsJoinedByString:@""]];
+    
+    // Aplico el formateador de numeros negativos y positivos float a los campos de los limites
+    [minRangeXField setStringValue:[arrayXMin  componentsJoinedByString:@""]];
+    [maxRangeXField setStringValue:[arrayXMax  componentsJoinedByString:@""]];
+    [minRangeYField setStringValue:[arrayYMin  componentsJoinedByString:@""]];
+    [maxRangeYField setStringValue:[arrayYMax  componentsJoinedByString:@""]];
+}
+
+-(void) selectParameters
+{
+
+    [self fomatterOnlyRealNumbers];
     
     [selectParamAField setEnabled:YES];
     paramA = [selectParamAField floatValue];
@@ -568,8 +579,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         ([selectParamAField isEnabled] && paramA != 0 && ![selectParamBField isEnabled] && ![selectParamCField isEnabled] && ![selectParamNField isEnabled]) )
        )
     {
+        [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+        [parametersLabel setHidden:NO];
+        [parametersLabel setStringValue:@"Parametros introducidos"];
+        
+        [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+        [appearanceLabel setHidden:NO];
+        [appearanceLabel setStringValue:@"Color por defecto utilizado"];
+
         [addGraphicButton setEnabled:YES];
     } else {
+        [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+        [parametersLabel setHidden:YES];
+        
+        [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+        [appearanceLabel setHidden:YES];
+        
         [addGraphicButton setEnabled:NO];
     }
 }
@@ -580,12 +605,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  */
 -(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
-
-    
-    //NSString *regex = @"[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)";
-    //NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    //int lengthField;
-    //NSString *mystring;
     
     /*
      *--------- Definicion Funcion ------------
@@ -594,6 +613,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [self selectFunction];
     
     if ([function length] > 0) {
+        
+        // Progreso parcial (Apariencia amarilla)
+        [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+        
         // Comprueba que no se introduzca una grafica con un nombre vacio
         NSString *cadena = [selectGraphicNameField stringValue];
         if ([cadena length] == 0){
@@ -606,8 +629,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
          *--------- Parametros ------------
          */
         
+        // Se activa en comboBoxSelectionDidChange
         if(functionSelectedFlag){
-
+            
+            // Progreso parcial (Apariencia amarilla)
+            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+            [functionDefLabel setHidden:NO];
+            [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+            
             [self selectParameters];
 
         }
@@ -616,7 +645,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
          *--------- Apariencia ------------
          */
         
+        // Progreso parcial (Apariencia amarilla)
+        [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+        
         [self selectColour];
+    } else {
+        [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+        [functionDefLabel setHidden:YES];
     }
 
     [self checkAddGraphicIsAvailable];
@@ -633,6 +668,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
     if ([keyPath isEqualToString:@"color"]){
         colour = [selectColorGraphicButton color];
+        [appearanceLabel setStringValue:@"Color introducido utilizado"];
     }
 }
 

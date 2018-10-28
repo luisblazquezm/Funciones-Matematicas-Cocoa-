@@ -42,7 +42,7 @@
 }
 
 -(id)init{
-    NSLog(@"En init de GC");
+    NSLog(@"En init de GraphicClass");
     self = [super init];
     if(!self){
         return nil;
@@ -60,7 +60,6 @@
     axisYBezier = [[NSBezierPath alloc] init];
     pointsAxisXBezier = [[NSBezierPath alloc] init];
     pointsAxisYBezier = [[NSBezierPath alloc] init];
-    
     
     colorGraphic = [self colour];
     colorAxis  = [NSColor blackColor];
@@ -114,6 +113,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
 
     if (!zoom){
         zoomQuant = 10;
+        NSLog(@"Matriz de tranformación afin creada");
         NSAffineTransform *tf = [NSAffineTransform transform];
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
         [tf translateXBy:b.size.width/2
@@ -135,7 +135,6 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [tf scaleXBy:zoomQuant
                  yBy:zoomQuant];
         [tf concat];
-        
     }
 
     NSLog(@"Bounds Depsues: X: %f Y: %f W: %f H: %f", b.origin.x, b.origin.y, b.size.width, b.size.height);

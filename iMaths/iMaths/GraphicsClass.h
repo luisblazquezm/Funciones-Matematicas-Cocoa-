@@ -38,6 +38,7 @@
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
 
+
 //@property(retain)NSBezierPath *poly;
 
     /* Constructor */

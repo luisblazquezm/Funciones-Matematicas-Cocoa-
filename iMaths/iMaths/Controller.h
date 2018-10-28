@@ -29,11 +29,20 @@
     IBOutlet GraphicView *graphicRepresentationView;
     IBOutlet NSButton *resetZoom;
     PanelModel *model;
+    IBOutlet NSTextField *nameGraphLabel;
     
     NSRect limit;
     NSRect bounds;
-    BOOL graphicIsZoomed;
+    BOOL graphicIsZoomed, zoomIsRestored;
     float wid, heig;
+    
+    IBOutlet NSPopover *helpButton;
+    IBOutlet NSPopover *legendButton;
+    
+    IBOutlet NSTextField *XLegendField;
+    IBOutlet NSTextField *YLegendField;
+    
+    
 }
 
 -(IBAction) showPanel:(id)sender;
@@ -49,10 +58,14 @@
     /* Metodo para dibujar las graficas en el CustomView */
 
 -(void) handleDrawGraphics:(NSNotification *)aNotification; // Tambien es el que recibe la notificación para dibujar
-
+-(void) handleShowLegend:(NSNotification *)aNotification;
     /* Metodos para exportar una gráfica de la tabla */
 
 -(IBAction) exportGraphicAs:(id)sender;
+
+-(IBAction) showHelp:(id)sender;
+-(IBAction) showLegend:(id)sender;
+-(IBAction) restoreZoom:(id)sender;
 
 
 
