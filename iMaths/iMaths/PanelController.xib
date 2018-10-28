@@ -55,6 +55,7 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="702" height="460"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <value key="minSize" type="size" width="702" height="460"/>
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="702" height="460"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -73,7 +74,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Definición de la gráfica" identifier="" id="6Ie-FJ-LhB">
-                                <view key="view" ambiguous="YES" id="FYB-A6-gfh">
+                                <view key="view" id="FYB-A6-gfh">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -381,7 +382,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Parámetros generales" identifier="" id="Zrr-Ff-mkK">
-                                <view key="view" id="K7l-d6-r50">
+                                <view key="view" ambiguous="YES" id="K7l-d6-r50">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -433,15 +434,6 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
-                                        <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjN-Z9-fUc">
-                                            <rect key="frame" x="17" y="373" width="363" height="22"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="CnV-Xo-JhR">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </searchFieldCell>
-                                        </searchField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ifp-kq-FVI">
                                             <rect key="frame" x="221" y="181" width="214" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -454,24 +446,13 @@
                                                 <action selector="showGraphicInfo:" target="-2" id="S1J-Na-naQ"/>
                                             </connections>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3y-Ez-Abz">
-                                            <rect key="frame" x="463" y="334" width="128" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="roundTextured" title="Dibujar" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nSJ-Lw-is8">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="drawGraphic:" target="-2" id="01k-BU-b7N"/>
-                                            </connections>
-                                        </button>
                                         <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qen-B8-KHK">
                                             <rect key="frame" x="10" y="-13" width="636" height="192"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Información" identifier="" id="0Jy-1o-Ypu">
-                                                    <view key="view" id="mi1-JO-5q0">
+                                                    <view key="view" ambiguous="YES" id="mi1-JO-5q0">
                                                         <rect key="frame" x="10" y="33" width="133" height="0.0"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -616,7 +597,7 @@
                                                     </view>
                                                 </tabViewItem>
                                                 <tabViewItem label="Propiedades representación" identifier="" id="Ocb-1k-HKb">
-                                                    <view key="view" ambiguous="YES" id="zZh-ZY-Hx9">
+                                                    <view key="view" id="zZh-ZY-Hx9">
                                                         <rect key="frame" x="10" y="33" width="616" height="146"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
@@ -721,7 +702,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DiB-cU-mEc">
-                                            <rect key="frame" x="463" y="235" width="128" height="25"/>
+                                            <rect key="frame" x="463" y="216" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="roundTextured" title="Eliminar" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="m12-b0-NMQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -729,6 +710,26 @@
                                             </buttonCell>
                                             <connections>
                                                 <action selector="deleteGraphic:" target="-2" id="owN-ZU-d5e"/>
+                                            </connections>
+                                        </button>
+                                        <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cwr-xs-w6j">
+                                            <rect key="frame" x="17" y="373" width="363" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="noi-X2-nwn">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </searchFieldCell>
+                                        </searchField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3y-Ez-Abz">
+                                            <rect key="frame" x="463" y="351" width="128" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="roundTextured" title="Dibujar" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nSJ-Lw-is8">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="drawGraphic:" target="-2" id="01k-BU-b7N"/>
                                             </connections>
                                         </button>
                                     </subviews>

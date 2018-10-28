@@ -707,6 +707,7 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="511" height="393"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <value key="minSize" type="size" width="511" height="393"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="511" height="393"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -878,6 +879,7 @@
         <popover id="f7X-6z-XzE">
             <connections>
                 <outlet property="contentViewController" destination="Xbl-rA-c7t" id="grL-8W-MOm"/>
+                <outlet property="delegate" destination="dQG-0K-aIn" id="qV7-Pn-x4O"/>
             </connections>
         </popover>
         <customView id="eGF-5y-27Y">

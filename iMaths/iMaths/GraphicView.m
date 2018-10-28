@@ -115,5 +115,27 @@ NSString *ShowLegendNotification = @"ShowLeyend";
 
 }
 
+-(void)keyDown:(NSEvent *)event
+{
+    NSLog(@"Aqui");
+    switch ([event keyCode]) {
+        case 123:    // Left arrow
+            NSLog(@"Left behind.");
+            break;
+        case 124:    // Right arrow
+            NSLog(@"Right as always!");
+            break;
+        case 125:    // Down arrow
+            NSLog(@"Downward is Heavenward");
+            break;
+        case 126:    // Up arrow
+            NSLog(@"Up, up, and away!");
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 @end

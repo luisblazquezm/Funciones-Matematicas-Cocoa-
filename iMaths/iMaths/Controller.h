@@ -42,6 +42,8 @@
     IBOutlet NSTextField *XLegendField;
     IBOutlet NSTextField *YLegendField;
     
+    IBOutlet NSWindow *popoverWindow;
+    
     
 }
 
@@ -66,9 +68,6 @@
 -(IBAction) showHelp:(id)sender;
 -(IBAction) showLegend:(id)sender;
 -(IBAction) restoreZoom:(id)sender;
-
-
-
 
 @end
 
