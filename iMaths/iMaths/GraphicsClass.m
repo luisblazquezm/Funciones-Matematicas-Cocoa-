@@ -112,7 +112,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     [ctx saveGraphicsState]; //------------------- Contexto gráfico
 
     if (!zoom){
-        zoomQuant = 10;
+        zoomQuant = 0;
         NSLog(@"Matriz de tranformación afin creada");
         NSAffineTransform *tf = [NSAffineTransform transform];
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
@@ -124,7 +124,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [tf concat];
         
     } else {
-        zoomQuant += 10;
+        zoomQuant += 0.1;
         NSAffineTransform *tf = [NSAffineTransform transform];
         NSLog(@"W: %f H: %f",width, height);
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
@@ -132,8 +132,8 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [tf translateXBy:height
                      yBy:width];
         // 1º Ancho y Alto / Escala (funcRect)
-        [tf scaleXBy:zoomQuant
-                 yBy:zoomQuant];
+        [tf scaleXBy:width*zoomQuant
+                 yBy:height*zoomQuant];
         [tf concat];
     }
 

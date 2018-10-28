@@ -27,6 +27,7 @@
                 <outlet property="modifyGraphicButton" destination="57W-c9-0KZ" id="K5I-54-wwR"/>
                 <outlet property="parametersLabel" destination="7DJ-gu-q4g" id="TgP-Nc-Zy5"/>
                 <outlet property="parametersProgressButton" destination="ple-iA-sdN" id="eu2-0E-FLU"/>
+                <outlet property="searchField" destination="Cwr-xs-w6j" id="yF9-I2-kOz"/>
                 <outlet property="selectColorFuncButton" destination="KBn-nZ-zao" id="qOv-tf-qUV"/>
                 <outlet property="selectColorGraphicButton" destination="KBn-nZ-zao" id="2Gp-ap-prf"/>
                 <outlet property="selectFuncNameField" destination="sbx-tU-Qz3" id="wSj-Y7-2sT"/>
@@ -53,7 +54,7 @@
         <window title="Preferencias" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="702" height="460"/>
+            <rect key="contentRect" x="578" y="166" width="702" height="460"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="702" height="460"/>
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
@@ -720,6 +721,9 @@
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </searchFieldCell>
+                                            <connections>
+                                                <outlet property="delegate" destination="-2" id="yvm-AC-cBn"/>
+                                            </connections>
                                         </searchField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3y-Ez-Abz">
                                             <rect key="frame" x="463" y="351" width="128" height="25"/>

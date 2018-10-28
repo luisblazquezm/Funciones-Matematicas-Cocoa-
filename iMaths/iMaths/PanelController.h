@@ -58,6 +58,7 @@
     IBOutlet NSTextField *minRangeYField;
     IBOutlet NSTextField *maxRangeXField;
     IBOutlet NSTextField *maxRangeYField;
+    IBOutlet NSSearchField *searchField;
            // No editables
     IBOutlet NSTextField *showFuncField;
     IBOutlet NSTextField *showNameGraphicField;
@@ -88,9 +89,10 @@
     //NSInteger aRowSelected;
     NSInteger previousSelectedRow;
     BOOL functionSelectedFlag;
-    BOOL BisEnabled ,CisEnabled ,NisEnabled;
+    BOOL BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
     
     NSNumberFormatter *formatter;
+    
 }
 
 -(void) deactivateFields;
@@ -104,6 +106,7 @@
 -(void) checkAddGraphicIsAvailable;
 -(IBAction) addNewGraphic:(id)sender;
 -(void) fomatterOnlyRealNumbers;
+-(void) applyFilterWithString:(NSString*)filter;
 //-(void) sendNotification:(NSString*) withContent:(NSObject);
 
     /* Métodos Parámetros Generales */

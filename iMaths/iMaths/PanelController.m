@@ -88,6 +88,7 @@ extern NSString *SendModelNotification;
         BisEnabled = NO;
         CisEnabled = NO;
         NisEnabled = NO;
+        filterEnabled = NO;
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         
@@ -135,6 +136,7 @@ extern NSString *SendModelNotification;
     [drawGraphicButton setEnabled:NO];
     [modifyGraphicButton setEnabled:NO];
     [deleteGraphicButton setEnabled:NO];
+
     
 }
 
@@ -191,6 +193,14 @@ extern NSString *SendModelNotification;
     // Añade esas funciones al ComboBox
     [selectListFuncComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
     
+    for (NSTableColumn *column in [listOfCreatedFunctionsTableView tableColumns]) {
+        NSLog(@"Coliumn");
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:[column identifier]
+                                                                         ascending:YES
+                                                                          selector:@selector(compare:)];
+        [column setSortDescriptorPrototype:sortDescriptor];
+    }
+    
 }
 
 
@@ -230,40 +240,6 @@ extern NSString *SendModelNotification;
 
 /* --------------------------- ACCIONES DEFINICION GRAFICA ---------------------- */
 
-
-/* SI EL CONTENIDO CAMBIA DINAMICAMENTE (ES DECIR AÑADIMOS NUEVAS FUNCIONES)
- * tambien habria que pasarlo a Editable porque solo se puede seleccionar
- - (void)comboBoxWillPopUp:(NSNotification *)notification
- {
- [[modelInPanel arrayListFunctions] ]
- }
- 
- 
- - (NSString *)comboBox:(NSComboBox *)comboBox
- completedString:(NSString *)string
- {
- int z = 0;
- 
- for (int i = 0; i < NUM_PARAMETERS; i++) {
- if ([[[modelInPanel arrayListFunctions] objectAtIndex:i ] containsString:string] ){
- z = i;
- }
- }
- 
- return [[modelInPanel arrayListFunctions] objectAtIndex:z ];
- }
- 
- - (id)comboBox:(NSComboBox *)comboBox
- objectValueForItemAtIndex:(NSInteger)index
- {
- return [[modelInPanel arrayListFunctions] objectAtIndex:index];
- }
- 
- - (NSInteger)numberOfItemsInComboBox:(NSComboBox *)comboBox
- {
- return [[modelInPanel arrayListFunctions] count];
- }
- */
 
 -(void) deactivateFields
 {
@@ -332,20 +308,7 @@ extern NSString *SendModelNotification;
     [selectParamCField setStringValue:@""];
     [selectParamNField setStringValue:@""];
     
-    /*
-     * Envia una notificación al controlador principal con el contenido del arrayDeGraficas del Modelo
-     * En cuanto se añada la primera grafica ya estará disponible la opcion de exportar los datos.
-     * Cada vez que se añade una grafica nueva envia la nueva grafica al controlador para guardar
-     * el contenido de toda la tabla
-     */
-    
-    // Notificación sin contenido
-    /*
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:ExportGraphicsNotification
-                      object:self
-                    userInfo:notificationInfo];
-     */
+
     
 }
 
@@ -401,9 +364,17 @@ extern NSString *SendModelNotification;
 objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(NSInteger)row
 {
-    NSString *cadena = [[[modelInPanel arrayListGraphics] objectAtIndex:row] funcName];
-    NSLog(@"Fila %ld - Texto (%@)\r", row, cadena);
-    return cadena;
+    NSString *cadena;
+    
+    if (filterEnabled) {
+        cadena = [[[modelInPanel arrayFilteredGraphics] objectAtIndex:row] funcName];
+        return cadena;
+    } else {
+        cadena = [[[modelInPanel arrayListGraphics] objectAtIndex:row] funcName];
+        NSLog(@"Fila %ld - Texto (%@)\r", row, cadena);
+        return cadena;
+    }
+
 }
 
 
@@ -420,13 +391,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     //NSLog(@"Texto Antiguo (%@) - Texto nuevo(%@)\r", cadena, object);
 }
 
+-(void) tableView:(NSTableView *)tableView
+sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
+{
+    NSLog(@"COLUMN 2");
+    [[modelInPanel arrayListGraphics] sortUsingDescriptors:[tableView sortDescriptors]];
+    [listOfCreatedFunctionsTableView reloadData];
+}
 
 /*!
  * @brief  Devuelve el numero de filas de la tabla
  */
 -(NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return [modelInPanel countOfArrayListGraphics];
+    if (filterEnabled) {
+        return [[modelInPanel arrayFilteredGraphics] count];
+    } else {
+        return [modelInPanel countOfArrayListGraphics];
+    }
 }
 
 -(void) selectFunction
@@ -610,52 +592,82 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
      *--------- Definicion Funcion ------------
      */
     
-    [self selectFunction];
-    
-    if ([function length] > 0) {
+    if ([obj object] == searchField) {
+        NSLog(@"Llamando a applyFilter");
+        [self applyFilterWithString:[searchField stringValue]];
+    } else {
         
-        // Progreso parcial (Apariencia amarilla)
-        [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+        [self selectFunction];
         
-        // Comprueba que no se introduzca una grafica con un nombre vacio
-        NSString *cadena = [selectGraphicNameField stringValue];
-        if ([cadena length] == 0){
-            [addGraphicButton setEnabled:NO];
-        }
-        
-        [self selectName];
-        
-        /*
-         *--------- Parametros ------------
-         */
-        
-        // Se activa en comboBoxSelectionDidChange
-        if(functionSelectedFlag){
+        if ([function length] > 0) {
             
             // Progreso parcial (Apariencia amarilla)
-            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
-            [functionDefLabel setHidden:NO];
-            [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
             
-            [self selectParameters];
+            // Comprueba que no se introduzca una grafica con un nombre vacio
+            NSString *cadena = [selectGraphicNameField stringValue];
+            if ([cadena length] == 0){
+                [addGraphicButton setEnabled:NO];
+            }
+            
+            [self selectName];
+            
+            /*
+             *--------- Parametros ------------
+             */
+            
+            // Se activa en comboBoxSelectionDidChange
+            if(functionSelectedFlag){
+                
+                // Progreso parcial (Apariencia amarilla)
+                [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+                [functionDefLabel setHidden:NO];
+                [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+                
+                [self selectParameters];
 
+            }
+            
+            /*
+             *--------- Apariencia ------------
+             */
+            
+            // Progreso parcial (Apariencia amarilla)
+            [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+            
+            [self selectColour];
+        } else {
+            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+            [functionDefLabel setHidden:YES];
         }
-        
-        /*
-         *--------- Apariencia ------------
-         */
-        
-        // Progreso parcial (Apariencia amarilla)
-        [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-        
-        [self selectColour];
-    } else {
-        [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-        [functionDefLabel setHidden:YES];
-    }
 
-    [self checkAddGraphicIsAvailable];
+        [self checkAddGraphicIsAvailable];
+    }
     
+}
+
+-(void) applyFilterWithString:(NSString *)filter
+{
+    NSArray *array = [[NSArray alloc] init];
+    NSMutableArray *mutArray = [[NSMutableArray alloc] init];
+    
+    if ([filter length] > 0) {
+        NSLog(@"Filtrado mayor que 0");
+        NSPredicate *filterPredicate = [NSPredicate predicateWithFormat:@"self.funcName CONTAINS[cd] %@", filter];
+        NSLog(@"Predicado correcto");
+        array = [[modelInPanel arrayListGraphics] filteredArrayUsingPredicate:filterPredicate];
+        filterEnabled = YES;
+    } else {
+        NSLog(@"NO hay filtrado");
+        array = [modelInPanel arrayListGraphics];
+        filterEnabled = NO;
+    }
+    
+    mutArray = [array mutableCopy];
+    [modelInPanel setArrayFilteredGraphics:mutArray];
+    [listOfCreatedFunctionsTableView reloadData];
+    NSLog(@"ReloadData Filter");
+
 }
 
 /*!

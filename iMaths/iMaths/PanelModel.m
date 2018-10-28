@@ -10,7 +10,7 @@
 #import "GraphicsClass.h"
 
 @implementation PanelModel
-@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , arrayOfGraphicsToRepresent, rowSelectedToModify;
+@synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , arrayOfGraphicsToRepresent, rowSelectedToModify, arrayFilteredGraphics;
 
 //NSString *PanelDisableIndexesFunctionNotification = @"PanelDisableIndexesFunction";
 

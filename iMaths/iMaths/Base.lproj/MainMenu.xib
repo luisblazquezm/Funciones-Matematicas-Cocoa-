@@ -95,11 +95,7 @@
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
-                                <connections>
-                                    <action selector="openTableGraphic:" target="dQG-0K-aIn" id="5Si-aF-5rM"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9"/>
                             <menuItem title="Open Recent" id="tXI-mr-wws">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
@@ -705,7 +701,7 @@
         <window title="iMaths" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="511" height="393"/>
+            <rect key="contentRect" x="17" y="242" width="511" height="393"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <value key="minSize" type="size" width="511" height="393"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
@@ -799,10 +795,7 @@
         <customObject id="dQG-0K-aIn" customClass="Controller">
             <connections>
                 <outlet property="XLegendField" destination="HeK-Yi-9FH" id="1c7-o5-N8o"/>
-                <outlet property="XLeyendField" destination="HeK-Yi-9FH" id="V2V-zu-ONI"/>
                 <outlet property="YLegendField" destination="skN-Nn-htp" id="37d-qS-Lr8"/>
-                <outlet property="YLeyendField" destination="skN-Nn-htp" id="33L-9t-O1p"/>
-                <outlet property="funcLabel" destination="z3J-pS-Bof" id="bfH-gd-a6K"/>
                 <outlet property="graphicRepresentationView" destination="Ytn-lX-lsB" id="QKU-Kp-pcE"/>
                 <outlet property="helpButton" destination="i9O-04-FYq" id="sj0-XG-jWq"/>
                 <outlet property="legendButton" destination="f7X-6z-XzE" id="plY-ln-jsq"/>

@@ -42,9 +42,6 @@
     IBOutlet NSTextField *XLegendField;
     IBOutlet NSTextField *YLegendField;
     
-    IBOutlet NSWindow *popoverWindow;
-    
-    
 }
 
 -(IBAction) showPanel:(id)sender;

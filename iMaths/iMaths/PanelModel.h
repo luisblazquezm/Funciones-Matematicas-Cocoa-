@@ -19,6 +19,7 @@
 {
     NSMutableArray *arrayListGraphics; // Array que contendra una serie de objetos de tipo Funcion
     NSMutableArray *arrayListFunctions; // Array que contendra las funciones a escoger para añadir una gráfica
+    NSMutableArray *arrayFilteredGraphics;
     NSArray *parametersB;
     NSArray *parametersC;
     NSArray *parametersN;
@@ -38,6 +39,7 @@
 @property (nonatomic) NSArray *parametersN;
 @property (nonatomic) NSArray *arrayOfGraphicsToRepresent;
 @property (nonatomic) NSInteger rowSelectedToModify;
+@property (nonatomic) NSMutableArray *arrayFilteredGraphics;
 
 
     /* Metodo de inicialización del array de funciones del ComboBox */
