@@ -68,6 +68,15 @@
     return self;
 }
 
+-(NSPoint) showLegendAtPoint:(NSPoint)a
+{
+    NSLog(@"JAJA NEW.W %f NEW.H %f",a.x, a.y);
+    [tf invert];
+    NSPoint new = [tf transformPoint:a];
+    NSLog(@"JEJEJE NEW.W %f NEW.H %f",new.x, new.y);
+    return new;
+}
+
 -(float)valueAt:(float)x{
     float resultY = 0;
     
@@ -92,6 +101,7 @@
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
            isZoomed:(BOOL)zoom
+      withMovement:(BOOL)move 
              w:(float)width
              h:(float)height
 {
@@ -99,7 +109,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     int counter = 0;
     float lineWidth = 0.1;   // Anchura de los ejes al dibujar
     float spacePoints = 0.3; // Espacio entre las barras de los ejes
-    
+    NSPoint x, new;
     [self init];
     
     float distance = funcRect.size.width/HOPS;
@@ -114,7 +124,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     if (!zoom){
         zoomQuant = 0;
         NSLog(@"Matriz de tranformación afin creada");
-        NSAffineTransform *tf = [NSAffineTransform transform];
+        tf = [NSAffineTransform transform];
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
         [tf translateXBy:b.size.width/2
                      yBy:b.size.height/2];
@@ -122,19 +132,25 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         [tf scaleXBy:b.size.width/funcRect.size.width
                  yBy:b.size.height/funcRect.size.height];
         [tf concat];
-        
+        x.x = 245;
+        x.y = 343;
+        [tf invert];
+        new = [tf transformPoint:x];
+        NSLog(@" NEW.W %f NEW.H %f", new.x, new.y);
+
     } else {
-        zoomQuant += 0.1;
-        NSAffineTransform *tf = [NSAffineTransform transform];
-        NSLog(@"W: %f H: %f",width, height);
+        if (!move)
+            zoomQuant += 0.1;
+        
+        NSAffineTransform *tfZoom = [NSAffineTransform transform];
         // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
         NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
-        [tf translateXBy:height
-                     yBy:width];
+        [tfZoom translateXBy:width
+                     yBy:height];
         // 1º Ancho y Alto / Escala (funcRect)
-        [tf scaleXBy:width*zoomQuant
+        [tfZoom scaleXBy:width*zoomQuant
                  yBy:height*zoomQuant];
-        [tf concat];
+        [tfZoom concat];
     }
 
     NSLog(@"Bounds Depsues: X: %f Y: %f W: %f H: %f", b.origin.x, b.origin.y, b.size.width, b.size.height);

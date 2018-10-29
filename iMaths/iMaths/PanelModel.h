@@ -17,15 +17,19 @@
 
 @interface PanelModel : NSObject
 {
-    NSMutableArray *arrayListGraphics; // Array que contendra una serie de objetos de tipo Funcion
-    NSMutableArray *arrayListFunctions; // Array que contendra las funciones a escoger para añadir una gráfica
+    // Array que contendra una serie de objetos de tipo Funcion
+    NSMutableArray *arrayListGraphics;
+    // Array que contendra las funciones a escoger para añadir una gráfica
+    NSMutableArray *arrayListFunctions;
+    // Array que contendra las graficas filtras por el nombre introducido en la barra de Búsquda
     NSMutableArray *arrayFilteredGraphics;
+    // Arrays con las posibles apariciones de los parametros b,c o n en una función y poder habilitar sus corrrespondientes campos
     NSArray *parametersB;
     NSArray *parametersC;
     NSArray *parametersN;
-    
+    // Array que contendra las gráficas que se quieran representar en la vista
     NSArray *arrayOfGraphicsToRepresent;
-    
+    // Indice de la grafica del arrayListGraphics que se va a modificar
     NSInteger rowSelectedToModify;
 
 }

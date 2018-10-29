@@ -34,23 +34,30 @@
 
 @implementation PanelController
 
-/* NOTIFICACIONES*/
+/* (PanelController -> Controller) */
 
-// PanelController -> PanelModificationController (Cuando se modifica una grafica de la lista de graficas de la tabla)
-NSString *ModifyGraphicNotification = @"ModifyGraphic";
-extern NSString *PanelGraphicModifiedNotification;
-
-// PanelController -> Controller (Cuando se exporta la lista de graficas de la tabla)
-// PanelController -> Controller (Cuando se pasa a dibujar la grafica)
+// Cuando se exporta la lista de graficas de la tabla
 NSString *DrawGraphicsNotification = @"DrawGraphics";
-
+// Cuando se pasa a dibujar la grafica
 NSString *ExportGraphicsNotification = @"ExportGraphics";
 
-// PanelModificationController -> PanelController (Cuando se modifica una grafica de la tabla)
-// Controller -> PanelController (Cuando se importa una nueva grafica)
-extern NSString *NewGraphicImportedNotification;
+/* (PanelController -> PanelModificationController) */
+                                                      
+// Cuando se modifica una grafica de la lista de graficas de la tabla
+NSString *ModifyGraphicNotification = @"ModifyGraphic";
 
+/* (Controller -> PanelController) */
+
+// Cuando se importa una nueva grafica
+extern NSString *NewGraphicImportedNotification;
+// Cuando se recibe la instancia del modelo del Controlador principal
 extern NSString *SendModelNotification;
+
+/* (PanelModificationController -> PanelController) */
+
+// Cuando se modifica una grafica de la tabla
+extern NSString *PanelGraphicModifiedNotification;
+
 
 /* KEYS */
 
@@ -123,21 +130,20 @@ extern NSString *SendModelNotification;
 
 -(void) awakeFromNib
 {
-
+    // Los botones de progreso incialmente en Rojo
     [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
     [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
     [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
 
+    // Deshabilitados los campos y botones principales
     [selectParamAField setEnabled:NO];
     [selectParamBField setEnabled:NO];
     [selectParamCField setEnabled:NO];
     [selectParamNField setEnabled:NO];
-    
     [drawGraphicButton setEnabled:NO];
     [modifyGraphicButton setEnabled:NO];
     [deleteGraphicButton setEnabled:NO];
 
-    
 }
 
 /* --------------------------- TRATAMIENTO DE VENTANAS ---------------------- */
@@ -205,11 +211,7 @@ extern NSString *SendModelNotification;
 
 
 /*!
- * @brief  (Si viene de la tabla de Modificacion) Reescribe el contenido del objeto que ha sido modificado
- *         en el panel de Modificación al confirmar su modificación en dicho panel.
- *
- *         (Si viene del panel principal) Recoge la lista de graficas de un fichero
- *         enviada desde el panel principal Controller
+ * @brief  Recoge la lista de graficas de un fichero enviada desde el panel principal Controller.
  */
 -(void) handleNewGraphicImported:(NSNotification *)aNotification
 {
@@ -224,6 +226,10 @@ extern NSString *SendModelNotification;
     
 }
 
+/*!
+ * @brief  Reescribe el contenido del objeto dentro del array y la tabla, que ha sido modificado
+ *         en el panel de Modificación.
+ */
 -(void) handleGraphicModified:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleNewGraphicImported\r", aNotification);
@@ -240,7 +246,9 @@ extern NSString *SendModelNotification;
 
 /* --------------------------- ACCIONES DEFINICION GRAFICA ---------------------- */
 
-
+/*!
+ * @brief  Desactiva los campos necesarios cuando se añade una nueva grafica en la tabla.
+ */
 -(void) deactivateFields
 {
     [addGraphicButton setEnabled:NO];
@@ -255,6 +263,9 @@ extern NSString *SendModelNotification;
     functionSelectedFlag = NO;
 }
 
+/*!
+ * @brief Metodo notificado cada vez que se selecciona un elemento dentro del ComboBox
+ */
 - (void) comboBoxSelectionDidChange:(NSNotification *)notification
 {
     NSInteger selectedRow = [selectListFuncComboBox indexOfSelectedItem];
@@ -307,9 +318,7 @@ extern NSString *SendModelNotification;
     [selectParamBField setStringValue:@""];
     [selectParamCField setStringValue:@""];
     [selectParamNField setStringValue:@""];
-    
 
-    
 }
 
 
@@ -388,7 +397,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
               row:(NSInteger)row
 {
     [[modelInPanel arrayListGraphics] setObject:object atIndexedSubscript:row];
-    //NSLog(@"Texto Antiguo (%@) - Texto nuevo(%@)\r", cadena, object);
 }
 
 -(void) tableView:(NSTableView *)tableView
@@ -762,19 +770,6 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 }
 
 /*!
- * @brief  Muestra el panel de Modificación enviando la información correspondiente
- *         al objeto que se desea modificar.
- */
--(IBAction) selectDrawingRange:(id)sender
-{
-    //varXMin = [minRangeXField integerValue];
-    //varYMin = [minRangeYField integerValue];
-    //varXMax = [maxRangeXField integerValue];
-    //varYMax = [maxRangeYField integerValue];
-}
-
-
-/*!
  * @brief  Muestra el panel de Modificación enviando la información acerca
  *         del objeto que se desea modificar.
  */
@@ -807,9 +802,15 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     [listOfCreatedFunctionsTableView deselectRow:RowSelected];
 }
 
-- (void)dealloc
+/*!
+ * @brief  Elimina el registro de objetos instanciados.
+ */
+-(void) dealloc
 {
     [selectColorGraphicButton removeObserver:self forKeyPath:@"color"];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
 }
+
 
 @end

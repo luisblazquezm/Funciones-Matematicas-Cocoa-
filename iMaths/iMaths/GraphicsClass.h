@@ -26,6 +26,8 @@
     NSBezierPath *axisXBezier, *axisYBezier;
     NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
     float zoomQuant;
+    
+    NSAffineTransform *tf ;
 }
 
     /* Getters y setters */
@@ -59,6 +61,9 @@
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit
           isZoomed:(BOOL)zoom
+      withMovement:(BOOL)move 
                  w: (float)width
                  h:(float)height;
+
+-(NSPoint) showLegendAtPoint:(NSPoint)a;
 @end

@@ -12,18 +12,19 @@
 @interface GraphicView : NSView
 {
     IBOutlet __weak Controller *controller;
-    bool mouseInBounds, trackingBoundsHit;
-    NSRect originalBoundsView, newBoundsView;
-    NSSize scaleSize;
-    BOOL graphicIsZoomed;
-    BOOL mouseDraggedFlag;
-    NSPoint quadrantDragged;
-    BOOL trackingCloseBoxHit, mouseInCloseBox;
+    
+    /* Variables globales a la clase */
+
+    // Flags
+    BOOL graphicIsZoomed; // Indica si se va a hacer zoom o no sobre la vista
+    BOOL mouseDraggedFlag; // Indica si se ha hecho una selección sobre la vista (acción de zoom sobre la vista)
+    BOOL graphicIsMoved;
+    
+    // Variables que indican los puntos de la vista para hacer zoom
     NSPoint a, c;
     float width, height;
 }
 
-//-(void) resetScaling;
 
 
 @end

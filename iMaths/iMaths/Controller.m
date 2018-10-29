@@ -30,19 +30,25 @@
 
 @implementation Controller
 
-/*(PanelController -> Controller) Manda una notificación cada vez que se añade una grafica a la tabla */
-extern NSString *DrawGraphicsNotification;
+/* (Controller -> PanelController) */
 
-extern NSString *ExportGraphicsNotification;
-
-/*(Controller -> PanelController) Manda una notificación cuando se importa el fichero del sistema */
+// Cuando se importan las graficas de un fichero y se añaden a la tabla.
 NSString *NewGraphicImportedNotification = @"NewGraphicImported";
-
-/* (Controller -> PanelController) Manda una notificación con la instancia de la variable del modelo al resto de controladores*/
+// Manda la instancia de la variable del modelo al resto de controladores.
 NSString *SendModelNotification = @"SendModel";
 
-extern NSString *DrawRectCalledNotification;
+/* (PanelController -> Controller) */
 
+// Cuando se quiere representar una grafica de la tabla
+extern NSString *DrawGraphicsNotification;
+// Cuando se quiere exportar las graficas de la tabla
+extern NSString *ExportGraphicsNotification;
+
+/* (GraphicView -> Controller) */
+
+// Se manda la información de la vista desde el metodo drawRect
+extern NSString *DrawRectCalledNotification;
+// Manda las coordenadas del puntero en la vista para mostrar la leyenda.
 extern NSString *ShowLegendNotification;
 
 /* ---------------------------- TRATAMIENTO DE VENTANA ---------------------------- */
@@ -55,26 +61,27 @@ extern NSString *ShowLegendNotification;
 {
     self = [super init];
     if (self){
-        NSLog(@"En init");
+        NSLog(@"En init (Controller)");
         
-        enableExportingFlag = NO;
         zoomIsRestored = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
         model = [[PanelModel alloc] init];
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        
+        // Observador de la notificación de dibujo de la grafica o graficas seleccionadas (desde el controlador de preferencias)
         [nc addObserver:self
                selector:@selector(handleDrawGraphics:)
                    name:DrawGraphicsNotification
                  object:nil];
 
-        
+        // Observador de la notificación de representancion de la vista (desde drawRect de la vista)
         [nc addObserver:self
                selector:@selector(handleDrawGraphics:)
                    name:DrawRectCalledNotification
                  object:nil];
         
-        
+        // Observador de la notificación de envio de la posicion del puntero en la vista (desde la vista)
         [nc addObserver:self
                selector:@selector(handleShowLegend:)
                    name:ShowLegendNotification
@@ -113,7 +120,8 @@ extern NSString *ShowLegendNotification;
 #pragma clang diagnostic pop
 
 /*!
- * @brief  Abre y muestra el panel especificado.
+ * @brief  Abre y muestra el panel especificado. En este caso muestra el panel de Preferencias y envia la
+ *         instancia del modelo a la clase controlador de ese panel.
  */
 -(IBAction) showPanel:(id)sender
 {
@@ -123,6 +131,7 @@ extern NSString *ShowLegendNotification;
     NSLog(@"panel %@\r", panelController);
     [panelController showWindow:self];
     
+    // Envia la instancia del modelo a la clase 'PanelController'
     NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:model
                                                                  forKey:@"model"];
     
@@ -132,17 +141,6 @@ extern NSString *ShowLegendNotification;
                     userInfo:notificationInfo];
     
 }
-
-/*!
- * @brief  Elimina el registro de objetos instanciados.
- */
--(void) dealloc
-{
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc removeObserver:self];
-}
-
-
 
 /* ---------------------------- DIBUJAR GRAFICA ---------------------------- */
 
@@ -154,29 +152,30 @@ extern NSString *ShowLegendNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
+    
+    // Variables locales
     NSArray *array = [[NSArray alloc] init];
     NSMutableString *s = [[NSMutableString alloc] init];
 
     // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
-    //NSMutableArray *graphicsArray = [notificationInfo objectForKey:@"graphicsToRepresent"];
     NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
     NSNumber *YMin = [notificationInfo objectForKey:@"YMin"];
     NSNumber *XMax = [notificationInfo objectForKey:@"XMax"];
     NSNumber *YMax = [notificationInfo objectForKey:@"YMax"];
     
     // De la vista al controlador, se envia la información referente a las dimensiones de la vista, su contexto grafico y otros parametros referidos al zoom
-    NSNumber *oX=[notificationInfo objectForKey:@"OrigenX"];
-    NSNumber *oY=[notificationInfo objectForKey:@"OrigenY"];
-    NSNumber *alt=[notificationInfo objectForKey:@"Altura"];
-    NSNumber *anch=[notificationInfo objectForKey:@"Ancho"];
-    NSGraphicsContext *ctx=[notificationInfo objectForKey:@"ContextoGrafico"];
+    NSNumber *oX = [notificationInfo objectForKey:@"OrigenX"];
+    NSNumber *oY = [notificationInfo objectForKey:@"OrigenY"];
+    NSNumber *alt = [notificationInfo objectForKey:@"Altura"];
+    NSNumber *anch = [notificationInfo objectForKey:@"Ancho"];
+    NSGraphicsContext *ctx = [notificationInfo objectForKey:@"ContextoGrafico"];
     NSNumber *zoom = [notificationInfo objectForKey:@"graphicIsZoomed"];
+    NSNumber *move = [notificationInfo objectForKey:@"graphicIsMoved"];
     NSNumber *w = [notificationInfo objectForKey:@"width"];
     NSNumber *h = [notificationInfo objectForKey:@"height"];
     
     // Activa el metodo setNeedsDisplay para poder representar los ajustes de la vista 'CustomView' en el drawRect
     if (XMin != nil && XMax != nil && YMin != nil && YMax != nil) {
-        //graphicToRepresent = graphic;
         limit.origin.x = [XMin integerValue];
         limit.origin.y = [YMin integerValue];
         limit.size.width = [XMax integerValue];
@@ -188,7 +187,6 @@ extern NSString *ShowLegendNotification;
               limit.size.height);
         
         zoomIsRestored = YES;
-        NSLog(@"Notificacion para representar grafica (PanelController -> Controller)\n");
         [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
     }
@@ -196,12 +194,12 @@ extern NSString *ShowLegendNotification;
     
     // Modela la representación de los objetos que se visualizarán dentro del 'Custom View': ejes, graficas,...
     if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
-
-        bounds.origin.x=[oX integerValue];
-        bounds.origin.y=[oY integerValue];
-        bounds.size.height=[alt integerValue];
-        bounds.size.width=[anch integerValue];
+        bounds.origin.x = [oX integerValue];
+        bounds.origin.y = [oY integerValue];
+        bounds.size.height = [alt integerValue];
+        bounds.size.width = [anch integerValue];
         graphicIsZoomed = [zoom boolValue];
+        graphicIsMoved = [move boolValue];
         wid = [w floatValue];
         heig = [h floatValue];
         
@@ -210,16 +208,16 @@ extern NSString *ShowLegendNotification;
               limit.size.width,
               limit.size.height);
         
-        NSLog(@"Notificacion para representar grafica (GraphicView -> Controller)\n");
         array = [model arrayOfGraphicsToRepresent];
         if ([array count] != 0) {
-            NSLog(@"Entre para dibujar");
+            NSLog(@"Entrar para dibujar");
             
             if (zoomIsRestored)
                 graphicIsZoomed = NO;
             
+            NSLog(@"Valor Zoom antes de dibujar: %hhd", graphicIsZoomed);
             for (GraphicsClass *g in array) {
-                [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed w:wid h:heig];
+                [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
                 [s appendString:[g funcName]];
                 [s appendString:@":"];
                 [s appendString:[g function]];
@@ -228,21 +226,32 @@ extern NSString *ShowLegendNotification;
             }
         } else {
             GraphicsClass *g = [[GraphicsClass alloc] init];
-            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:NO w:wid h:heig];
+            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
         }
+        
         NSLog(@"Grafica Representada");
         zoomIsRestored = NO;
     }
 
 }
 
+/*!
+ * @brief  Recibe las coordenadas donde el usuario ha pulsado en la vista para mostrar la leyenda
+ */
 -(void) handleShowLegend:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleShowLegend\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
+    NSPoint pointToLegend, newPoint;
     
     NSNumber *X = [notificationInfo objectForKey:@"LeyendaX"];
     NSNumber *Y = [notificationInfo objectForKey:@"LeyendaY"];
+    
+    pointToLegend.x = [X floatValue];
+    pointToLegend.y = [Y floatValue];
+    
+    GraphicsClass *g = [[GraphicsClass alloc] init];
+    newPoint = [g showLegendAtPoint:pointToLegend];
     
     int absX = fabsf([X floatValue]);
     int absY = fabsf([Y floatValue]);
@@ -253,16 +262,8 @@ extern NSString *ShowLegendNotification;
 
 /* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
 
-/*
--(void) handleExportGraphicsAvailable:(NSNotification *)aNotification
-{
-    NSLog(@"Notificacion %@ recibida en handleExportGraphicsAvailable\r", aNotification);
-    enableExportingFlag = YES; // NO hace falta notificaciones , basta con que haya un solo elemento en el array de graficas del modelo
-}
-*/
-
 /*!
- * @brief  Exporta en un fichero XML o CSV las graficas dentro de la tabla del panel Preferencias
+ * @brief  Exporta en un fichero XML o TXT las graficas dentro de la tabla del panel Preferencias
  */
 -(IBAction) exportTableGraphicsAs:(id)sender
 {
@@ -289,12 +290,10 @@ extern NSString *ShowLegendNotification;
     NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
                                                                  forKey:@"graphicsImported"];
     
-    //NSLog(@"A enviar %@\r", array);
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:NewGraphicImportedNotification
                       object:self
                     userInfo:notificationInfo];
-    //NSLog(@"Información enviada\r");
     
 }
 
@@ -308,20 +307,43 @@ extern NSString *ShowLegendNotification;
     [model exportGraphicView:graphicRepresentationView To:@"png"];
 }
 
+/* ---------------------------- REPRESENTACION DE LA BARRA DE HERRAMIENTAS ---------------------------- */
+
+/*!
+ * @brief  Muestra a través del botón de ayuda un panel emergente los pasos principales a seguir para
+ *         representar una grafica.
+ */
 -(IBAction) showHelp:(id)sender
 {
     [helpButton showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxXEdge];
 }
 
+/*!
+ * @brief  Muestra un panel emergente con los valores de X e Y de la vista donde el usuario ha pulsado con
+ *         el puntero del raton.
+ */
 -(IBAction) showLegend:(id)sender
 {
     [legendButton showRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSMaxXEdge];
 }
 
+/*!
+ * @brief  Reinicia o resetea la matriz de transformación afín a la vista por defecto antes de llevar a
+ *         cabo el zoom sobre la misma.
+ */
 -(IBAction) restoreZoom:(id)sender
 {
     zoomIsRestored = YES;
     [graphicRepresentationView setNeedsDisplay:YES];
+}
+
+/*!
+ * @brief  Elimina el registro de objetos instanciados.
+ */
+-(void) dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
 }
 
 @end

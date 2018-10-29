@@ -7,10 +7,7 @@
 //
 
 #import "GraphicView.h"
-#import "GraphicsClass.h"
-//static const NSSize unitSize = {1.0, 1.0};
-//static const int zoomValueX = 40;
-//static const int zoomValueY = 40;
+static const int zoom = 20;
 
 @implementation GraphicView
 
@@ -20,18 +17,21 @@ NSString *ShowLegendNotification = @"ShowLeyend";
 
 -(id) initWithCoder:(NSCoder *)decoder
 {
-    NSLog(@"En init with coder");
+    NSLog(@"En init with coder (GraphicView)");
     self = [super initWithCoder:decoder];
     if (self) {
-        originalBoundsView = [self bounds];
         graphicIsZoomed = NO;
         mouseDraggedFlag = NO;
-
+        graphicIsMoved = NO;
     }
     return self;
 }
 
-
+/*!
+ * @brief  Metodo llamado cada vez que se pretende redibujar la vista, manda toda la información de las
+ *         dimensiones de la vista al controlador
+ * @param  dirtyRect Rectangulo de la vista a dibujar.
+ */
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     
@@ -53,6 +53,7 @@ NSString *ShowLegendNotification = @"ShowLeyend";
     NSNumber *alt = [[NSNumber alloc]initWithFloat:altura];
     NSNumber *anch = [[NSNumber alloc]initWithFloat:ancho];
     NSNumber *zoom = [[NSNumber alloc]initWithBool:graphicIsZoomed];
+    NSNumber *move = [[NSNumber alloc]initWithBool:graphicIsMoved];
     NSNumber *w = [[NSNumber alloc]initWithFloat:width];
     NSNumber *h = [[NSNumber alloc]initWithFloat:height];
 
@@ -62,6 +63,7 @@ NSString *ShowLegendNotification = @"ShowLeyend";
                                                                     alt,@"Altura",
                                                                     anch,@"Ancho",
                                                                     zoom,@"graphicIsZoomed",
+                                                                    move,@"graphicIsMoved",
                                                                     w,@"width",
                                                                     h,@"height",
                                                                     nil];
@@ -71,17 +73,16 @@ NSString *ShowLegendNotification = @"ShowLeyend";
                     userInfo:info];
 }
 
-// mouseDown y luego (if delegateRespondsto.) se lo paso al delegate processMouseDown inBounds
-// mouseDragged seleccionas un area con el boton izquierdo y hace zoom
-// Matriz de transferencia en estos metodos
-// if(trackingMouse){ // el codigo //}
-
+/*!
+ * @brief  Evento de raton que se llama cada vez que el usuario pulso el botón izquierdo del ratón sobre la
+ *         vista.
+ */
 - (void)mouseDown:(NSEvent *)theEvent {
     a = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     NSRect bounds = [self frame];
     NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",a.x, a.y, bounds.origin.x, bounds.origin.y);
     mouseDraggedFlag = NO;
-    
+
     // Leyenda
     NSNumber *Xleyend = [[NSNumber alloc]initWithFloat:a.x];
     NSNumber *Yleyend = [[NSNumber alloc]initWithFloat:a.y];
@@ -96,44 +97,66 @@ NSString *ShowLegendNotification = @"ShowLeyend";
                     userInfo:info];
 }
 
+/*!
+ * @brief  Evento de raton que se llama cada vez que el usuario arrastra con el botón izquierdo del ratón
+ *         sobre la vista.
+ */
 - (void)mouseDragged:(NSEvent *)theEvent {
     mouseDraggedFlag = YES;
 }
 
+/*!
+ * @brief  Evento de raton que se llama cada vez que el usuario suelta el botón izquierdo del ratón tras
+ *         haber pulsado.
+ */
 - (void)mouseUp:(NSEvent *)theEvent {
     c = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    NSRect bounds = [self frame];
+    NSRect bounds = [self bounds];
     NSLog(@"C(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",c.x, c.y, bounds.origin.x, bounds.origin.y);
     
+    // Nos aseguramos de que solo se haga zooom sobre esa zona si se ha arrastrado antes.
     if(mouseDraggedFlag){
+        // Width y height representan las coordenadas X e Y del punto medio o central del rectangulo que se ha creado al arrastar el usuario por la vista, y serán el nuevo origen de coordenadas al que se trasladará la matriz de transformación afín para representar la acción de hacer zoom.
         width = (c.x + a.x)/2;
         height = (c.y + a.y)/2;
         graphicIsZoomed = YES;
+        graphicIsMoved = NO;
         [self setNeedsDisplay:YES];
     }
 
 
 }
 
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
 -(void)keyDown:(NSEvent *)event
 {
-    NSLog(@"Aqui");
+    NSRect newBounds = [self bounds];
     switch ([event keyCode]) {
         case 123:    // Left arrow
+            newBounds.origin.x -= zoom;
             NSLog(@"Left behind.");
             break;
         case 124:    // Right arrow
+            newBounds.origin.x += zoom;
             NSLog(@"Right as always!");
             break;
         case 125:    // Down arrow
+            newBounds.origin.y -= zoom;
             NSLog(@"Downward is Heavenward");
             break;
         case 126:    // Up arrow
+            newBounds.origin.y += zoom;
             NSLog(@"Up, up, and away!");
             break;
         default:
             break;
     }
+    graphicIsMoved = YES;
+    [self setBoundsOrigin:newBounds.origin];
 }
 
 
