@@ -10,6 +10,7 @@
 		291A0135217208CF00212DF6 /* GraphicsClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 291A0134217208CF00212DF6 /* GraphicsClass.m */; };
 		291A01392172623800212DF6 /* PanelModificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 291A01372172623800212DF6 /* PanelModificationController.m */; };
 		291A013A2172623800212DF6 /* PanelModificationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 291A01382172623800212DF6 /* PanelModificationController.xib */; };
+		292B7866217B7640009D94C4 /* GraphicView.m in Sources */ = {isa = PBXBuildFile; fileRef = 292B7865217B7640009D94C4 /* GraphicView.m */; };
 		294D1A6E21712A45001AC69F /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A6C21712A45001AC69F /* PanelController.m */; };
 		294D1A6F21712A45001AC69F /* PanelController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 294D1A6D21712A45001AC69F /* PanelController.xib */; };
 		294D1A7221712A57001AC69F /* PanelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 294D1A7121712A57001AC69F /* PanelModel.m */; };
@@ -26,6 +27,8 @@
 		291A01362172623800212DF6 /* PanelModificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelModificationController.h; sourceTree = "<group>"; };
 		291A01372172623800212DF6 /* PanelModificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelModificationController.m; sourceTree = "<group>"; };
 		291A01382172623800212DF6 /* PanelModificationController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelModificationController.xib; sourceTree = "<group>"; };
+		292B7864217B7640009D94C4 /* GraphicView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicView.h; sourceTree = "<group>"; };
+		292B7865217B7640009D94C4 /* GraphicView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicView.m; sourceTree = "<group>"; };
 		294D1A6B21712A45001AC69F /* PanelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
 		294D1A6C21712A45001AC69F /* PanelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
 		294D1A6D21712A45001AC69F /* PanelController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PanelController.xib; sourceTree = "<group>"; };
@@ -77,18 +80,20 @@
 				29C92798216A7FF500E43BA8 /* AppDelegate.m */,
 				29C9279A216A7FF700E43BA8 /* Assets.xcassets */,
 				29C9279C216A7FF700E43BA8 /* MainMenu.xib */,
+				294D1A6D21712A45001AC69F /* PanelController.xib */,
+				291A01382172623800212DF6 /* PanelModificationController.xib */,
 				29C927A8216A809400E43BA8 /* Controller.h */,
 				29C927A9216A809400E43BA8 /* Controller.m */,
+				292B7864217B7640009D94C4 /* GraphicView.h */,
+				292B7865217B7640009D94C4 /* GraphicView.m */,
 				294D1A6B21712A45001AC69F /* PanelController.h */,
 				294D1A6C21712A45001AC69F /* PanelController.m */,
-				294D1A6D21712A45001AC69F /* PanelController.xib */,
-				291A01362172623800212DF6 /* PanelModificationController.h */,
-				291A01372172623800212DF6 /* PanelModificationController.m */,
-				291A01382172623800212DF6 /* PanelModificationController.xib */,
 				294D1A7021712A57001AC69F /* PanelModel.h */,
 				294D1A7121712A57001AC69F /* PanelModel.m */,
 				291A0133217208CF00212DF6 /* GraphicsClass.h */,
 				291A0134217208CF00212DF6 /* GraphicsClass.m */,
+				291A01362172623800212DF6 /* PanelModificationController.h */,
+				291A01372172623800212DF6 /* PanelModificationController.m */,
 				29C9279F216A7FF700E43BA8 /* Info.plist */,
 				29C927A0216A7FF700E43BA8 /* main.m */,
 				29C927A2216A7FF700E43BA8 /* iMaths.entitlements */,
@@ -173,6 +178,7 @@
 				291A01392172623800212DF6 /* PanelModificationController.m in Sources */,
 				29C92799216A7FF500E43BA8 /* AppDelegate.m in Sources */,
 				294D1A7221712A57001AC69F /* PanelModel.m in Sources */,
+				292B7866217B7640009D94C4 /* GraphicView.m in Sources */,
 				29C927AA216A809400E43BA8 /* Controller.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

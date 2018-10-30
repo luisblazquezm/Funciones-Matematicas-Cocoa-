@@ -36,6 +36,24 @@
                                     <action selector="showPanel:" target="dQG-0K-aIn" id="qfm-s1-H3D"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Import Table of Graphics" id="eV3-U0-yXj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="importTableGraphics:" target="dQG-0K-aIn" id="qYu-oc-DBd"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Table of Graphics As..." keyEquivalent="S" id="3dY-Gx-GRe">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Graphic As..." id="owA-RF-4fm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -77,11 +95,7 @@
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
-                                <connections>
-                                    <action selector="openDocument:" target="-1" id="bVn-NM-KNZ"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9"/>
                             <menuItem title="Open Recent" id="tXI-mr-wws">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
@@ -108,7 +122,7 @@
                             </menuItem>
                             <menuItem title="Save As…" keyEquivalent="S" id="Bw7-FT-i3A">
                                 <connections>
-                                    <action selector="saveDocumentAs:" target="-1" id="mDf-zr-I0C"/>
+                                    <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="Xf4-T5-Gf2"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Revert to Saved" keyEquivalent="r" id="KaW-ft-85H">
@@ -682,50 +696,231 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="100" y="551"/>
+            <point key="canvasLocation" x="101" y="625"/>
         </menu>
         <window title="iMaths" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="contentRect" x="17" y="242" width="511" height="393"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+            <value key="minSize" type="size" width="511" height="393"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                <rect key="frame" x="0.0" y="0.0" width="511" height="393"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HHA-0V-ppS">
-                        <rect key="frame" x="165" y="193" width="150" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Gráfica no seleccionada" id="DX9-6n-gYg">
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ytn-lX-lsB" customClass="GraphicView">
+                        <rect key="frame" x="20" y="20" width="471" height="338"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </customView>
+                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3J-pS-Bof">
+                        <rect key="frame" x="192" y="366" width="127" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="LLM-ot-LDW">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rAU-jM-Iay">
-                        <rect key="frame" x="25" y="171" width="431" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Por favor, pulse iMaths-Propiedades para configurar una nueva gráfica" id="6YU-5K-mqo">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bzv-SN-Esn">
-                        <rect key="frame" x="437" y="322" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I7S-RL-AES">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                 </subviews>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="874CCAE9-FD56-4534-90FD-669E7BB16C83" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="3Sa-ZF-vlh">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="mgt-LK-BsX"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="Yvb-xi-hsw"/>
+                    <toolbarItem implicitItemIdentifier="5B087D78-85F4-482A-8BA1-03ECE061A52E" label="Ayuda" paletteLabel="Ayuda" id="7QP-Cv-F9W">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="25" height="25"/>
+                        <size key="maxSize" width="25" height="25"/>
+                        <button key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="knm-Mv-Qa3">
+                            <rect key="frame" x="8" y="14" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u3k-aJ-heW">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="showHelp:" target="dQG-0K-aIn" id="fVj-A3-tLN"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="2E2E3035-6CB0-45D4-BEB3-81041AD96980" label="Custom View" paletteLabel="Custom View" image="NSRevealFreestandingTemplate" id="ZXp-cP-QwD">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="25" height="25"/>
+                        <size key="maxSize" width="25" height="25"/>
+                        <button key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="yo7-pn-WRA">
+                            <rect key="frame" x="26" y="14" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="help" bezelStyle="helpButton" image="NSRevealFreestandingTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8it-wK-Hvj">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="showLegend:" target="dQG-0K-aIn" id="u4c-DW-Cdc"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="BB31EB5E-8856-4248-992E-FCB6C0D287D3" label="Reiniciar Zoom" paletteLabel="Reiniciar Zoom" image="NSRefreshFreestandingTemplate" id="Nfe-9o-1We">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="25" height="25"/>
+                        <size key="maxSize" width="25" height="25"/>
+                        <button key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="qtS-Jm-g93">
+                            <rect key="frame" x="30" y="14" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="help" bezelStyle="helpButton" image="NSRefreshFreestandingTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hiR-XK-zHW">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="restoreZoom:" target="dQG-0K-aIn" id="6HP-tz-vmu"/>
+                        </connections>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="mgt-LK-BsX"/>
+                    <toolbarItem reference="Nfe-9o-1We"/>
+                    <toolbarItem reference="Yvb-xi-hsw"/>
+                    <toolbarItem reference="ZXp-cP-QwD"/>
+                    <toolbarItem reference="Yvb-xi-hsw"/>
+                    <toolbarItem reference="7QP-Cv-F9W"/>
+                    <toolbarItem reference="mgt-LK-BsX"/>
+                    <toolbarItem reference="mgt-LK-BsX"/>
+                </defaultToolbarItems>
+            </toolbar>
             <connections>
-                <outlet property="delegate" destination="SCP-yE-C91" id="Mm5-NC-GBh"/>
+                <outlet property="delegate" destination="dQG-0K-aIn" id="HOn-xP-tI9"/>
             </connections>
+            <point key="canvasLocation" x="-50.5" y="171.5"/>
         </window>
-        <customObject id="SCP-yE-C91" customClass="Controller"/>
-        <customObject id="dQG-0K-aIn" customClass="Controller"/>
+        <customObject id="dQG-0K-aIn" customClass="Controller">
+            <connections>
+                <outlet property="XLegendField" destination="HeK-Yi-9FH" id="1c7-o5-N8o"/>
+                <outlet property="YLegendField" destination="skN-Nn-htp" id="37d-qS-Lr8"/>
+                <outlet property="graphicRepresentationView" destination="Ytn-lX-lsB" id="QKU-Kp-pcE"/>
+                <outlet property="helpButton" destination="i9O-04-FYq" id="sj0-XG-jWq"/>
+                <outlet property="legendButton" destination="f7X-6z-XzE" id="plY-ln-jsq"/>
+                <outlet property="nameGraphLabel" destination="z3J-pS-Bof" id="VQt-ct-724"/>
+            </connections>
+        </customObject>
+        <viewController id="JUP-4u-W2N" userLabel="Popover View Controller">
+            <connections>
+                <outlet property="view" destination="gYC-LK-UJC" id="GRt-MB-S6u"/>
+            </connections>
+        </viewController>
+        <popover behavior="t" id="i9O-04-FYq">
+            <connections>
+                <outlet property="contentViewController" destination="JUP-4u-W2N" id="cCU-e6-WFL"/>
+            </connections>
+        </popover>
+        <customView id="gYC-LK-UJC">
+            <rect key="frame" x="0.0" y="0.0" width="456" height="149"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14Y-aw-w8A">
+                    <rect key="frame" x="30" y="112" width="193" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="-Para añadir una nueva grafica:" id="rO8-bw-MiA">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Afz-pk-fzR">
+                    <rect key="frame" x="44" y="87" width="371" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="1) Abra el menu Preferencias en la barra horizontal superior: " id="Q07-j3-3eW">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UXM-Wo-ITU">
+                    <rect key="frame" x="56" y="62" width="152" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="(iMaths -&gt; Preferencias)" id="NAk-wH-lWC">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="foH-Lm-Y96">
+                    <rect key="frame" x="46" y="37" width="372" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2) Una vez abierto el nuevo panel, introduzca los parametros" id="Szb-Is-tV7">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aw9-Hw-asK">
+                    <rect key="frame" x="60" y="20" width="386" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="necesarios para representar la grafica y pulse el boton &quot;Añadir&quot;" id="BJB-89-M1J">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="482" y="49.5"/>
+        </customView>
+        <viewController id="Xbl-rA-c7t" userLabel="Popover View Controller">
+            <connections>
+                <outlet property="view" destination="eGF-5y-27Y" id="3Ve-Eg-db8"/>
+            </connections>
+        </viewController>
+        <popover id="f7X-6z-XzE">
+            <connections>
+                <outlet property="contentViewController" destination="Xbl-rA-c7t" id="grL-8W-MOm"/>
+                <outlet property="delegate" destination="dQG-0K-aIn" id="qV7-Pn-x4O"/>
+            </connections>
+        </popover>
+        <customView id="eGF-5y-27Y">
+            <rect key="frame" x="0.0" y="0.0" width="231" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HeK-Yi-9FH">
+                    <rect key="frame" x="86" y="54" width="96" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="1Ta-da-CbQ">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="skN-Nn-htp">
+                    <rect key="frame" x="86" y="20" width="96" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="RgO-FN-77t">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4SM-xS-6F8">
+                    <rect key="frame" x="38" y="57" width="17" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="X:" id="JYD-XM-m4r">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FD7-kp-Zxn">
+                    <rect key="frame" x="38" y="23" width="16" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Y:" id="Jp2-QQ-muH">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="-495.5" y="14"/>
+        </customView>
     </objects>
+    <resources>
+        <image name="NSRefreshFreestandingTemplate" width="14" height="14"/>
+        <image name="NSRevealFreestandingTemplate" width="14" height="14"/>
+    </resources>
 </document>

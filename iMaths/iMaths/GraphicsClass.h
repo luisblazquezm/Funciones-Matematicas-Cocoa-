@@ -17,9 +17,13 @@
     float paramC;
     float paramN;
     NSColor *colour;
+    
+    NSColor *colorGraphic;
+    NSBezierPath *funcBezier;
+    float zoomQuant;
 }
 
-/* Getters y setters */
+    /* Getters y setters */
 
 @property (nonatomic) NSString *funcName;
 @property (nonatomic) NSString *function;
@@ -29,7 +33,10 @@
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
 
-/* Constructor */
+
+//@property(retain)NSBezierPath *poly;
+
+    /* Constructor */
 
 -(id) initWithGraphicName: (NSString *) graphic_Name
                  function: (NSString *) graphic_Function
@@ -39,4 +46,15 @@
                    paramN: (float) graphic_ParamN
                    colour: (NSColor *) graphic_Colour;
 
+    /* Metodos para representar graficas */
+
+-(float) valueAt:(float)x;
+
+-(void) drawInRect:(NSRect)b
+withGraphicsContext:(NSGraphicsContext*)ctx
+          andLimits:(NSRect)limit
+          isZoomed:(BOOL)zoom
+      withMovement:(BOOL)move 
+                 w: (float)width
+                 h:(float)height;
 @end

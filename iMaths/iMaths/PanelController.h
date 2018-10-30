@@ -40,12 +40,12 @@
     
     IBOutlet NSComboBox *selectListFuncComboBox;
     IBOutlet NSTextField *selectGraphicNameField;
-    IBOutlet NSTextField *selectParamAField;      // Cambiar a formateador para solo introducir numeros y convertirlos a float con formato 0.00
+    IBOutlet NSTextField *selectParamAField;
     IBOutlet NSTextField *selectParamBField;
     IBOutlet NSTextField *selectParamCField;
     IBOutlet NSTextField *selectParamNField;
     IBOutlet NSColorWell *selectColorGraphicButton;
-    IBOutlet NSButton *addGraphicButton;         // Deshabilitado por defecto hasta que no se rellenen todos los campos
+    IBOutlet NSButton *addGraphicButton;
     
     /* Outlets Parámetros Generales */
     
@@ -58,6 +58,8 @@
     IBOutlet NSTextField *minRangeYField;
     IBOutlet NSTextField *maxRangeXField;
     IBOutlet NSTextField *maxRangeYField;
+    IBOutlet NSSearchField *searchField;
+    
            // No editables
     IBOutlet NSTextField *showFuncField;
     IBOutlet NSTextField *showNameGraphicField;
@@ -67,8 +69,17 @@
     IBOutlet NSTextField *showParamNField;
     IBOutlet NSColorWell *showColorGraphicField;
     
+           // Botones de progreso (Rojo - Amarillo - Verde)
+    IBOutlet NSButton *functionDefProgressButton;
+    IBOutlet NSButton *parametersProgressButton;
+    IBOutlet NSButton *appearanceProgressButton;
+    IBOutlet NSTextField *functionDefLabel;
+    IBOutlet NSTextField *parametersLabel;
+    IBOutlet NSTextField *appearanceLabel;
+    
     /* Variables de instancia */
     
+    // Variables globales de los parametros con los que se creara cada gráfica
     NSString *name;
     NSString *function;
     float paramA;
@@ -77,27 +88,35 @@
     float paramN;
     NSColor *colour;
     
-    NSInteger aRowSelected;
-
-
+    NSInteger previousSelectedRow;
+    BOOL functionSelectedFlag;
+    BOOL BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
+    NSNumberFormatter *formatter;
+    
 }
 
-    /* Métodos Definicion de la Grafica */
+    /* Manejadoras llamadas tras recibir las notificaciones */
+-(void) handleNewGraphicImported:(NSNotification *)aNotification;
+-(void) handleModelReceived:(NSNotification *)aNotification;
 
--(IBAction)selectNewGraphic:(id)sender;
--(IBAction)addNewGraphic:(id)sender;
+    /* Métodos Definicion de la Grafica */
+-(void) selectFunction;
+-(void) selectName;
+-(void) selectParameters;
+-(void) selectColour;
+-(void) checkAddGraphicIsAvailable;
+-(IBAction) addNewGraphic:(id)sender;
+-(void) fomatterOnlyRealNumbers;
+-(void) applyFilterWithString:(NSString*)filter;
+-(void) deactivateFields;
 
     /* Métodos Parámetros Generales */
-
--(IBAction)drawGraphic:(id)sender;
--(IBAction)modifyGraphic:(id)sender;
--(IBAction)deleteGraphic:(id)sender;
--(IBAction)selectDrawingRange:(id)sender;
+-(IBAction) drawGraphic:(id)sender;
+-(IBAction) deleteGraphic:(id)sender;
 
     /* Métodos Panel Modificar */
-
--(IBAction)showPanel:(id)sender;
--(void)handleNewGraphic:(NSNotification *)aNotification;
+-(IBAction) showPanel:(id)sender;
+-(void) handleGraphicModified:(NSNotification *)aNotification;
 
 
 @end

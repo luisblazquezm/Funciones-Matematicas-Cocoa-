@@ -7,7 +7,22 @@
 //
 
 #import "PanelModificationController.h"
+#import "PanelModel.h"
 #import "GraphicsClass.h"
+
+/* --------- Esquema metodos ---------
+ *   > Inicializadores
+ *       - init()
+ *       - initWithWindow()
+ *   > Tratamiento de ventana
+ *       - windowShouldClose()
+ *       - windowDidLoad()
+ *   > Acciones de modificación
+ *       - handleModifyGraphic()
+ *   > Tratamiento de botones de modificación
+ *       - confirmNewGraphic()
+ *       - cancelNewGraphic()
+ */
 
 @interface PanelModificationController ()
 
@@ -15,14 +30,17 @@
 
 @implementation PanelModificationController
 
-extern NSString *PanelModifyGraphicNotification;
-NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
+extern NSString *ModifyGraphicNotification;
+NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
+
+
+/* --------------------------- INICIALIZADORES ---------------------- */
 
 /*!
  * @brief  Inicializa todas las variables de instancias declaradass en fichero .h .
  * @return id, puntero genérico.
  */
--(id)init
+-(id) init
 {
     if (![super initWithWindowNibName:@"PanelModificationController"])
         return nil;
@@ -36,24 +54,28 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
  * @param  window .Ventana panelController.
  * @return instancetype.
  */
--(instancetype)initWithWindow:(NSWindow *)window
+-(instancetype) initWithWindow:(NSWindow *)window
 {
     self = [super initWithWindow:window];
     if (self){
         NSLog(@"En init PanelModification");
-        //modelInPanel = [[PanelModel alloc] init];
+        fieldsChanged = NO;
+        
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        
         [nc addObserver:self
                selector:@selector(handleModifyGraphic:)
-                   name:PanelModifyGraphicNotification
+                   name:ModifyGraphicNotification
                  object:nil];
+        
     }
     
     return self;
 }
 
-
--(BOOL)windowShouldClose:(NSWindow *)sender
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+-(BOOL) windowShouldClose:(NSWindow *)sender
 {
     NSInteger respuesta;
     
@@ -63,27 +85,42 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
                                 @"Si",
                                 nil);
     
-    if(respuesta == NSAlertDefaultReturn)
+    if(respuesta == NSAlertDefaultReturn) {
         return NO;
-    else
-        //[NSApp terminate:self];
-    return YES;
+    } else {
+        [NSApp stopModal];
+        return YES;
+    }
     
 }
+#pragma clang diagnostic pop
 
-- (void)windowDidLoad {
+- (void) windowDidLoad {
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
--(void)handleModifyGraphic:(NSNotification *)aNotification
+/* --------------------------- ACCIONES DE MODIFICACION ---------------------- */
+
+/*!
+ * @brief  Recoge los datos de la grafica a modificar así como la instancia del modelo para
+ *         que el comboBox pueda utilizarla.
+ */
+-(void) handleModifyGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
     NSDictionary *notificationInfoToModify = [aNotification userInfo];
     GraphicsClass *graphic = [notificationInfoToModify objectForKey:@"graphicToModify"];
+    modelInPanel = [notificationInfoToModify objectForKey:@"modelInPanel"];
+    
+    // Inicializa el array del modelo de funciones
+    [modelInPanel initializeArrayListFunctions];
+    
+    // Añade esas funciones al ComboBox
+    [newFunction addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
         
-    [newFunction setStringValue:[graphic function]];
+    [newFunction selectItemWithObjectValue:[graphic function]];
     [newName setStringValue:[graphic funcName]];
     [newParamA setFloatValue:[graphic paramA]];
     [newParamB setFloatValue:[graphic paramB]];
@@ -91,9 +128,18 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
     [newParamN setFloatValue:[graphic paramN]];
     [newColour setColor:[graphic colour]];
     
+    NSWindow *w = [self window];
+    [NSApp runModalForWindow:w];
+    
 }
 
--(IBAction)confirmNewGraphic:(id)sender
+
+/* --------------------------- TRATMIENTO DE BOTONES DE MODIFICACION ---------------------- */
+
+/*!
+ * @brief  Metodo que se llama cuando se confirman los cambios de la ventana.
+ */
+-(IBAction) confirmNewGraphic:(id)sender
 {
     // OJOOOOO NO PERMITIR QUE EL USURIO MODIFIQUE EN PANEL PREFERENCIAS MIENTRAS ESTA ESTE ABIERTO PARA EVITAR QUE aRowSelected cambie
     GraphicsClass *newGraphic = [[GraphicsClass alloc] initWithGraphicName:[newName stringValue]
@@ -104,21 +150,88 @@ NSString *PanelNewGraphicNotification = @"PanelNewGraphic";
                                                                  paramN:[newParamN floatValue]
                                                                  colour:[newColour color]];
     
+    // modelo puede guardar esta grafica directamente
+    [modelInPanel graphicModified:newGraphic];
+    
+    
     NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:newGraphic
                                                                  forKey:@"newGraphic"];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:PanelNewGraphicNotification
+    [nc postNotificationName:PanelGraphicModifiedNotification
                       object:self
                     userInfo:notificationInfo];
     
-    // Cerrar el panel
+    // Cierra el panel
+    [NSApp stopModal];
+    [self close];
 }
 
--(IBAction)cancelNewGraphic:(id)sender
+/*!
+ * @brief  Metodo que se llama cuando se cierra la ventana.
+ */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+-(IBAction) cancelNewGraphic:(id)sender
 {
-    // Preguntar si desea guardar cambios y Cerrar el panel
+    NSInteger respuesta;
+    respuesta = NSRunAlertPanel(@"Cambios realizados no guardados",
+                                @"¿Está seguro de que desea cerrar la ventana?",
+                                @"No. Guardar y cerrar panel",
 
+                                @"Si. Cerrar panel",
+                                nil);
+    
+    NSLog(@"NSAlertDefaultReturn %d", NSAlertDefaultReturn);
+    
+    if(respuesta == NSAlertDefaultReturn) { // No.Guardar y cerrar panel
+        if (fieldsChanged) {
+            [self confirmNewGraphic:sender];
+        } else {
+            [NSApp stopModal];
+            [self close];
+        }
+    } else if (respuesta == NSAlertSecondButtonReturn) {// Si.Cerrar panel
+         [NSApp stopModal];
+         [self close];
+     }
+    
+}
+#pragma clang diagnostic pop
+
+-(IBAction) controlTextDidChange:(NSNotification *)obj
+{
+    fieldsChanged = YES;
+    
+    [self fomatterOnlyRealNumbers];
+}
+
+/*!
+ * @brief  Formatea la entrada en los textFields para que solo se pueda introducir
+ *         numeros reales positivos y negativos (al igual que en el panelController).
+ */
+-(void) fomatterOnlyRealNumbers
+{
+    // Formateador que no deja introducir palabras salvo numeros float que contengan - o .
+    // Si se introduce un - despues de los numeros, varios puntos o varios menos, Estos se ignoran
+    NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"-1234567890."] invertedSet];
+    
+    // Creo varios arrays porque si creo uno general para todos los campos, lo que se escribiera en uno de ellos, se escribiría automaticamente en el resto.
+    NSArray<NSString*> *arrayParamA = [[newParamA stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamB = [[newParamB stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamC = [[newParamC stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamN = [[newParamN stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    
+    // Aplico el formateador de numeros negativos y positivos float a los campos de los parametros
+    [newParamA setStringValue:[arrayParamA  componentsJoinedByString:@""]];
+    [newParamB setStringValue:[arrayParamB  componentsJoinedByString:@""]];
+    [newParamC setStringValue:[arrayParamC  componentsJoinedByString:@""]];
+    [newParamN setStringValue:[arrayParamN  componentsJoinedByString:@""]];
+    
 }
 
 
