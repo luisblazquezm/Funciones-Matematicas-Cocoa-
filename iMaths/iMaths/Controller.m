@@ -152,10 +152,6 @@ extern NSString *ShowLegendNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
-    
-    // Variables locales
-    NSArray *array = [[NSArray alloc] init];
-    NSMutableString *s = [[NSMutableString alloc] init];
 
     // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
     NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
@@ -194,6 +190,10 @@ extern NSString *ShowLegendNotification;
     
     // Modela la representación de los objetos que se visualizarán dentro del 'Custom View': ejes, graficas,...
     if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
+        // Variables locales
+        NSArray *array = [[NSArray alloc] init];
+        NSMutableString *s = [[NSMutableString alloc] init];
+        
         bounds.origin.x = [oX integerValue];
         bounds.origin.y = [oY integerValue];
         bounds.size.height = [alt integerValue];
@@ -212,24 +212,27 @@ extern NSString *ShowLegendNotification;
         if ([array count] != 0) {
             NSLog(@"Entrar para dibujar");
             
+            [graphicRepresentationView drawAxisAndPoints];
+            
             if (zoomIsRestored)
                 graphicIsZoomed = NO;
             
             NSLog(@"Valor Zoom antes de dibujar: %hhd", graphicIsZoomed);
             for (GraphicsClass *g in array) {
                 [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
+                
                 [s appendString:[g funcName]];
                 [s appendString:@":"];
                 [s appendString:[g function]];
                 [nameGraphLabel setHidden:NO];
                 [nameGraphLabel setStringValue:s];
             }
+            NSLog(@"Grafica Representada");
+            
         } else {
-            GraphicsClass *g = [[GraphicsClass alloc] init];
-            [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
+            [graphicRepresentationView drawAxisAndPoints];
         }
         
-        NSLog(@"Grafica Representada");
         zoomIsRestored = NO;
     }
 
@@ -242,22 +245,15 @@ extern NSString *ShowLegendNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleShowLegend\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
-    NSPoint pointToLegend, newPoint;
     
     NSNumber *X = [notificationInfo objectForKey:@"LeyendaX"];
     NSNumber *Y = [notificationInfo objectForKey:@"LeyendaY"];
     
-    pointToLegend.x = [X floatValue];
-    pointToLegend.y = [Y floatValue];
+    NSInteger x = [X integerValue];
+    NSInteger y = -([Y integerValue]);
     
-    GraphicsClass *g = [[GraphicsClass alloc] init];
-    newPoint = [g showLegendAtPoint:pointToLegend];
-    
-    int absX = fabsf([X floatValue]);
-    int absY = fabsf([Y floatValue]);
-    
-    [XLegendField setFloatValue:absX];
-    [YLegendField setFloatValue:absY];
+    [XLegendField setFloatValue:x];
+    [YLegendField setFloatValue:y];
 }
 
 /* ---------------------------- EXPORTAR LISTA DE GRAFICAS ---------------------------- */
@@ -334,6 +330,7 @@ extern NSString *ShowLegendNotification;
 -(IBAction) restoreZoom:(id)sender
 {
     zoomIsRestored = YES;
+    [graphicRepresentationView restoreView:YES];
     [graphicRepresentationView setNeedsDisplay:YES];
 }
 

@@ -412,6 +412,7 @@
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
+                                                                <sortDescriptor key="sortDescriptorPrototype" selector="compare:" sortKey="funcName"/>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                         </tableColumns>
@@ -454,11 +455,11 @@
                                             <tabViewItems>
                                                 <tabViewItem label="Información" identifier="" id="0Jy-1o-Ypu">
                                                     <view key="view" ambiguous="YES" id="mi1-JO-5q0">
-                                                        <rect key="frame" x="10" y="33" width="133" height="0.0"/>
+                                                        <rect key="frame" x="10" y="33" width="616" height="146"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <box fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ORQ-vp-qVE">
-                                                                <rect key="frame" x="-13" y="-161" width="636" height="185"/>
+                                                                <rect key="frame" x="-13" y="-15" width="636" height="185"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="6Sb-j8-C8b">
                                                                     <rect key="frame" x="2" y="2" width="632" height="168"/>

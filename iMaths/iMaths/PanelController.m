@@ -116,9 +116,6 @@ extern NSString *PanelGraphicModifiedNotification;
                selector:@selector(handleGraphicModified:)
                    name:PanelGraphicModifiedNotification
                  object:nil];
-
-        
-
     }
     
     return self;
@@ -127,7 +124,6 @@ extern NSString *PanelGraphicModifiedNotification;
 /*!
  * @brief  Realiza una operación al cargar el fichero NIB
  */
-
 -(void) awakeFromNib
 {
     // Los botones de progreso incialmente en Rojo
@@ -153,7 +149,6 @@ extern NSString *PanelGraphicModifiedNotification;
  * @param  sender Objeto ventana.
  * @return BOOL, respuesta del usuario al mensaje de cierre.
  */
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 -(BOOL) windowShouldClose:(NSWindow *)sender
@@ -186,7 +181,9 @@ extern NSString *PanelGraphicModifiedNotification;
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
-
+/*!
+ * @brief  Recoge la instancia del modelo inicializada en la ventana principal Controller.
+ */
 -(void) handleModelReceived:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModelReceived\r", aNotification);
@@ -201,7 +198,7 @@ extern NSString *PanelGraphicModifiedNotification;
     
     for (NSTableColumn *column in [listOfCreatedFunctionsTableView tableColumns]) {
         NSLog(@"Coliumn");
-        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:[column identifier]
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"funcName"
                                                                          ascending:YES
                                                                           selector:@selector(compare:)];
         [column setSortDescriptorPrototype:sortDescriptor];
@@ -211,7 +208,7 @@ extern NSString *PanelGraphicModifiedNotification;
 
 
 /*!
- * @brief  Recoge la lista de graficas de un fichero enviada desde el panel principal Controller.
+ * @brief  Recoge la lista de graficas de un fichero enviada desde la ventana principal Controller.
  */
 -(void) handleNewGraphicImported:(NSNotification *)aNotification
 {
@@ -318,6 +315,16 @@ extern NSString *PanelGraphicModifiedNotification;
     [selectParamBField setStringValue:@""];
     [selectParamCField setStringValue:@""];
     [selectParamNField setStringValue:@""];
+    
+    [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+    [functionDefLabel setHidden:YES];
+    
+    [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+    [parametersLabel setHidden:YES];
+    
+    [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+    [appearanceLabel setHidden:YES];
+
 
 }
 
@@ -402,9 +409,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 -(void) tableView:(NSTableView *)tableView
 sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 {
-    NSLog(@"COLUMN 2");
-    [[modelInPanel arrayListGraphics] sortUsingDescriptors:[tableView sortDescriptors]];
-    [listOfCreatedFunctionsTableView reloadData];
+    NSMutableArray *array = [modelInPanel arrayListGraphics];
+    if ([array count] > 0){
+        NSLog(@"COLUMN 2");
+        [array sortUsingDescriptors:[tableView sortDescriptors]];
+        [listOfCreatedFunctionsTableView reloadData];
+    }
+
 }
 
 /*!
@@ -419,18 +430,28 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     }
 }
 
+/*!
+ * @brief  Recoge la funcion seleccionada en el ComboBox
+ */
 -(void) selectFunction
 {
     function = [selectListFuncComboBox stringValue];
     NSLog(@"Funcion %@ escogida\r", function);
 }
 
+/*!
+ * @brief  Recoge el nombre introducido para la gráfica
+ */
 -(void) selectName
 {
     name = [selectGraphicNameField stringValue];
     NSLog(@"Nombre Funcion %@\r", name);
 }
 
+/*!
+ * @brief  Formatea la entrada en los textFields para que solo se pueda introducir
+ *         numeros reales positivos y negativos.
+ */
 -(void) fomatterOnlyRealNumbers
 {
     // Formateador que no deja introducir palabras salvo numeros float que contengan - o .
@@ -468,6 +489,9 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     [maxRangeYField setStringValue:[arrayYMax  componentsJoinedByString:@""]];
 }
 
+/*!
+ * @brief  Recoge los parametros introducidos para A y B,C o N (si tocan).
+ */
 -(void) selectParameters
 {
 
@@ -537,6 +561,9 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     NSLog(@"Parámetros introducidos correctamente A:%f B:%f C:%f N:%f\r", paramA, paramB, paramC, paramN);
 }
 
+/*!
+ * @brief  Recoge el color seleccionado para la grafica o el color por defecto.
+ */
 -(void) selectColour
 {
     // LLama al metodo observeValueForKeyPath cada vez que se cambia el color del colorWell
@@ -549,9 +576,11 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     NSLog(@"Apariencia introducida correctamente color: %@\r", colour);
 }
 
+/*!
+ * @brief  Comprueba que todos los datos introducidos para la creación de la grafica han sido introducidos
+ */
 -(void) checkAddGraphicIsAvailable
 {
-    // Para habilitar el Boton de Añadir tiene que cumplir estas codiciones
     NSLog(@"Nombre: %@ Funcion: %@ ParamA: %f ParamB: %f ParamC: %f ParamN: %f\n",name,
                                                                                   function,
                                                                                   paramA,
@@ -559,6 +588,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
                                                                                   paramC,
                                                                                   paramN);
     
+    // Tienen que cumplirse los parametros para habilitar el boton 'Añadir'
     if([name length] != 0 &&
        [function length] != 0 &&
        (
@@ -602,27 +632,22 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     
     if ([obj object] == searchField) {
         NSLog(@"Llamando a applyFilter");
-        [self applyFilterWithString:[searchField stringValue]];
+        [self applyFilterWithString:[searchField stringValue]];// LLamada al metodo de filtrado de la tabla
     } else {
         
         [self selectFunction];
         
+
         if ([function length] > 0) {
             
             // Progreso parcial (Apariencia amarilla)
             [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
             
-            // Comprueba que no se introduzca una grafica con un nombre vacio
-            NSString *cadena = [selectGraphicNameField stringValue];
-            if ([cadena length] == 0){
-                [addGraphicButton setEnabled:NO];
-            }
+            /*
+             *--------- Definicion Nombre ------------
+             */
             
             [self selectName];
-            
-            /*
-             *--------- Parametros ------------
-             */
             
             // Se activa en comboBoxSelectionDidChange
             if(functionSelectedFlag){
@@ -632,21 +657,27 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
                 [functionDefLabel setHidden:NO];
                 [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
                 
+                /*
+                 *--------- Parametros ------------
+                 */
+                
                 [self selectParameters];
 
             }
+        
+            // Progreso parcial (Apariencia amarilla)
+            [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
             
             /*
              *--------- Apariencia ------------
              */
             
-            // Progreso parcial (Apariencia amarilla)
-            [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            
             [self selectColour];
+            
         } else {
             [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            [functionDefLabel setHidden:YES];
+            [functionDefLabel setHidden:NO];
+            [functionDefLabel setStringValue:@"¡La función es lo primero!"];
         }
 
         [self checkAddGraphicIsAvailable];
@@ -654,6 +685,10 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     
 }
 
+/*!
+ * @brief  Metodo que filtra en la tabla las graficas que coincidan con la cadena
+ *         introducida en la barra de búsqueda.
+ */
 -(void) applyFilterWithString:(NSString *)filter
 {
     NSArray *array = [[NSArray alloc] init];
@@ -699,13 +734,13 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 -(IBAction) drawGraphic:(id)sender
 {
     float varXMax = 0, varXMin = 0, varYMax = 0, varYMin = 0;
-    //NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
     NSMutableArray *graphicsToRepresent = [[NSMutableArray alloc] init];
     NSIndexSet *rowsSelected = [[NSIndexSet alloc] init];
     rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
     
-    //NSLog(@"Filas seleccionada %ld\r", [rowsSelected ]);
     NSLog(@"modelInPanel drawIndexes done");
+    
+    // Guarda las graficas que se van a dibujar
     [modelInPanel arrayOfGraphicToDrawInIndexes:rowsSelected];
 
         NSLog(@"minX: %f minY: %f maxX: %f maxY: %f",[minRangeXField floatValue],
@@ -759,14 +794,17 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 -(IBAction) deleteGraphic:(id)sender
 {
     NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
-    // Orden que deniega la edición al usuario (Es necesrio en el caso en el que el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
+    /*
+     * Orden que deniega la edición al usuario (Es necesrio en el caso en el que
+     * el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
+     */
     [listOfCreatedFunctionsTableView abortEditing];
-    if (aRowSelected == -1)
-        return;
-    
-    [[modelInPanel arrayListGraphics] removeObjectAtIndex:aRowSelected];
-    NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
-    [listOfCreatedFunctionsTableView reloadData];
+    if (aRowSelected != -1) {
+        [modelInPanel deleteGraphicAtIndex:aRowSelected];
+        NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
+        [listOfCreatedFunctionsTableView reloadData];
+    }
+
 }
 
 /*!
@@ -786,11 +824,14 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     
     NSLog(@"Fila seleccionada %ld\r", RowSelected);
     
+    // Tambien envio la instancia del modelo para el ComboBox
     if (RowSelected != -1) {
         NSMutableArray *array = [modelInPanel arrayListGraphics];
         GraphicsClass *graphicToModify = [array objectAtIndex:RowSelected];
-        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:graphicToModify
-                                                                     forKey:@"graphicToModify"];
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          graphicToModify,@"graphicToModify",
+                                          modelInPanel,@"modelInPanel",
+                                          nil];
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc postNotificationName:ModifyGraphicNotification

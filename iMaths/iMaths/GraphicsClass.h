@@ -18,16 +18,9 @@
     float paramN;
     NSColor *colour;
     
-    NSRect funcRect;
-    
     NSColor *colorGraphic;
-    NSColor *colorAxis;
     NSBezierPath *funcBezier;
-    NSBezierPath *axisXBezier, *axisYBezier;
-    NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
     float zoomQuant;
-    
-    NSAffineTransform *tf ;
 }
 
     /* Getters y setters */
@@ -64,6 +57,4 @@ withGraphicsContext:(NSGraphicsContext*)ctx
       withMovement:(BOOL)move 
                  w: (float)width
                  h:(float)height;
-
--(NSPoint) showLegendAtPoint:(NSPoint)a;
 @end

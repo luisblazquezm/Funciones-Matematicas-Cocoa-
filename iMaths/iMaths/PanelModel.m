@@ -117,13 +117,18 @@
     
 }
 
+-(void) graphicModified:(GraphicsClass*)graph
+{
+    [arrayListGraphics insertObject:graph atIndex:rowSelectedToModify];
+}
+
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 {
-    arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:indexArray];
+    arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:row];
     
 }
 
--(void) deleteGraphic:(NSInteger)graphicDeletedIndex;
+-(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
 {
     [arrayListGraphics removeObjectAtIndex:graphicDeletedIndex];
 }

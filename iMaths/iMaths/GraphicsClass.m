@@ -11,6 +11,7 @@
 
 #define RANDFLOAT() (random()%128/128.0)
 #define HOPS (500) // Numero de puntos
+static NSRect funcRect = {-10, -10, 20 ,20};
 
 
 @implementation GraphicsClass
@@ -47,35 +48,13 @@
     if(!self){
         return nil;
     }
-    
-    //MAXIMO Y MINIMO DE EJES X E Y Y DONDE ESTA LA ESQUINA INFERIOR IZQUIERDA
-    funcRect.origin.x = -10;
-    funcRect.origin.y = -10;
-    funcRect.size.width = 20;
-    funcRect.size.height = 20;
-    
-    // IMPORTANTE: esto está aqui porque no se llama al init cuando nuestra grafica llama a este metodo
-    funcBezier = [[NSBezierPath alloc] init];
-    axisXBezier = [[NSBezierPath alloc] init];
-    axisYBezier = [[NSBezierPath alloc] init];
-    pointsAxisXBezier = [[NSBezierPath alloc] init];
-    pointsAxisYBezier = [[NSBezierPath alloc] init];
-    
-    colorGraphic = [self colour];
-    colorAxis  = [NSColor blackColor];
+
+    //colorAxis  = [NSColor blackColor];
 
     
     return self;
 }
 
--(NSPoint) showLegendAtPoint:(NSPoint)a
-{
-    NSLog(@"JAJA NEW.W %f NEW.H %f",a.x, a.y);
-    [tf invert];
-    NSPoint new = [tf transformPoint:a];
-    NSLog(@"JEJEJE NEW.W %f NEW.H %f",new.x, new.y);
-    return new;
-}
 
 -(float)valueAt:(float)x{
     float resultY = 0;
@@ -106,229 +85,49 @@ withGraphicsContext:(NSGraphicsContext*)ctx
              h:(float)height
 {
     NSPoint aPoint;
-    int counter = 0;
     float lineWidth = 0.1;   // Anchura de los ejes al dibujar
-    float spacePoints = 0.3; // Espacio entre las barras de los ejes
-    NSPoint x, new;
-    [self init];
-    
     float distance = funcRect.size.width/HOPS;
+    
+    funcBezier = [[NSBezierPath alloc] init];
+    colorGraphic = [self colour];
     
     NSLog(@"Bounds: X: %f Y: %f WIDTH: %f HEIGHT: %f",b.origin.x
           ,b.origin.y, b.size.width, b.size.height);
     
-    // Cuando se añade una nueva grafica se borra la anterior
     [funcBezier removeAllPoints];
-    [ctx saveGraphicsState]; //------------------- Contexto gráfico
-
-    if (!zoom){
-        zoomQuant = 0;
-        NSLog(@"Matriz de tranformación afin creada");
-        tf = [NSAffineTransform transform];
-        // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
-        [tf translateXBy:b.size.width/2
-                     yBy:b.size.height/2];
-        // 1º Ancho y Alto / Escala (funcRect)
-        [tf scaleXBy:b.size.width/funcRect.size.width
-                 yBy:b.size.height/funcRect.size.height];
-        [tf concat];
-        x.x = 245;
-        x.y = 343;
-        [tf invert];
-        new = [tf transformPoint:x];
-        NSLog(@" NEW.W %f NEW.H %f", new.x, new.y);
-
-    } else {
-        if (!move)
-            zoomQuant += 0.1;
-        
-        NSAffineTransform *tfZoom = [NSAffineTransform transform];
-        // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
-        NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
-        [tfZoom translateXBy:width
-                     yBy:height];
-        // 1º Ancho y Alto / Escala (funcRect)
-        [tfZoom scaleXBy:width*zoomQuant
-                 yBy:height*zoomQuant];
-        [tfZoom concat];
-    }
-
-    NSLog(@"Bounds Depsues: X: %f Y: %f W: %f H: %f", b.origin.x, b.origin.y, b.size.width, b.size.height);
-
-        /* -------------- Dibujo de los ejes --------------- */
+    [ctx saveGraphicsState];
     
-                            // * EJE X *
-    
-        [axisXBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-    
-        aPoint.x = funcRect.origin.x;
-        aPoint.y = 0;
-    
-        [axisXBezier moveToPoint:aPoint];
-        while (aPoint.x <= funcRect.size.width + b.size.width) {
-            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
-            aPoint.y = 0;
-            [axisXBezier lineToPoint:aPoint];
-            aPoint.x += distance;
-        }
-    
-        [axisXBezier stroke];
-    
-                            // * EJE Y *
-    
-        [axisYBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-    
-        // Comienza en el punto minimo de Y (abajo) y dibuja la raya hasta el punto maximo (la altura)
-        aPoint.x = 0;
-        aPoint.y = funcRect.origin.y;
-    
-        [axisYBezier moveToPoint:aPoint];
-        while (aPoint.y <= funcRect.size.height + b.size.height) {
-            //NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
-            aPoint.x = 0;
-            [axisYBezier lineToPoint:aPoint];
-            aPoint.y += distance;
-        }
-    
-        [axisYBezier stroke];
-    
-        /* -------------- Dibujo de los puntos de los ejes --------------- */
-    
-                            // * EJE X (POSITIVO) *
-    
-        [pointsAxisXBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-    
-        aPoint.x = 0;
-        aPoint.y = 0.3;
-        // Si lo hago desde el punto x minimo hasta el punto x maximo (anchura) se mueven los ejes al redimensionar la ventana
-        // Por eso hago la primera mitad positiva y luego la negativa de x e y
-        [pointsAxisXBezier moveToPoint:aPoint];
-    
-        while (aPoint.x <= funcRect.size.width + (b.size.width/2))  { // aPoint.y = 0.3 => -0.3
-            counter++;
-            //NSLog(@"PointPositivo: %f %f %f", aPoint.x, aPoint.y,(b.size.width/2) );
-            aPoint.x += spacePoints;
-            aPoint.y = 0;
-            [pointsAxisXBezier moveToPoint:aPoint];
-            if (counter == 5) {
-                aPoint.y = 0.6;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                aPoint.y = -0.6;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                counter = 0;
-            } else {
-                aPoint.y = 0.3;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                aPoint.y = -0.3;
-                [pointsAxisXBezier lineToPoint:aPoint];
-            }
-        }
-    
-        [pointsAxisXBezier stroke];
-    
-                            // * EJE X (NEGATIVO) *
-    
-        [pointsAxisXBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-
-        aPoint.x = 0;
-        aPoint.y = 0.3;
-        [pointsAxisXBezier moveToPoint:aPoint];
-
-        counter = 0;
-        while (aPoint.x >= (-(funcRect.size.width)) + (-(b.size.width/2)))  {
-            counter++;
-            //NSLog(@"PointNegativo: %f %f ", aPoint.x, aPoint.y);
-            aPoint.x -= spacePoints;
-            aPoint.y = 0;
-            [pointsAxisXBezier moveToPoint:aPoint];
-
-            if (counter == 5) {
-                aPoint.y = 0.6;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                aPoint.y = -0.6;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                counter = 0;
-            } else {
-                aPoint.y = 0.3;
-                [pointsAxisXBezier lineToPoint:aPoint];
-                aPoint.y = -0.3;
-                [pointsAxisXBezier lineToPoint:aPoint];
-            }
-        }
-    
-        [pointsAxisXBezier stroke];
-    
-                            // * EJE Y (POSITIVO) *
-    
-        [pointsAxisYBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-    
-        aPoint.x = 0.3;
-        aPoint.y = 0;
-        [pointsAxisYBezier moveToPoint:aPoint];
-    
-        counter = 0;
-        while (aPoint.y <= (funcRect.size.height) + (b.size.height/2))  { // aPoint.y = 0.3 => -0.3
-            counter++;
-            //NSLog(@"PointPositivoY: %f %f %f", aPoint.x, aPoint.y,(b.size.height/2) );
-            aPoint.y += spacePoints;
-            aPoint.x = 0;
-            [pointsAxisYBezier moveToPoint:aPoint];
-            if (counter == 5) {
-                aPoint.x = 0.6;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                aPoint.x = -0.6;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                counter = 0;
-            } else {
-                aPoint.x = 0.3;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                aPoint.x = -0.3;
-                [pointsAxisYBezier lineToPoint:aPoint];
-            }
-        }
-    
-        [pointsAxisYBezier stroke];
-    
-                            // * EJE Y (NEGATIVO) *
-    
-        [pointsAxisYBezier setLineWidth:lineWidth];
-        [colorAxis setStroke];
-    
-        aPoint.x = 0.3;
-        aPoint.y = 0;
-        [pointsAxisYBezier moveToPoint:aPoint];
-    
-        counter = 0;
-        while (aPoint.y >= (-(funcRect.size.height)) + (-(b.size.height/2)))  {
-            counter++;
-            //NSLog(@"PointNegativoY: %f %f %f", aPoint.x, aPoint.y,(b.size.height/2) );
-            aPoint.y -= spacePoints;
-            aPoint.x = 0;
-            [pointsAxisYBezier moveToPoint:aPoint];
+        if (!zoom){
+            zoomQuant = 0;
             
-            if (counter == 5) {
-                aPoint.x = 0.6;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                aPoint.x = -0.6;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                counter = 0;
-            } else {
-                aPoint.x = 0.3;
-                [pointsAxisYBezier lineToPoint:aPoint];
-                aPoint.x = -0.3;
-                [pointsAxisYBezier lineToPoint:aPoint];
-            }
+            NSLog(@"Matriz de tranformación afin creada");
+            NSAffineTransform *tf = [NSAffineTransform transform];
+            tf = [NSAffineTransform transform];
+            // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
+            [tf translateXBy:b.size.width/2
+                         yBy:b.size.height/2];
+            // 1º Ancho y Alto / Escala (funcRect)
+            [tf scaleXBy:b.size.width/funcRect.size.width
+                     yBy:b.size.height/funcRect.size.height];
+            [tf concat];
+            
+            // Si se realiza ZOOM sobre la vista
+        } else {
+            if (!move)
+                zoomQuant += 0.1;
+            
+            NSAffineTransform *tfZoom = [NSAffineTransform transform];
+            NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
+            [tfZoom translateXBy:width
+                             yBy:height];
+            [tfZoom scaleXBy:width*zoomQuant
+                         yBy:height*zoomQuant];
+            [tfZoom concat];
+            
         }
-    
-        [pointsAxisYBezier stroke];
     
         /* -------------- Dibujo de las graficas --------------- */
-    
+
         if ([[self function] length] > 0){
             
             NSLog(@"Limits: oX: %f oY: %f width: %f height: %f", limit.origin.x,
@@ -340,6 +139,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
                   funcRect.size.width,
                   funcRect.size.height);
             
+            // Se cambia el funcRect si se introducen los limites en el panel 'Preferencias'
             if (limit.origin.x != 0)
                 funcRect.origin.x = limit.origin.x;
             
@@ -362,7 +162,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         
             aPoint.x = funcRect.origin.x;
             aPoint.y = [self valueAt:aPoint.x];
-            //NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
+            NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
             
             [funcBezier moveToPoint:aPoint];
             while (aPoint.x <= funcRect.size.width) {

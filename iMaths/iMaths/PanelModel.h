@@ -60,8 +60,9 @@
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour;
 -(void) addGraphic:(id)sender;
+-(void) graphicModified:(GraphicsClass*)graph;
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
--(void) deleteGraphic:(NSInteger)graphicDeletedIndex;
+-(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
 -(NSMutableArray*) importListOfGraphics;
 -(void) exportListOfGraphicsTo:(NSString*)typeFile;
 -(void) exportGraphicView:(NSView*)view To:(NSString*)extension;

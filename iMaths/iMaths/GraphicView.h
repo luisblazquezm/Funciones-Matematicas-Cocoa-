@@ -21,10 +21,17 @@
     BOOL graphicIsMoved;
     
     // Variables que indican los puntos de la vista para hacer zoom
-    NSPoint a, c;
+    NSPoint a, c, clickInView;
     float width, height;
+    
+    NSColor *colorAxis;
+    NSBezierPath *funcBezier;
+    NSBezierPath *axisXBezier, *axisYBezier;
+    NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
+    float zoomQuant;
 }
 
-
+-(void) drawAxisAndPoints;
+-(void) restoreView:(BOOL)flag;
 
 @end

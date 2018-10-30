@@ -8,10 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 @class GraphicsClass;
+@class PanelModel;
 
-@interface PanelModificationController : NSWindowController <NSWindowDelegate>
+@interface PanelModificationController : NSWindowController <NSWindowDelegate,
+                                                             NSTextFieldDelegate>
 {
-    IBOutlet NSTextField *newFunction;
+    IBOutlet NSComboBox *newFunction;
     IBOutlet NSTextField *newName;
     IBOutlet NSTextField *newParamA;
     IBOutlet NSTextField *newParamB;
@@ -22,6 +24,8 @@
     IBOutlet NSButton *cancelChanges;
     
     bool fieldsChanged;
+    PanelModel *modelInPanel;
+    NSInteger pos;
 }
 
 
@@ -29,5 +33,6 @@
 
 -(IBAction)confirmNewGraphic:(id)sender;
 -(IBAction)cancelNewGraphic:(id)sender;
+-(void) fomatterOnlyRealNumbers;
 
 @end

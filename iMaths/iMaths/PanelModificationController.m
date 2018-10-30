@@ -7,6 +7,7 @@
 //
 
 #import "PanelModificationController.h"
+#import "PanelModel.h"
 #import "GraphicsClass.h"
 
 /* --------- Esquema metodos ---------
@@ -31,6 +32,7 @@
 
 extern NSString *ModifyGraphicNotification;
 NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
+
 
 /* --------------------------- INICIALIZADORES ---------------------- */
 
@@ -60,10 +62,12 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         fieldsChanged = NO;
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        
         [nc addObserver:self
                selector:@selector(handleModifyGraphic:)
                    name:ModifyGraphicNotification
                  object:nil];
+        
     }
     
     return self;
@@ -99,14 +103,24 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 
 /* --------------------------- ACCIONES DE MODIFICACION ---------------------- */
 
-
+/*!
+ * @brief  Recoge los datos de la grafica a modificar así como la instancia del modelo para
+ *         que el comboBox pueda utilizarla.
+ */
 -(void) handleModifyGraphic:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
     NSDictionary *notificationInfoToModify = [aNotification userInfo];
     GraphicsClass *graphic = [notificationInfoToModify objectForKey:@"graphicToModify"];
+    modelInPanel = [notificationInfoToModify objectForKey:@"modelInPanel"];
+    
+    // Inicializa el array del modelo de funciones
+    [modelInPanel initializeArrayListFunctions];
+    
+    // Añade esas funciones al ComboBox
+    [newFunction addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
         
-    [newFunction setStringValue:[graphic function]];
+    [newFunction selectItemWithObjectValue:[graphic function]];
     [newName setStringValue:[graphic funcName]];
     [newParamA setFloatValue:[graphic paramA]];
     [newParamB setFloatValue:[graphic paramB]];
@@ -122,7 +136,9 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 
 /* --------------------------- TRATMIENTO DE BOTONES DE MODIFICACION ---------------------- */
 
-
+/*!
+ * @brief  Metodo que se llama cuando se confirman los cambios de la ventana.
+ */
 -(IBAction) confirmNewGraphic:(id)sender
 {
     // OJOOOOO NO PERMITIR QUE EL USURIO MODIFIQUE EN PANEL PREFERENCIAS MIENTRAS ESTA ESTE ABIERTO PARA EVITAR QUE aRowSelected cambie
@@ -133,6 +149,10 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
                                                                  paramC:[newParamC floatValue]
                                                                  paramN:[newParamN floatValue]
                                                                  colour:[newColour color]];
+    
+    // modelo puede guardar esta grafica directamente
+    [modelInPanel graphicModified:newGraphic];
+    
     
     NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:newGraphic
                                                                  forKey:@"newGraphic"];
@@ -147,6 +167,9 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     [self close];
 }
 
+/*!
+ * @brief  Metodo que se llama cuando se cierra la ventana.
+ */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 -(IBAction) cancelNewGraphic:(id)sender
@@ -179,6 +202,36 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 -(IBAction) controlTextDidChange:(NSNotification *)obj
 {
     fieldsChanged = YES;
+    
+    [self fomatterOnlyRealNumbers];
+}
+
+/*!
+ * @brief  Formatea la entrada en los textFields para que solo se pueda introducir
+ *         numeros reales positivos y negativos (al igual que en el panelController).
+ */
+-(void) fomatterOnlyRealNumbers
+{
+    // Formateador que no deja introducir palabras salvo numeros float que contengan - o .
+    // Si se introduce un - despues de los numeros, varios puntos o varios menos, Estos se ignoran
+    NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"-1234567890."] invertedSet];
+    
+    // Creo varios arrays porque si creo uno general para todos los campos, lo que se escribiera en uno de ellos, se escribiría automaticamente en el resto.
+    NSArray<NSString*> *arrayParamA = [[newParamA stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamB = [[newParamB stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamC = [[newParamC stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    NSArray<NSString*> *arrayParamN = [[newParamN stringValue]
+                                       componentsSeparatedByCharactersInSet:charSet];
+    
+    // Aplico el formateador de numeros negativos y positivos float a los campos de los parametros
+    [newParamA setStringValue:[arrayParamA  componentsJoinedByString:@""]];
+    [newParamB setStringValue:[arrayParamB  componentsJoinedByString:@""]];
+    [newParamC setStringValue:[arrayParamC  componentsJoinedByString:@""]];
+    [newParamN setStringValue:[arrayParamN  componentsJoinedByString:@""]];
+    
 }
 
 

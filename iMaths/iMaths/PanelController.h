@@ -113,7 +113,6 @@
     /* Métodos Parámetros Generales */
 -(IBAction) drawGraphic:(id)sender;
 -(IBAction) deleteGraphic:(id)sender;
--(IBAction) selectDrawingRange:(id)sender;
 
     /* Métodos Panel Modificar */
 -(IBAction) showPanel:(id)sender;
