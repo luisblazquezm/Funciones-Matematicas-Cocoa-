@@ -31,24 +31,24 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                            <menuItem title="Preferencias" keyEquivalent="," id="BOF-NM-1cW">
                                 <connections>
                                     <action selector="showPanel:" target="dQG-0K-aIn" id="qfm-s1-H3D"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Import Table of Graphics" id="eV3-U0-yXj">
+                            <menuItem title="Importar Tabla de Graficas" id="eV3-U0-yXj">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="importTableGraphics:" target="dQG-0K-aIn" id="qYu-oc-DBd"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export Table of Graphics As..." keyEquivalent="S" id="3dY-Gx-GRe">
+                            <menuItem title="Exportar Tabla de Graficas Como..." keyEquivalent="S" id="3dY-Gx-GRe">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export Graphic As..." id="owA-RF-4fm">
+                            <menuItem title="Exportar Representacion Grafica Como..." id="owA-RF-4fm">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
@@ -743,12 +743,12 @@
                             <action selector="showHelp:" target="dQG-0K-aIn" id="fVj-A3-tLN"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="2E2E3035-6CB0-45D4-BEB3-81041AD96980" label="Custom View" paletteLabel="Custom View" image="NSRevealFreestandingTemplate" id="ZXp-cP-QwD">
+                    <toolbarItem implicitItemIdentifier="2E2E3035-6CB0-45D4-BEB3-81041AD96980" label="Leyenda" paletteLabel="Leyenda" image="NSRevealFreestandingTemplate" id="ZXp-cP-QwD">
                         <nil key="toolTip"/>
                         <size key="minSize" width="25" height="25"/>
                         <size key="maxSize" width="25" height="25"/>
                         <button key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" id="yo7-pn-WRA">
-                            <rect key="frame" x="26" y="14" width="25" height="25"/>
+                            <rect key="frame" x="13" y="14" width="25" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="help" bezelStyle="helpButton" image="NSRevealFreestandingTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8it-wK-Hvj">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
