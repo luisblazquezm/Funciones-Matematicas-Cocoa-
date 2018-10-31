@@ -111,9 +111,29 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 {
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
     NSDictionary *notificationInfoToModify = [aNotification userInfo];
+    
     GraphicsClass *graphic = [notificationInfoToModify objectForKey:@"graphicToModify"];
     modelInPanel = [notificationInfoToModify objectForKey:@"modelInPanel"];
     
+    NSNumber *availabilityB = [notificationInfoToModify objectForKey:@"BisEnabled"];
+    NSNumber *availabilityC = [notificationInfoToModify objectForKey:@"CisEnabled"];
+    NSNumber *availabilityN = [notificationInfoToModify objectForKey:@"NisEnabled"];
+    
+    BisEnabled = [availabilityB boolValue];
+    CisEnabled = [availabilityC boolValue];
+    NisEnabled = [availabilityN boolValue];
+    
+    NSLog(@"B: %d C: %d N: %d",BisEnabled,CisEnabled,NisEnabled);
+    
+    if (BisEnabled)
+        [newParamB setEnabled:YES];
+        
+    if (CisEnabled)
+        [newParamC setEnabled:YES];
+        
+    if (NisEnabled)
+        [newParamN setEnabled:YES];
+        
     // Inicializa el array del modelo de funciones
     [modelInPanel initializeArrayListFunctions];
     
@@ -150,17 +170,14 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
                                                                  paramN:[newParamN floatValue]
                                                                  colour:[newColour color]];
     
-    // modelo puede guardar esta grafica directamente
+    // El modelo guarda la información nueva de la grafica directamente en el array
+    // dado que el modelo almacena el indice del objeto que ha sido enviado a este panel para ser modificado
     [modelInPanel graphicModified:newGraphic];
     
-    
-    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:newGraphic
-                                                                 forKey:@"newGraphic"];
-    
+    // Se avisa al controlador para que recargue el contenido de la tabla
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc postNotificationName:PanelGraphicModifiedNotification
-                      object:self
-                    userInfo:notificationInfo];
+                      object:self];
     
     // Cierra el panel
     [NSApp stopModal];
@@ -204,6 +221,72 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     fieldsChanged = YES;
     
     [self fomatterOnlyRealNumbers];
+}
+
+/*!
+ * @brief Metodo notificado cada vez que se selecciona un elemento dentro del ComboBox
+ */
+-(void)comboBoxSelectionDidChange:(NSNotification *)notification
+{
+    NSLog(@"Fila cambiada");
+    [newParamB setStringValue:@""];
+    [newParamC setStringValue:@""];
+    [newParamN setStringValue:@""];
+    BisEnabled = NO;
+    CisEnabled = NO;
+    NisEnabled = NO;
+    [self selectParameters];
+}
+
+
+/*!
+ * @brief  Recoge los parametros introducidos para A y B,C o N (si tocan).
+ */
+-(void) selectParameters
+{
+
+    NSString *function = [newFunction objectValueOfSelectedItem];
+    
+    if (!BisEnabled && !CisEnabled && !NisEnabled) {
+        // Habilitación Campo Variable N
+        for (int j = 0; j < NUM_PARAMETERS; j++) {
+            if ([function rangeOfString:[[modelInPanel parametersN] objectAtIndex:j]                              options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersN] objectAtIndex:j]);
+                [newParamN setEnabled:YES];
+                NisEnabled = YES;
+                break;
+            } else {
+                [newParamN setEnabled:NO];
+            }
+            
+        }
+        
+        // Habilitación Campo Variable B
+        for (int j = 0; j < NUM_PARAMETERS; j++) {
+            if ([function rangeOfString:[[modelInPanel parametersB] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersB] objectAtIndex:j]);
+                [newParamB setEnabled:YES];
+                BisEnabled = YES;
+                break;
+            } else {
+                [newParamB setEnabled:NO];
+            }
+        }
+        
+        // Habilitación Campo Variable C
+        for (int j = 0; j < NUM_PARAMETERS; j++) {
+            if ([function rangeOfString:[[modelInPanel parametersC] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersC] objectAtIndex:j]);
+                [newParamC setEnabled:YES];
+                CisEnabled = YES;
+                break;
+            } else {
+                [newParamC setEnabled:NO];
+            }
+        }
+        
+    }// End of if-else
+
 }
 
 /*!

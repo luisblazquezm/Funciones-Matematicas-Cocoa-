@@ -10,8 +10,14 @@
 @class GraphicsClass;
 @class PanelModel;
 
+#define NUM_PARAMETERS 10
+#define NUM_DEFAULT_FUNCTIONS 6
+
 @interface PanelModificationController : NSWindowController <NSWindowDelegate,
-                                                             NSTextFieldDelegate>
+                                                             NSTextFieldDelegate,
+                                                             NSControlTextEditingDelegate,
+                                                             NSComboBoxDelegate,
+                                                             NSComboBoxDataSource>
 {
     IBOutlet NSComboBox *newFunction;
     IBOutlet NSTextField *newName;
@@ -23,7 +29,7 @@
     IBOutlet NSButton *confirmChanges;
     IBOutlet NSButton *cancelChanges;
     
-    bool fieldsChanged;
+    bool fieldsChanged, BisEnabled, CisEnabled, NisEnabled;
     PanelModel *modelInPanel;
     NSInteger pos;
 }

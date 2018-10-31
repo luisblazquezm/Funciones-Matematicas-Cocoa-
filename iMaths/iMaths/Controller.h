@@ -61,6 +61,7 @@
 -(IBAction) showHelp:(id)sender;
 -(IBAction) showLegend:(id)sender;
 -(IBAction) restoreZoom:(id)sender;
+-(void) sendLabel:(GraphicsClass*)g;
 
 @end
 

@@ -72,7 +72,6 @@ static NSRect funcRect = {-10, -10, 20 ,20};
     } else { // @"a/(b*x)"
         resultY = [self paramA] / ([self paramB] * x);
     }
-    
     return resultY;
 }
 
@@ -85,7 +84,8 @@ withGraphicsContext:(NSGraphicsContext*)ctx
              h:(float)height
 {
     NSPoint aPoint;
-    float lineWidth = 0.1;   // Anchura de los ejes al dibujar
+    NSRect limitOfDrawing;
+    float lineWidth = 0.1;   // Anchura de la grafica
     float distance = funcRect.size.width/HOPS;
     
     funcBezier = [[NSBezierPath alloc] init];
@@ -100,7 +100,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
         if (!zoom){
             zoomQuant = 0;
             
-            NSLog(@"Matriz de tranformación afin creada");
+            NSLog(@"Matriz de tranformación afin creada (GraphicClass)");
             NSAffineTransform *tf = [NSAffineTransform transform];
             tf = [NSAffineTransform transform];
             // 2º Mult* por la matriz de Transformación Afín (Coloca la x e y en el (0,0) con respecto a la grafica
@@ -111,11 +111,12 @@ withGraphicsContext:(NSGraphicsContext*)ctx
                      yBy:b.size.height/funcRect.size.height];
             [tf concat];
             
-            // Si se realiza ZOOM sobre la vista
-        } else {
+        } else { // Si se realiza ZOOM sobre la vista
+            
             if (!move)
                 zoomQuant += 0.1;
             
+            NSLog(@"Matriz de tranformación afin de ZOOM creada (GraphicClass)");
             NSAffineTransform *tfZoom = [NSAffineTransform transform];
             NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
             [tfZoom translateXBy:width
@@ -130,6 +131,11 @@ withGraphicsContext:(NSGraphicsContext*)ctx
 
         if ([[self function] length] > 0){
             
+            limitOfDrawing.origin.x = funcRect.origin.x;
+            limitOfDrawing.origin.y = funcRect.origin.y;
+            limitOfDrawing.size.width = funcRect.size.width;
+            limitOfDrawing.size.height = funcRect.size.height;
+            
             NSLog(@"Limits: oX: %f oY: %f width: %f height: %f", limit.origin.x,
                   limit.origin.y,
                   limit.size.width,
@@ -141,31 +147,31 @@ withGraphicsContext:(NSGraphicsContext*)ctx
             
             // Se cambia el funcRect si se introducen los limites en el panel 'Preferencias'
             if (limit.origin.x != 0)
-                funcRect.origin.x = limit.origin.x;
+                limitOfDrawing.origin.x = limit.origin.x;
             
             if (limit.origin.y != 0)
-                funcRect.origin.y = limit.origin.y;
+                limitOfDrawing.origin.y = limit.origin.y;
             
             if (limit.size.width != 0)
-                funcRect.size.width = limit.size.width;
+                limitOfDrawing.size.width = limit.size.width;
             
             if (limit.size.height != 0)
-                funcRect.size.height = limit.size.height;
+                limitOfDrawing.size.height = limit.size.height;
             
-            NSLog(@"Nuevo FunRect: oX: %f oY: %f width: %f height: %f", funcRect.origin.x,
-                  funcRect.origin.y,
-                  funcRect.size.width,
-                  funcRect.size.height);
+            NSLog(@"Nuevo FunRect: oX: %f oY: %f width: %f height: %f", limitOfDrawing.origin.x,
+                  limitOfDrawing.origin.y,
+                  limitOfDrawing.size.width,
+                  limitOfDrawing.size.height);
             
             [funcBezier setLineWidth:lineWidth];
             [colorGraphic setStroke];
-        
-            aPoint.x = funcRect.origin.x;
+
+            aPoint.x = limitOfDrawing.origin.x;
             aPoint.y = [self valueAt:aPoint.x];
             NSLog(@"aPointY: %f aPointX: %f\n",aPoint.y, aPoint.x);
             
             [funcBezier moveToPoint:aPoint];
-            while (aPoint.x <= funcRect.size.width) {
+            while (aPoint.x <= limitOfDrawing.size.width) {
                 NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
                 aPoint.y = [self valueAt:aPoint.x];
                 [funcBezier lineToPoint:aPoint];

@@ -112,19 +112,24 @@
 }
 
 
--(void) addGraphic:(id)sender
+-(BOOL) containsName:(NSString*)name
 {
+    for (GraphicsClass *g in arrayListGraphics) {
+        if ([[g funcName] isEqualToString:name])
+            return YES;
+    }
     
+    return NO;
 }
 
 -(void) graphicModified:(GraphicsClass*)graph
 {
-    [arrayListGraphics insertObject:graph atIndex:rowSelectedToModify];
+    [arrayListGraphics setObject:graph atIndexedSubscript:rowSelectedToModify];
 }
 
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 {
-    arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:row];
+    arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:indexArray];
     
 }
 

@@ -68,14 +68,17 @@
     IBOutlet NSTextField *showParamCField;
     IBOutlet NSTextField *showParamNField;
     IBOutlet NSColorWell *showColorGraphicField;
+    IBOutlet NSTextField *limitsLabel;
     
-           // Botones de progreso (Rojo - Amarillo - Verde)
+           // Botones de progreso (Rojo - Amarillo - Verde) y sus Labels
     IBOutlet NSButton *functionDefProgressButton;
     IBOutlet NSButton *parametersProgressButton;
     IBOutlet NSButton *appearanceProgressButton;
     IBOutlet NSTextField *functionDefLabel;
     IBOutlet NSTextField *parametersLabel;
     IBOutlet NSTextField *appearanceLabel;
+    
+    
     
     /* Variables de instancia */
     
@@ -92,6 +95,7 @@
     BOOL functionSelectedFlag;
     BOOL BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
     NSNumberFormatter *formatter;
+    NSNumber *availabilityB , *availabilityC, *availabilityN;
     
 }
 
@@ -106,6 +110,7 @@
 -(void) selectColour;
 -(void) checkAddGraphicIsAvailable;
 -(IBAction) addNewGraphic:(id)sender;
+-(void) selectLimits;
 -(void) fomatterOnlyRealNumbers;
 -(void) applyFilterWithString:(NSString*)filter;
 -(void) deactivateFields;

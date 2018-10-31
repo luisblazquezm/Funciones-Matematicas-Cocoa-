@@ -12,35 +12,29 @@
                 <outlet property="addGraphicButton" destination="Ofs-UC-afN" id="xzP-H5-JM3"/>
                 <outlet property="appearanceLabel" destination="Owb-aU-wiw" id="toT-qm-nmk"/>
                 <outlet property="appearanceProgressButton" destination="D2m-Pm-aFm" id="X07-1z-kOl"/>
-                <outlet property="deleteFunctionButton" destination="DiB-cU-mEc" id="6sQ-KX-u6x"/>
                 <outlet property="deleteGraphicButton" destination="DiB-cU-mEc" id="ngq-pG-1QP"/>
-                <outlet property="drawFunctionButton" destination="c3y-Ez-Abz" id="dkK-p4-2Ld"/>
                 <outlet property="drawGraphicButton" destination="c3y-Ez-Abz" id="82h-ZV-sUd"/>
                 <outlet property="functionDefLabel" destination="yYf-s2-jpW" id="b9R-cL-GCQ"/>
                 <outlet property="functionDefProgressButton" destination="Ktz-lX-npo" id="fap-iP-hNz"/>
+                <outlet property="limitsLabel" destination="xp2-hY-t7h" id="spC-xq-4Mj"/>
                 <outlet property="listOfCreatedFunctionsTableView" destination="3Nn-Oh-TKh" id="is8-7s-zhD"/>
                 <outlet property="maxRangeXField" destination="G4S-o6-Tb1" id="8LD-f2-fR4"/>
                 <outlet property="maxRangeYField" destination="oyP-R7-Eou" id="ah8-Xc-cBS"/>
                 <outlet property="minRangeXField" destination="udK-EU-YCH" id="6Gp-eE-ORE"/>
                 <outlet property="minRangeYField" destination="NEa-hp-kYg" id="kcQ-PW-lOM"/>
-                <outlet property="modifyFunctionButton" destination="57W-c9-0KZ" id="uAi-fu-F33"/>
                 <outlet property="modifyGraphicButton" destination="57W-c9-0KZ" id="K5I-54-wwR"/>
                 <outlet property="parametersLabel" destination="7DJ-gu-q4g" id="TgP-Nc-Zy5"/>
                 <outlet property="parametersProgressButton" destination="ple-iA-sdN" id="eu2-0E-FLU"/>
                 <outlet property="searchField" destination="Cwr-xs-w6j" id="yF9-I2-kOz"/>
-                <outlet property="selectColorFuncButton" destination="KBn-nZ-zao" id="qOv-tf-qUV"/>
                 <outlet property="selectColorGraphicButton" destination="KBn-nZ-zao" id="2Gp-ap-prf"/>
-                <outlet property="selectFuncNameField" destination="sbx-tU-Qz3" id="wSj-Y7-2sT"/>
                 <outlet property="selectGraphicNameField" destination="sbx-tU-Qz3" id="gcM-MF-ZUI"/>
                 <outlet property="selectListFuncComboBox" destination="2xj-hz-Fql" id="3D6-jS-vYe"/>
                 <outlet property="selectParamAField" destination="Utw-Mk-8Eq" id="K9T-Ha-o2W"/>
                 <outlet property="selectParamBField" destination="zpy-wz-jYz" id="jkd-Hr-FPF"/>
                 <outlet property="selectParamCField" destination="ZPt-Ve-huM" id="qiM-8o-N30"/>
                 <outlet property="selectParamNField" destination="aqj-FX-itO" id="twn-gk-2Td"/>
-                <outlet property="showColorFuncField" destination="7sw-S9-SN3" id="aOS-qH-k07"/>
                 <outlet property="showColorGraphicField" destination="7sw-S9-SN3" id="VL1-SH-v7y"/>
                 <outlet property="showFuncField" destination="ifp-kq-FVI" id="5Wc-pF-J0J"/>
-                <outlet property="showNameFuncField" destination="2Ts-10-XBK" id="LFS-qJ-QPt"/>
                 <outlet property="showNameGraphicField" destination="2Ts-10-XBK" id="5X2-A0-jKY"/>
                 <outlet property="showParamAField" destination="NB4-kD-KFf" id="cxs-xd-ZMz"/>
                 <outlet property="showParamBField" destination="pxT-CK-3cx" id="3Ie-SO-Yjg"/>
@@ -61,21 +55,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="702" height="460"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96V-Kg-Lq1">
-                        <rect key="frame" x="659" y="427" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OQe-Ij-3w2">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qz1-BF-ac6">
                         <rect key="frame" x="13" y="2" width="676" height="444"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Definición de la gráfica" identifier="" id="6Ie-FJ-LhB">
-                                <view key="view" id="FYB-A6-gfh">
+                                <view key="view" ambiguous="YES" id="FYB-A6-gfh">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -107,7 +93,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="ID1-oQ-zmu"/>
                                                                     <outlet property="delegate" destination="-2" id="9Vf-n0-ECm"/>
                                                                 </connections>
                                                             </textField>
@@ -129,8 +114,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </comboBoxCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="aOf-md-NNm"/>
-                                                                    <outlet property="dataSource" destination="-2" id="kxa-jD-l4z"/>
                                                                     <outlet property="delegate" destination="-2" id="Kj3-hf-vq4"/>
                                                                 </connections>
                                                             </comboBox>
@@ -169,7 +152,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="BH3-pT-hjz"/>
                                                                     <outlet property="delegate" destination="-2" id="2aV-qW-AgH"/>
                                                                 </connections>
                                                             </textField>
@@ -182,7 +164,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="ojA-bb-saL"/>
                                                                     <outlet property="delegate" destination="-2" id="PNT-xw-6eV"/>
                                                                 </connections>
                                                             </textField>
@@ -195,7 +176,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="5Wq-rh-vr7"/>
                                                                     <outlet property="delegate" destination="-2" id="8GE-dT-BbP"/>
                                                                 </connections>
                                                             </textField>
@@ -226,7 +206,6 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="EhK-np-qop"/>
                                                                     <outlet property="delegate" destination="-2" id="NFl-bF-j4X"/>
                                                                 </connections>
                                                             </textField>
@@ -242,9 +221,6 @@
                                                                 <rect key="frame" x="286" y="39" width="184" height="128"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <connections>
-                                                                    <action selector="selectNewGraphic:" target="-2" id="U82-Ok-vSM"/>
-                                                                </connections>
                                                             </colorWell>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P5s-K9-uwA">
                                                                 <rect key="frame" x="212" y="98" width="41" height="17"/>
@@ -383,7 +359,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Parámetros generales" identifier="" id="Zrr-Ff-mkK">
-                                <view key="view" ambiguous="YES" id="K7l-d6-r50">
+                                <view key="view" id="K7l-d6-r50">
                                     <rect key="frame" x="10" y="33" width="656" height="398"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -444,9 +420,6 @@
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <connections>
-                                                <action selector="showGraphicInfo:" target="-2" id="S1J-Na-naQ"/>
-                                            </connections>
                                         </textField>
                                         <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qen-B8-KHK">
                                             <rect key="frame" x="10" y="-13" width="636" height="192"/>
@@ -510,7 +483,6 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="AhJ-hh-aSn"/>
                                                                                 <outlet property="delegate" destination="-2" id="qBC-zR-EbM"/>
                                                                             </connections>
                                                                         </textField>
@@ -523,7 +495,6 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="4iD-J9-Jgn"/>
                                                                                 <outlet property="delegate" destination="-2" id="czJ-ir-w6F"/>
                                                                             </connections>
                                                                         </textField>
@@ -536,7 +507,6 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="eHZ-pg-u79"/>
                                                                                 <outlet property="delegate" destination="-2" id="r9A-ZF-Vyz"/>
                                                                             </connections>
                                                                         </textField>
@@ -549,7 +519,6 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="15z-GW-Xzy"/>
                                                                                 <outlet property="delegate" destination="-2" id="fOh-FF-TH1"/>
                                                                             </connections>
                                                                         </textField>
@@ -557,9 +526,6 @@
                                                                             <rect key="frame" x="558" y="74" width="54" height="23"/>
                                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                            <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="uOM-U3-V5X"/>
-                                                                            </connections>
                                                                         </colorWell>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9fA-kP-O38">
                                                                             <rect key="frame" x="466" y="77" width="86" height="17"/>
@@ -579,7 +545,6 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <action selector="showGraphicInfo:" target="-2" id="t7l-sw-obQ"/>
                                                                                 <outlet property="delegate" destination="-2" id="nOV-Dl-ONZ"/>
                                                                             </connections>
                                                                         </textField>
@@ -604,7 +569,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ySP-Hx-N5p">
-                                                                <rect key="frame" x="15" y="110" width="102" height="17"/>
+                                                                <rect key="frame" x="15" y="63" width="102" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Valor minimo X: " id="r8z-Vl-Ls5">
                                                                     <font key="font" metaFont="system"/>
@@ -622,7 +587,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K9Z-tH-T6j">
-                                                                <rect key="frame" x="326" y="109" width="106" height="17"/>
+                                                                <rect key="frame" x="325" y="64" width="106" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Valor máximo X: " id="Kea-hD-C8T">
                                                                     <font key="font" metaFont="system"/>
@@ -640,7 +605,7 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="udK-EU-YCH">
-                                                                <rect key="frame" x="138" y="107" width="137" height="22"/>
+                                                                <rect key="frame" x="138" y="59" width="137" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="AcJ-q5-rnd">
                                                                     <font key="font" metaFont="system"/>
@@ -663,18 +628,6 @@
                                                                     <outlet property="delegate" destination="-2" id="udd-n0-4Q1"/>
                                                                 </connections>
                                                             </textField>
-                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G4S-o6-Tb1">
-                                                                <rect key="frame" x="446" y="106" width="137" height="22"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="R5H-zr-qjc">
-                                                                    <font key="font" metaFont="system"/>
-                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                                <connections>
-                                                                    <outlet property="delegate" destination="-2" id="DPt-Eu-a6Q"/>
-                                                                </connections>
-                                                            </textField>
                                                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyP-R7-Eou">
                                                                 <rect key="frame" x="446" y="28" width="137" height="22"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -685,6 +638,30 @@
                                                                 </textFieldCell>
                                                                 <connections>
                                                                     <outlet property="delegate" destination="-2" id="cbG-nh-vpY"/>
+                                                                </connections>
+                                                            </textField>
+                                                            <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xp2-hY-t7h">
+                                                                <rect key="frame" x="46" y="110" width="524" height="17"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="gw3-zx-ZFo">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="-2" id="S4W-GA-dKR"/>
+                                                                </connections>
+                                                            </textField>
+                                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G4S-o6-Tb1">
+                                                                <rect key="frame" x="446" y="61" width="137" height="22"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="R5H-zr-qjc">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <connections>
+                                                                    <outlet property="delegate" destination="-2" id="DPt-Eu-a6Q"/>
                                                                 </connections>
                                                             </textField>
                                                         </subviews>

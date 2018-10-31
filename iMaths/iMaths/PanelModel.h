@@ -59,7 +59,7 @@
                paramC:(float)CGraphic
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour;
--(void) addGraphic:(id)sender;
+-(BOOL) containsName:(NSString*)name;
 -(void) graphicModified:(GraphicsClass*)graph;
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 -(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;

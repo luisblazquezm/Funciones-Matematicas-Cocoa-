@@ -192,7 +192,6 @@ extern NSString *ShowLegendNotification;
     if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
         // Variables locales
         NSArray *array = [[NSArray alloc] init];
-        NSMutableString *s = [[NSMutableString alloc] init];
         
         bounds.origin.x = [oX integerValue];
         bounds.origin.y = [oY integerValue];
@@ -214,18 +213,16 @@ extern NSString *ShowLegendNotification;
             
             [graphicRepresentationView drawAxisAndPoints];
             
-            if (zoomIsRestored)
+            if (zoomIsRestored) {
+                NSLog(@"Zoom is Restored");
                 graphicIsZoomed = NO;
+            }
             
             NSLog(@"Valor Zoom antes de dibujar: %hhd", graphicIsZoomed);
             for (GraphicsClass *g in array) {
                 [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
                 
-                [s appendString:[g funcName]];
-                [s appendString:@":"];
-                [s appendString:[g function]];
-                [nameGraphLabel setHidden:NO];
-                [nameGraphLabel setStringValue:s];
+                [self sendLabel:g];
             }
             NSLog(@"Grafica Representada");
             
@@ -236,6 +233,25 @@ extern NSString *ShowLegendNotification;
         zoomIsRestored = NO;
     }
 
+}
+
+-(void) sendLabel:(GraphicsClass*)g
+{
+    NSMutableString *s = [[NSMutableString alloc] init];
+    NSString *a = [NSString stringWithFormat:@"%f",[g paramA]];
+    NSString *b = [NSString stringWithFormat:@"%f",[g paramB]];
+    NSString *c = [NSString stringWithFormat:@"+%f",[g paramC]];
+    NSString *n = [NSString stringWithFormat:@"%f",[g paramN]];
+    
+    [s appendString:[g funcName]];
+    [s stringByReplacingOccurrencesOfString:@"a" withString:a];
+    [s stringByReplacingOccurrencesOfString:@"b" withString:b];
+    [s stringByReplacingOccurrencesOfString:@"+c" withString:c];
+    [s stringByReplacingOccurrencesOfString:@"n" withString:n];
+    [s appendString:@":"];
+    [s appendString:[g function]];
+    [nameGraphLabel setHidden:NO];
+    [nameGraphLabel setStringValue:s];
 }
 
 /*!
@@ -249,8 +265,8 @@ extern NSString *ShowLegendNotification;
     NSNumber *X = [notificationInfo objectForKey:@"LeyendaX"];
     NSNumber *Y = [notificationInfo objectForKey:@"LeyendaY"];
     
-    NSInteger x = [X integerValue];
-    NSInteger y = -([Y integerValue]);
+    float x = [X floatValue];
+    float y = -([Y floatValue]);
     
     [XLegendField setFloatValue:x];
     [YLegendField setFloatValue:y];

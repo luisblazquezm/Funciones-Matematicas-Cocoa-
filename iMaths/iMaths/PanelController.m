@@ -224,13 +224,14 @@ extern NSString *PanelGraphicModifiedNotification;
 }
 
 /*!
- * @brief  Reescribe el contenido del objeto dentro del array y la tabla, que ha sido modificado
- *         en el panel de Modificación.
+ * @brief  Recibe la notificación de que la grafica ha sido modificada para recargar el contenido de la tabla
  */
 -(void) handleGraphicModified:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleNewGraphicImported\r", aNotification);
-    NSDictionary *notificationInfo = [aNotification userInfo];
+    //NSDictionary *notificationInfo = [aNotification userInfo];
+    [listOfCreatedFunctionsTableView reloadData];
+    /*
     GraphicsClass *graphic = [notificationInfo objectForKey:@"newGraphic"];
     NSInteger row = [modelInPanel rowSelectedToModify];
     
@@ -238,6 +239,7 @@ extern NSString *PanelGraphicModifiedNotification;
         [[modelInPanel arrayListGraphics] setObject:graphic atIndexedSubscript:row];
         [listOfCreatedFunctionsTableView reloadData];
     }
+     */
     
 }
 
@@ -300,6 +302,10 @@ extern NSString *PanelGraphicModifiedNotification;
     NSLog(@"Grafica nueva guardada en tabla\r");
     [listOfCreatedFunctionsTableView reloadData];
     
+    availabilityB = [[NSNumber alloc]initWithBool:BisEnabled];
+    availabilityC  = [[NSNumber alloc]initWithBool:CisEnabled];
+    availabilityN  = [[NSNumber alloc]initWithBool:NisEnabled];
+    
     BisEnabled = NO;
     CisEnabled = NO;
     NisEnabled = NO;
@@ -324,10 +330,11 @@ extern NSString *PanelGraphicModifiedNotification;
     
     [appearanceProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
     [appearanceLabel setHidden:YES];
+    
+    [limitsLabel setHidden:YES];
 
 
 }
-
 
 /* --------------------------- ACCIONES PARAMETROS GENERALES ---------------------- */
 
@@ -435,7 +442,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
  */
 -(void) selectFunction
 {
-    function = [selectListFuncComboBox stringValue];
+    function = [selectListFuncComboBox objectValueOfSelectedItem];
     NSLog(@"Funcion %@ escogida\r", function);
 }
 
@@ -445,6 +452,17 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 -(void) selectName
 {
     name = [selectGraphicNameField stringValue];
+    if ([modelInPanel containsName:name]) {
+        [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusUnavailable]];
+        [functionDefLabel setHidden:NO];
+        [functionDefLabel setTextColor:[NSColor redColor]];
+        [functionDefLabel setStringValue:@"Nombre de Grafica Ya Existente"];
+        functionSelectedFlag = NO;
+    } else {
+        functionSelectedFlag = YES;
+    }
+    
+    [functionDefLabel setTextColor:[NSColor blackColor]];
     NSLog(@"Nombre Funcion %@\r", name);
 }
 
@@ -467,6 +485,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
                                        componentsSeparatedByCharactersInSet:charSet];
     NSArray<NSString*> *arrayParamN = [[selectParamNField stringValue]
                                        componentsSeparatedByCharactersInSet:charSet];
+    
     NSArray<NSString*> *arrayXMin = [[minRangeXField stringValue]
                                      componentsSeparatedByCharactersInSet:charSet];
     NSArray<NSString*> *arrayXMax = [[maxRangeXField stringValue]
@@ -494,7 +513,6 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
  */
 -(void) selectParameters
 {
-
     [self fomatterOnlyRealNumbers];
     
     [selectParamAField setEnabled:YES];
@@ -619,6 +637,52 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     }
 }
 
+-(void) selectLimits
+{
+    NSLog(@"Seleccionando los limites");
+    
+    [self fomatterOnlyRealNumbers];
+    
+    if ([maxRangeYField floatValue] == [minRangeYField floatValue] && [minRangeYField floatValue] != 0 && [maxRangeYField floatValue] != 0) {
+        NSLog(@"Y iguales");
+        [limitsLabel setHidden:NO];
+        [limitsLabel setTextColor:[NSColor redColor]];
+        [limitsLabel setStringValue:@"Valores minimo y maximo de Y coinciden"];
+        [maxRangeYField setStringValue:@""];
+        return;
+    }
+    
+    if ([maxRangeYField floatValue] < [minRangeYField floatValue]) {
+        NSLog(@"Y errones (mayor que otro)");
+        [limitsLabel setHidden:NO];
+        [limitsLabel setTextColor:[NSColor redColor]];
+        [limitsLabel setStringValue:@"El valor de Y maximo debe ser mayor que el valor de Y minimo"];
+        [maxRangeYField setStringValue:@""];
+        return;
+    }
+    
+    if ([maxRangeXField floatValue] == [minRangeXField floatValue] && [minRangeXField floatValue] != 0 && [maxRangeXField floatValue] != 0) {
+        NSLog(@"X iguales");
+        [limitsLabel setHidden:NO];
+        [limitsLabel setTextColor:[NSColor redColor]];
+        [limitsLabel setStringValue:@"Valores minimo y maximo de X coinciden"];
+        [maxRangeXField setStringValue:@""];
+        return;
+    }
+    
+    if ([maxRangeXField floatValue] < [minRangeXField floatValue]) {
+        NSLog(@"X errones (mayor que otro)");
+        [limitsLabel setHidden:NO];
+        [limitsLabel setTextColor:[NSColor redColor]];
+        [limitsLabel setStringValue:@"El valor de X maximo debe ser mayor que el valor de X minimo"];
+        [maxRangeXField setStringValue:@""];
+        return;
+    }
+    
+    [limitsLabel setTextColor:[NSColor greenColor]];
+    [limitsLabel setStringValue:@"Limites correctos"];
+}
+
 /*!
  * @brief  Función que es notificada cada vez que se escribe
  *         un caracter dentro del textField
@@ -633,19 +697,17 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     if ([obj object] == searchField) {
         NSLog(@"Llamando a applyFilter");
         [self applyFilterWithString:[searchField stringValue]];// LLamada al metodo de filtrado de la tabla
+    } else if ([obj object] == maxRangeXField || [obj object] == minRangeXField
+               || [obj object] == maxRangeYField || [obj object] == minRangeYField) {
+        [self selectLimits];
     } else {
         
         [self selectFunction];
         
-
         if ([function length] > 0) {
             
             // Progreso parcial (Apariencia amarilla)
             [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            
-            /*
-             *--------- Definicion Nombre ------------
-             */
             
             [self selectName];
             
@@ -657,10 +719,6 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
                 [functionDefLabel setHidden:NO];
                 [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
                 
-                /*
-                 *--------- Parametros ------------
-                 */
-                
                 [self selectParameters];
 
             }
@@ -668,16 +726,13 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
             // Progreso parcial (Apariencia amarilla)
             [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
             
-            /*
-             *--------- Apariencia ------------
-             */
-            
             [self selectColour];
             
         } else {
             [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
             [functionDefLabel setHidden:NO];
             [functionDefLabel setStringValue:@"¡La función es lo primero!"];
+            [selectGraphicNameField setStringValue:@""];
         }
 
         [self checkAddGraphicIsAvailable];
@@ -739,6 +794,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
     
     NSLog(@"modelInPanel drawIndexes done");
+    [limitsLabel setHidden:YES];
     
     // Guarda las graficas que se van a dibujar
     [modelInPanel arrayOfGraphicToDrawInIndexes:rowsSelected];
@@ -831,6 +887,9 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
         NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                           graphicToModify,@"graphicToModify",
                                           modelInPanel,@"modelInPanel",
+                                          availabilityB,@"BisEnabled",
+                                          availabilityC,@"CisEnabled",
+                                          availabilityN,@"NisEnabled",
                                           nil];
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];

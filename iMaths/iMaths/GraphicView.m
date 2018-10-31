@@ -92,6 +92,7 @@ NSString *ShowLegendNotification = @"ShowLeyend";
 {
     NSRect newBounds = [self bounds];
     if (flag) {
+        NSLog(@"Zoom y Bounds restaurados");
         graphicIsZoomed = NO;
         newBounds.origin.x = 0;
         newBounds.origin.y = 0;
