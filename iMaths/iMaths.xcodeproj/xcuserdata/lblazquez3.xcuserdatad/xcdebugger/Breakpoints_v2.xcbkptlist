@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/Controller.m"
-            timestampString = "562770761.99593"
+            timestampString = "562777393.7280869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
@@ -42,13 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicView.m"
-            timestampString = "562770761.9963959"
+            timestampString = "562777393.728184"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "436"
             endingLineNumber = "436"
-            landmarkName = "-mouseUp:"
-            landmarkType = "7">
+            landmarkName = "GraphicView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

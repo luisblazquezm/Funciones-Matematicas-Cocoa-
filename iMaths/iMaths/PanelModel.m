@@ -226,6 +226,10 @@
     NSString* parametersDelimiter = @"#";
     NSString* graphicsDelimiter = @"\n";
     
+    // Array con la extension/es con las que se exportará la lista de gráficas
+    NSArray *zAryOfExtensions = [NSArray arrayWithObjects:@"txt",@"xml",@"csv",@"log", nil];
+    [open setAllowedFileTypes:zAryOfExtensions];
+    
     // String que contiene los parametros de cada grafica separados por un delimitador #
     NSString* imported = [[NSString alloc] init];
     NSArray* items = [[NSArray alloc] init];

@@ -278,10 +278,30 @@ extern NSString *ShowLegendNotification;
 -(IBAction) exportTableGraphicsAs:(id)sender
 {
     NSInteger numberOfGraphics = [model countOfArrayListGraphics];
+    NSString *typeFile = [[NSString alloc] init];
     
     if (numberOfGraphics > 0) {
         NSLog(@"Exportar HABILITADO\r");
-        [model exportListOfGraphicsTo:@"txt"]; // title
+        switch ([sender tag]) {
+            case 1:
+                typeFile = @"txt";
+                break;
+            case 2:
+                typeFile = @"xml";
+                break;
+            case 3:
+                typeFile = @"csv";
+                break;
+            case 4:
+                typeFile = @"log";
+                break;
+            default:
+                typeFile = @"txt";
+                break;
+        }
+        
+        NSLog(@"Extension .%@ escogida", typeFile);
+        [model exportListOfGraphicsTo:typeFile]; 
     }
 
 }
@@ -297,6 +317,7 @@ extern NSString *ShowLegendNotification;
 {
 
     NSMutableArray *array = [model importListOfGraphics];
+    
     NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
                                                                  forKey:@"graphicsImported"];
     
@@ -314,7 +335,23 @@ extern NSString *ShowLegendNotification;
  */
 -(IBAction) exportGraphicAs:(id)sender
 {
-    [model exportGraphicView:graphicRepresentationView To:@"png"];
+    NSString *extension = [[NSString alloc] init];
+    switch ([sender tag]) {
+        case 1:
+            extension = @"jpeg";
+            break;
+        case 2:
+            extension = @"png";
+            break;
+        case 3:
+            extension = @"bmp";
+            break;
+        default:
+            extension = @"png";
+            break;
+    }
+    
+    [model exportGraphicView:graphicRepresentationView To:extension];
 }
 
 /* ---------------------------- REPRESENTACION DE LA BARRA DE HERRAMIENTAS ---------------------------- */

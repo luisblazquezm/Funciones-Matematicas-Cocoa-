@@ -42,17 +42,61 @@
                                     <action selector="importTableGraphics:" target="dQG-0K-aIn" id="qYu-oc-DBd"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Exportar Tabla de Graficas Como..." keyEquivalent="S" id="3dY-Gx-GRe">
+                            <menuItem title="Exportar Tabla de Graficas Como..." id="v82-XL-bWM">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
-                                </connections>
+                                <menu key="submenu" title="Exportar Tabla de Graficas Como..." id="FpX-kc-aQ8">
+                                    <items>
+                                        <menuItem title="Fichero TXT" tag="1" id="3dY-Gx-GRe">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="BWs-2q-C2N"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Fichero XML" tag="2" id="m45-9j-QXe">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="vQr-oV-Gdo"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Fichero CSV" tag="3" id="b7H-KU-BPG">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="tbl-b7-kRC"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Fichero LOG" tag="4" id="uZe-Aw-73s">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportTableGraphicsAs:" target="dQG-0K-aIn" id="muq-JU-YXS"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
-                            <menuItem title="Exportar Representacion Grafica Como..." id="owA-RF-4fm">
+                            <menuItem title="Exportar Representacion Grafica Como..." id="g5j-Bq-tFi">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
-                                </connections>
+                                <menu key="submenu" title="Exportar Representacion Grafica Como..." id="Vg1-p2-jSe">
+                                    <items>
+                                        <menuItem title="JPEG" tag="1" id="iUX-FD-Mhf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="5hj-04-f0B"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="PNG" tag="2" id="owA-RF-4fm">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="j0k-lc-lxD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="BMP" tag="3" id="QAS-u4-8wt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportGraphicAs:" target="dQG-0K-aIn" id="FQi-Ud-C7S"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                             <menuItem title="Services" id="NMo-om-nkz">
