@@ -13,22 +13,13 @@
 {
     IBOutlet __weak Controller *controller;
     
-    /* Variables globales a la clase */
+    /* Variables de instancia */
 
-    // Flags
-    BOOL graphicIsZoomed; // Indica si se va a hacer zoom o no sobre la vista
-    BOOL mouseDraggedFlag; // Indica si se ha hecho una selección sobre la vista (acción de zoom sobre la vista)
-    BOOL graphicIsMoved;
-    
-    // Variables que indican los puntos de la vista para hacer zoom
     NSPoint a, c, clickInView;
-    float width, height;
-    
     NSColor *colorAxis;
-    NSBezierPath *funcBezier;
-    NSBezierPath *axisXBezier, *axisYBezier;
-    NSBezierPath *pointsAxisXBezier, *pointsAxisYBezier;
-    float zoomQuant;
+    NSBezierPath *funcBezier, *axisXBezier, *axisYBezier, *pointsAxisXBezier, *pointsAxisYBezier;
+    float zoomQuant, width, height;
+    BOOL graphicIsZoomed, mouseDraggedFlag, graphicIsMoved;// * Flags *
 }
 
 -(void) drawAxisAndPoints;

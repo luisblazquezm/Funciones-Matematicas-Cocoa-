@@ -17,7 +17,9 @@ static NSRect funcRect = {-10, -10, 20 ,20};
 @implementation GraphicsClass
 @synthesize funcName, function, paramA, paramB, paramC, paramN, colour;
 
-
+/*!
+ * @brief  Constructor de la clase
+ */
 -(id) initWithGraphicName: (NSString *) graphic_Name
                  function: (NSString *) graphic_Function
                    paramA: (float) graphic_ParamA
@@ -42,20 +44,22 @@ static NSRect funcRect = {-10, -10, 20 ,20};
     return self;
 }
 
--(id)init{
+-(id) init{
     NSLog(@"En init de GraphicClass");
     self = [super init];
     if(!self){
         return nil;
     }
-
-    //colorAxis  = [NSColor blackColor];
-
     
     return self;
 }
 
-
+/*!
+ * @brief  Devuelve el valor de y según la función que se quiere representar y al valor de
+ *         x pasado
+ * @param  x Valor de la coordenada x
+ * @return float Valor de y con respecto al valor de x pasado
+ */
 -(float)valueAt:(float)x{
     float resultY = 0;
     
@@ -75,6 +79,20 @@ static NSRect funcRect = {-10, -10, 20 ,20};
     return resultY;
 }
 
+
+/*!
+ * @brief  Devuelve el valor de y según la función que se quiere representar y al valor de
+ *         x pasado
+ * @param  b Limites o bounds de la vista
+ *         ctx Contexto grafica actual de representacion
+ *         limit Limites de representación de la gráfica
+ *         zoom Flag que indica si se va a hacer zoom sobre la vista
+ *         move Flag que indica si se va a mover la vista
+ *         width Coordenada 'x' del punto medio entre el punto en el que el usario ha hecho click
+ *               izquierdo y el punto en el que, al arrastrar,  ha soltado para hacer zoom
+ *         height Coordenada 'y' del punto medio entre el punto en el que el usario ha hecho click
+ *               izquierdo y el punto en el que, al arrastrar,  ha soltado para hacer zoom
+ */
 -(void) drawInRect:(NSRect)b
 withGraphicsContext:(NSGraphicsContext*)ctx
           andLimits:(NSRect)limit

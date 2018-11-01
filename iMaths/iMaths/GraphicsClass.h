@@ -10,6 +10,7 @@
 
 @interface GraphicsClass : NSObject
 {
+    /* Propiedades de la clase -> Parámetros de la gráfica */
     NSString *funcName;
     NSString *function;
     float paramA;
@@ -18,6 +19,7 @@
     float paramN;
     NSColor *colour;
     
+    /* Variables de instancia */
     NSColor *colorGraphic;
     NSBezierPath *funcBezier;
     float zoomQuant;
@@ -32,9 +34,6 @@
 @property (nonatomic) float paramC;
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
-
-
-//@property(retain)NSBezierPath *poly;
 
     /* Constructor */
 

@@ -19,6 +19,12 @@
                                                              NSComboBoxDelegate,
                                                              NSComboBoxDataSource>
 {
+    /* Punteros o referencias a otras clases */
+    
+    PanelModel *modelInPanel;
+    
+    /* Outlets */
+    
     IBOutlet NSComboBox *newFunction;
     IBOutlet NSTextField *newName;
     IBOutlet NSTextField *newParamA;
@@ -29,8 +35,9 @@
     IBOutlet NSButton *confirmChanges;
     IBOutlet NSButton *cancelChanges;
     
+    /* Variables de instancia */
+    
     bool fieldsChanged, BisEnabled, CisEnabled, NisEnabled;
-    PanelModel *modelInPanel;
     NSInteger pos;
 }
 

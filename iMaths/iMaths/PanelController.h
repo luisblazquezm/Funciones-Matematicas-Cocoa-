@@ -30,10 +30,9 @@
                                                  NSComboBoxDelegate,
                                                  NSComboBoxDataSource>
 {
-    /* Variables de otras clases */
+    /* Punteros o referencias a otras clases */
     
     PanelModel *modelInPanel;
-    GraphicsClass *newGraphic;
     PanelModificationController *panelModController;
     
     /* Outlets Definicion de la Grafica */
@@ -92,9 +91,7 @@
     NSColor *colour;
     
     NSInteger previousSelectedRow;
-    BOOL functionSelectedFlag;
-    BOOL BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
-    NSNumberFormatter *formatter;
+    BOOL functionSelectedFlag, BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
     NSNumber *availabilityB , *availabilityC, *availabilityN;
     
 }

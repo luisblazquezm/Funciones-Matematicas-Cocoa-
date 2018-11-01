@@ -11,10 +11,6 @@
 
 #define NUM_DEFAULT_FUNCTIONS 6
 
-//static const NSArray *parametersN;
-//static const NSArray *parametersB;
-//static const NSArray *parametersC;
-
 @interface PanelModel : NSObject
 {
     // Array que contendra una serie de objetos de tipo Funcion
@@ -34,7 +30,7 @@
 
 }
 
-/* Getters y setters */
+    /* Getters y setters */
 
 @property (nonatomic) NSMutableArray *arrayListFunctions;
 @property (nonatomic) NSMutableArray *arrayListGraphics;
@@ -60,6 +56,7 @@
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour;
 -(BOOL) containsName:(NSString*)name;
+-(GraphicsClass*) getGraphicToModify;
 -(void) graphicModified:(GraphicsClass*)graph;
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 -(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
@@ -67,6 +64,7 @@
 -(void) exportListOfGraphicsTo:(NSString*)typeFile;
 -(void) exportGraphicView:(NSView*)view To:(NSString*)extension;
 -(NSInteger) countOfArrayListGraphics;
+-(NSString*) graphicLabelInfo:(GraphicsClass*)graph;
 
 
 @end

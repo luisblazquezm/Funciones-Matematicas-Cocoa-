@@ -30,21 +30,21 @@
 
 @implementation Controller
 
-/* (Controller -> PanelController) */
+                /* (Controller -> PanelController) */
 
 // Cuando se importan las graficas de un fichero y se añaden a la tabla.
 NSString *NewGraphicImportedNotification = @"NewGraphicImported";
 // Manda la instancia de la variable del modelo al resto de controladores.
 NSString *SendModelNotification = @"SendModel";
 
-/* (PanelController -> Controller) */
+                /* (PanelController -> Controller) */
 
 // Cuando se quiere representar una grafica de la tabla
 extern NSString *DrawGraphicsNotification;
 // Cuando se quiere exportar las graficas de la tabla
 extern NSString *ExportGraphicsNotification;
 
-/* (GraphicView -> Controller) */
+                /* (GraphicView -> Controller) */
 
 // Se manda la información de la vista desde el metodo drawRect
 extern NSString *DrawRectCalledNotification;
@@ -64,6 +64,8 @@ extern NSString *ShowLegendNotification;
         NSLog(@"En init (Controller)");
         
         zoomIsRestored = NO;
+        graphicIsMoved = NO;
+        graphicIsZoomed = NO;
         graphicRepresentationView = [[GraphicView alloc] init];
         model = [[PanelModel alloc] init];
         
@@ -120,8 +122,8 @@ extern NSString *ShowLegendNotification;
 #pragma clang diagnostic pop
 
 /*!
- * @brief  Abre y muestra el panel especificado. En este caso muestra el panel de Preferencias y envia la
- *         instancia del modelo a la clase controlador de ese panel.
+ * @brief  Abre y muestra el panel especificado. En este caso muestra el panel de Preferencias
+ *         y envia la instancia del modelo a la clase controlador de ese panel.
  */
 -(IBAction) showPanel:(id)sender
 {
@@ -152,7 +154,9 @@ extern NSString *ShowLegendNotification;
 {
     NSLog(@"Notificacion %@ recibida en handleDrawGraphic\r", aNotification);
     NSDictionary *notificationInfo = [aNotification userInfo];
-
+    NSString *s = [[NSString alloc] init];
+    float wid = 0, heig = 0;
+    
     // Del Panel al controlador, se envia la información de los ejes x e y y las graficas a representar
     NSNumber *XMin = [notificationInfo objectForKey:@"XMin"];
     NSNumber *YMin = [notificationInfo objectForKey:@"YMin"];
@@ -222,7 +226,8 @@ extern NSString *ShowLegendNotification;
             for (GraphicsClass *g in array) {
                 [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
                 
-                [self sendLabel:g];
+                s = [model graphicLabelInfo:g];
+                [self sendLabel:s];
             }
             NSLog(@"Grafica Representada");
             
@@ -235,21 +240,12 @@ extern NSString *ShowLegendNotification;
 
 }
 
--(void) sendLabel:(GraphicsClass*)g
+/*!
+ * @brief  Representa en un label la función de la gráfica que se ha dibujado
+ * @param  s Cadena que contiene el nombre de la grafica y la función que representa.
+ */
+-(void) sendLabel:(NSString*)s
 {
-    NSMutableString *s = [[NSMutableString alloc] init];
-    NSString *a = [NSString stringWithFormat:@"%f",[g paramA]];
-    NSString *b = [NSString stringWithFormat:@"%f",[g paramB]];
-    NSString *c = [NSString stringWithFormat:@"+%f",[g paramC]];
-    NSString *n = [NSString stringWithFormat:@"%f",[g paramN]];
-    
-    [s appendString:[g funcName]];
-    [s stringByReplacingOccurrencesOfString:@"a" withString:a];
-    [s stringByReplacingOccurrencesOfString:@"b" withString:b];
-    [s stringByReplacingOccurrencesOfString:@"+c" withString:c];
-    [s stringByReplacingOccurrencesOfString:@"n" withString:n];
-    [s appendString:@":"];
-    [s appendString:[g function]];
     [nameGraphLabel setHidden:NO];
     [nameGraphLabel setStringValue:s];
 }
@@ -265,6 +261,8 @@ extern NSString *ShowLegendNotification;
     NSNumber *X = [notificationInfo objectForKey:@"LeyendaX"];
     NSNumber *Y = [notificationInfo objectForKey:@"LeyendaY"];
     
+    // CUIDADO: la coordenada Y devuelve en [tf invert] un valor negativo cuando debería ser positivo
+    // y viceversa
     float x = [X floatValue];
     float y = -([Y floatValue]);
     
@@ -357,6 +355,8 @@ extern NSString *ShowLegendNotification;
 {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
+    graphicRepresentationView = nil;
+    model = nil;
 }
 
 @end

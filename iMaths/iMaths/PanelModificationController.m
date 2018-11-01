@@ -30,7 +30,14 @@
 
 @implementation PanelModificationController
 
-extern NSString *ModifyGraphicNotification;
+            /* (PanelController -> PanelModificationController) */
+
+// Cuando se recibe la instancia modelo del otro panel al igual que otros parámetros
+extern NSString *SendModelToModificationPanelNotification;
+
+            /* (PanelModificationController -> PanelController) */
+
+// Cuando se aceptan los cambios modificados de la grafica
 NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 
 
@@ -60,12 +67,17 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     if (self){
         NSLog(@"En init PanelModification");
         fieldsChanged = NO;
+        BisEnabled = NO;
+        CisEnabled = NO;
+        NisEnabled = NO;
+        pos = -1;
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         
+        // Observador de la notificación de envio de la grafica a modificar
         [nc addObserver:self
                selector:@selector(handleModifyGraphic:)
-                   name:ModifyGraphicNotification
+                   name:SendModelToModificationPanelNotification
                  object:nil];
         
     }
@@ -112,7 +124,6 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     NSLog(@"Notificacion %@ recibida en handleModifyGraphic\r", aNotification);
     NSDictionary *notificationInfoToModify = [aNotification userInfo];
     
-    GraphicsClass *graphic = [notificationInfoToModify objectForKey:@"graphicToModify"];
     modelInPanel = [notificationInfoToModify objectForKey:@"modelInPanel"];
     
     NSNumber *availabilityB = [notificationInfoToModify objectForKey:@"BisEnabled"];
@@ -136,6 +147,8 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         
     // Inicializa el array del modelo de funciones
     [modelInPanel initializeArrayListFunctions];
+    
+    GraphicsClass *graphic = [modelInPanel getGraphicToModify];
     
     // Añade esas funciones al ComboBox
     [newFunction addItemsWithObjectValues:[modelInPanel arrayListFunctions]];

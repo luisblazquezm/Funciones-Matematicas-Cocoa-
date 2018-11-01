@@ -26,6 +26,8 @@
         arrayListFunctions = [[NSMutableArray alloc] init];
         arrayListGraphics = [[NSMutableArray alloc] init];
         arrayOfGraphicsToRepresent = [[NSArray alloc] init];
+        arrayFilteredGraphics = [[NSMutableArray alloc] init];
+        rowSelectedToModify = -1;
         
         parametersC = [[NSArray alloc] initWithObjects:
                        @"^c",
@@ -70,9 +72,14 @@
     return self;
 }
 
+/*!
+ * @brief  Carga el array del ComboBox con las funciones que se van a mostrar o a utilizar
+ */
 -(void)initializeArrayListFunctions
 {
 
+    // Se utiliza un array estatico al metodo para la reutilización y por si se desease ampliar
+    // las funciones disponibles en un futuro.
     static NSString *defaultFunctions[] =
     {
         @"a*sen(b*x)",
@@ -91,7 +98,9 @@
     
 }
 
-
+/*!
+ * @brief  Crea una nueva grafica con los parametros seleccionados y la añade al array de graficas
+ */
 -(void) createGraphic:(NSString*)functionName
               withName:(NSString*)graphicName
                paramA:(float)AGraphic
@@ -100,6 +109,21 @@
                paramN:(float)NGraphic
                 color:(NSColor*)graphicColour
 {
+    if (functionName == nil){
+        NSLog(@"PanelModel: createGraphic: La función es nil\r");
+        return;
+    }
+    
+    if (graphicName == nil){
+        NSLog(@"PanelModel: createGraphic: El nombre de la grafica es nil\r");
+        return;
+    }
+    
+    if (graphicColour == nil){
+        NSLog(@"PanelModel: createGraphic: El color es nil\r");
+        return;
+    }
+    
     GraphicsClass *graphic =[[GraphicsClass alloc] initWithGraphicName:graphicName
                                                               function:functionName
                                                                 paramA:AGraphic
@@ -111,9 +135,17 @@
     [arrayListGraphics addObject:graphic];
 }
 
-
+/*!
+ * @brief  Indica si el nombre de nueva gráfica existe ya en la tabla de gráficas
+ * @return BOOL devuelve YES si el nombre ya existe, de lo contrario devuelve NO
+ */
 -(BOOL) containsName:(NSString*)name
 {
+    if (name == nil){
+        NSLog(@"PanelModel: containsName: El nombre es nil\r");
+        return NO;
+    }
+    
     for (GraphicsClass *g in arrayListGraphics) {
         if ([[g funcName] isEqualToString:name])
             return YES;
@@ -122,22 +154,67 @@
     return NO;
 }
 
+/*!
+ * @brief  Devuelve la grafica que se desea modificar en el panel
+ * @return GraphicClass* Grafica que se desea modificar.
+ */
+-(GraphicsClass*) getGraphicToModify
+{
+    if (rowSelectedToModify != -1)
+        return [arrayListGraphics objectAtIndex:rowSelectedToModify];
+    else
+        return nil;
+}
+
+/*!
+ * @brief  Reescribe la información modificada en una grafica determinada en el panel de Modificacion
+ * @param  graph Grafica que se ha modificado correctamente en el panel de Modificación
+ */
 -(void) graphicModified:(GraphicsClass*)graph
 {
+    if (graph == nil){
+        NSLog(@"PanelModel: graphicModified: La gráfica es nil\r");
+        return;
+    }
+    
     [arrayListGraphics setObject:graph atIndexedSubscript:rowSelectedToModify];
 }
 
+/*!
+ * @brief  Almacena en un array las graficas que el usuario desea dibujar.
+ * @param  indexArray Conjunto de los indices de las graficas de la tabla que se desean dibujar.
+ */
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
 {
+    if (indexArray == nil){
+        NSLog(@"PanelModel: arrayOfGraphicToDrawInIndexes: Set de indices es nil\r");
+        return;
+    }
+    
     arrayOfGraphicsToRepresent = [arrayListGraphics objectsAtIndexes:indexArray];
     
 }
 
+/*!
+ * @brief  Elimina el objeto grafica que se acaba de eliminar de la tabla del panel 'Preferencias' en
+ *         array de graficas.
+ * @param  graphicDeletedIndex Posición en el array de graficas de la grafica que se desea eliminar de
+ *         la tabla.
+ */
 -(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
 {
+    if (graphicDeletedIndex == -1){
+        NSLog(@"PanelModel: deleteGraphicAtIndex: Indice es -1\r");
+        return;
+    }
+    
     [arrayListGraphics removeObjectAtIndex:graphicDeletedIndex];
 }
 
+/*!
+ * @brief  Importa la información de un conjunto de gráficas de un fichero.
+ * @return NSMutableArray Devuelve el array de graficas que se ha importado de un fichero
+ */
 -(NSMutableArray*) importListOfGraphics
 {
     // Instanciación del panel de apertura
@@ -226,8 +303,17 @@
     return array;
 }
 
+/*!
+ * @brief  Exporta la lista de graficas añadidas a la tabla del panel 'Preferencias'
+ * @param  typeFile Extension del fichero en el que se desea exportar la lista de graficas de la tabla
+ */
 -(void) exportListOfGraphicsTo:(NSString*)typeFile;
 {
+    if (typeFile == nil){
+        NSLog(@"PanelModel: exportGraphicView: typeFile es nil\r");
+        return;
+    }
+    
     // Instanciación del panel de guardado
     NSSavePanel *save = [NSSavePanel savePanel];
 
@@ -301,12 +387,20 @@
     }
 }
 
+/*!
+ * @brief  Exporta el contenido de la vista a una imagen.
+ * @param  extension Extension del formato de la imagen, puede ser .png, .pdf o .jpeg
+ */
 -(void) exportGraphicView:(NSView*)view To:(NSString*)extension
 {
+    if (extension == nil){
+        NSLog(@"PanelModel: exportGraphicView: Extension es nil\r");
+        return;
+    }
+    
     NSLog(@"Exportar HABILITADO\r");
     
     // Conjunot de bytes donde se alojara el contenido del NSView para exportarlo a una imagen
-    NSData *exportedData;
     NSData *imageData;
     
     // Instancia el panel de Guardado
@@ -314,6 +408,7 @@
     
     NSError *error;
     
+    // URL o ruta del fichero exportado y bitmap en el que se añadirá el contenido de la vista
     NSURL *fileURL;
     NSBitmapImageRep *imageRep;
     
@@ -354,9 +449,6 @@
                                                                forKey:NSImageCompressionFactor];
         imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
         
-        if (exportedData == nil)
-            NSLog(@"ERROR");
-        
         BOOL zBoolResult = [imageData writeToURL:fileURL
                                          options:NSDataWritingAtomic
                                            error:&error];
@@ -387,9 +479,44 @@
     }
 }
 
+/*!
+ * @brief  Devuelve el numero de graficas añadidas a la tabla del panel 'Preferencias'
+ * @return NSInteger Numero de elementos del array de graficas
+ */
 -(NSInteger) countOfArrayListGraphics
 {
     return [arrayListGraphics count];
+}
+
+/*!
+ * @brief  Devuelve la información de la función que se acaba
+ * @param  graph Grafica que se caba de representar
+ * @return NSString Cadena que contiene el nombre de la grafica y la función que representa
+ */
+-(NSString*) graphicLabelInfo:(GraphicsClass*)graph
+{
+    if (graph == nil){
+        NSLog(@"PanelModel: graphicLabelInfo: Grafica es nil\r");
+        return nil;
+    }
+    
+    NSMutableString *s = [[NSMutableString alloc] init];
+    NSString *a = [NSString stringWithFormat:@"%f",[graph paramA]];
+    NSString *b = [NSString stringWithFormat:@"%f",[graph paramB]];
+    NSString *c = [NSString stringWithFormat:@"+%f",[graph paramC]];
+    NSString *n = [NSString stringWithFormat:@"%f",[graph paramN]];
+    
+    [s appendString:[graph funcName]];
+    [s stringByReplacingOccurrencesOfString:@"a" withString:a];
+    [s stringByReplacingOccurrencesOfString:@"b" withString:b];
+    [s stringByReplacingOccurrencesOfString:@"+c" withString:c];
+    [s stringByReplacingOccurrencesOfString:@"n" withString:n];
+    [s appendString:@":"];
+    [s appendString:[graph function]];
+    
+    NSString *message = [NSString stringWithString:s];
+    
+    return message;
 }
 
 @end

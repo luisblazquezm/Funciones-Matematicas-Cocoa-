@@ -14,14 +14,13 @@
 
 @interface Controller : NSObject <NSWindowDelegate>
 {
-    /* Variables relacionadas con PanelController*/
+    /* Punteros o referencias a otras clases */
     
     PanelController *panelController;
-    PanelModel *model; // instanciación del modelo
+    PanelModel *model; 
 
     /* Outlets */
     
-    // Outlet conectado por target-action a la vista donde se representará la gráfica.
     IBOutlet GraphicView *graphicRepresentationView;
     IBOutlet NSButton *resetZoom;
     IBOutlet NSPopover *helpButton;
@@ -30,38 +29,29 @@
     IBOutlet NSTextField *YLegendField;
     IBOutlet NSTextField *nameGraphLabel;
     
+    /* Variables de instancia */
     
-    NSRect limit;
-    NSRect bounds;
-    BOOL graphicIsZoomed;
-    BOOL graphicIsMoved;
-    BOOL zoomIsRestored;
-    float wid, heig;
-    
+    BOOL graphicIsZoomed, graphicIsMoved, zoomIsRestored;
+    NSRect limit, bounds;
 
-    
 }
 
 -(IBAction) showPanel:(id)sender;
-
-    /* Metodos para exportar una lista de gráficas de la tabla */
 -(IBAction) exportTableGraphicsAs:(id)sender;
-
-    /* Metodos para importar una lista de graficas y cargarlas en la tabla de preferencias */
 -(IBAction) importTableGraphics:(id)sender;
-
-    /* Metodo para dibujar las graficas en el CustomView */
--(void) handleDrawGraphics:(NSNotification *)aNotification;
-
-    /* Metodos para exportar una gráfica de la tabla */
--(IBAction) exportGraphicAs:(id)sender;
-
-    /* Metodos de la barra de herramientas */
--(void) handleShowLegend:(NSNotification *)aNotification;
 -(IBAction) showHelp:(id)sender;
 -(IBAction) showLegend:(id)sender;
 -(IBAction) restoreZoom:(id)sender;
--(void) sendLabel:(GraphicsClass*)g;
+-(IBAction) exportGraphicAs:(id)sender;
+-(void) sendLabel:(NSString*)s;
+
+    /* Handles de notificaciones */
+-(void) handleDrawGraphics:(NSNotification *)aNotification;
+-(void) handleShowLegend:(NSNotification *)aNotification;
+
+
+
+
 
 @end
 
