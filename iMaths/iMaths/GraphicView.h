@@ -15,10 +15,10 @@
     
     /* Variables de instancia */
 
-    NSPoint a, c, clickInView;
+    NSPoint startPoint, endPoint, clickInView;
     NSColor *colorAxis;
     NSBezierPath *funcBezier, *axisXBezier, *axisYBezier, *pointsAxisXBezier, *pointsAxisYBezier;
-    float zoomQuant, width, height;
+    float zoomQuant, zoomCoordenateX, zoomCoordenateY;
     BOOL graphicIsZoomed, mouseDraggedFlag, graphicIsMoved;// * Flags *
 }
 

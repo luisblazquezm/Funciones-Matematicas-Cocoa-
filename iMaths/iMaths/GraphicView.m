@@ -34,7 +34,9 @@ NSString *ShowLegendNotification = @"ShowLegend";
         graphicIsZoomed = NO;
         mouseDraggedFlag = NO;
         graphicIsMoved = NO;
-        
+        zoomQuant = 0;
+        zoomCoordenateX = 0;
+        zoomCoordenateY = 0;
         funcBezier = [[NSBezierPath alloc] init];
         axisXBezier = [[NSBezierPath alloc] init];
         axisYBezier = [[NSBezierPath alloc] init];
@@ -72,8 +74,8 @@ NSString *ShowLegendNotification = @"ShowLegend";
     NSNumber *anch = [[NSNumber alloc]initWithFloat:ancho];
     NSNumber *z = [[NSNumber alloc]initWithFloat:graphicIsZoomed];
     NSNumber *move = [[NSNumber alloc]initWithFloat:graphicIsMoved];
-    NSNumber *w = [[NSNumber alloc]initWithFloat:width];
-    NSNumber *h = [[NSNumber alloc]initWithFloat:height];
+    NSNumber *w = [[NSNumber alloc]initWithFloat:zoomCoordenateX];
+    NSNumber *h = [[NSNumber alloc]initWithFloat:zoomCoordenateY];
 
     NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys: ctx,@"ContextoGrafico",
                                                                     oX,@"OrigenX",
@@ -164,11 +166,11 @@ NSString *ShowLegendNotification = @"ShowLegend";
             
             NSLog(@"Matriz de tranformación afin de ZOOM creada");
             NSAffineTransform *tfZoom = [NSAffineTransform transform];
-            NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", width, height, zoomQuant);
-            [tfZoom translateXBy:width
-                             yBy:height];
-            [tfZoom scaleXBy:width*zoomQuant
-                         yBy:height*zoomQuant];
+            NSLog(@"Punto x: %f Punto y: %f ZoomQuant: %f", zoomCoordenateX, zoomCoordenateY, zoomQuant);
+            [tfZoom translateXBy:zoomCoordenateX
+                             yBy:zoomCoordenateY];
+            [tfZoom scaleXBy:zoomCoordenateX*zoomQuant
+                         yBy:zoomCoordenateY*zoomQuant];
             [tfZoom concat];
             
         }
@@ -361,11 +363,11 @@ NSString *ShowLegendNotification = @"ShowLegend";
     NSRect bounds = [self bounds];
 
     // Punto de la vista donde se pulsa con el botón izquierdo del ratón
-    a = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    startPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     clickInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     mouseDraggedFlag = NO;
     
-    NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",a.x, a.y, bounds.origin.x, bounds.origin.y);
+    NSLog(@"A(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",startPoint.x, startPoint.y, bounds.origin.x, bounds.origin.y);
     
     // Se realiza la transformación afín de la vista que creamos para representar los ejes
     // pero la invertimos para conseguir las coordenadas x e y según el sistema de coordenadas
@@ -412,15 +414,15 @@ NSString *ShowLegendNotification = @"ShowLegend";
     NSRect bounds = [self bounds];
     
     // Punto de la vista donde se suelta el botón izquierdo del ratón
-    c = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    endPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     
-    NSLog(@"C(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",c.x, c.y, bounds.origin.x, bounds.origin.y);
+    NSLog(@"C(X: %f Y: %f)   -    BOUNDS(X: %f Y: %f)",endPoint.x, endPoint.y, bounds.origin.x, bounds.origin.y);
     
     // Nos aseguramos de que solo se haga zooom sobre esa zona si se ha arrastrado antes.
     if(mouseDraggedFlag){
         // Width y height representan las coordenadas X e Y del punto medio o central del rectangulo que se ha creado al arrastar el usuario por la vista, y serán el nuevo origen de coordenadas al que se trasladará la matriz de transformación afín para representar la acción de hacer zoom.
-        width = (c.x + a.x)/2;
-        height = (c.y + a.y)/2;
+        zoomCoordenateX = (endPoint.x + startPoint.x)/2;
+        zoomCoordenateY = (endPoint.y + startPoint.y)/2;
         graphicIsZoomed = YES;
         graphicIsMoved = NO;
         [self setNeedsDisplay:YES];

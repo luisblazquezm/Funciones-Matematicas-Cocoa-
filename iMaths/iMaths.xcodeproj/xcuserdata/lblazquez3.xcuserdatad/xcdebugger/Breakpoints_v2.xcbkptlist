@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/Controller.m"
-            timestampString = "562777393.7280869"
+            timestampString = "562870983.53811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/PanelController.m"
-            timestampString = "562770761.996008"
+            timestampString = "562926959.872346"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "877"
-            endingLineNumber = "877"
-            landmarkName = "PanelController"
-            landmarkType = "3">
+            startingLineNumber = "894"
+            endingLineNumber = "894"
+            landmarkName = "-deleteGraphic:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicView.m"
-            timestampString = "562777393.728184"
+            timestampString = "562870983.538748"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "438"
+            endingLineNumber = "438"
             landmarkName = "GraphicView"
             landmarkType = "3">
          </BreakpointContent>

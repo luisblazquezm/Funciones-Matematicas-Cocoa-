@@ -35,6 +35,9 @@
 @property (nonatomic) float paramN;
 @property (nonatomic) NSColor *colour;
 
+
+-(NSString *) description;
+
     /* Constructor */
 
 -(id) initWithGraphicName: (NSString *) graphic_Name

@@ -212,7 +212,10 @@ extern NSString *ShowLegendNotification;
               limit.size.height);
         
         array = [model arrayOfGraphicsToRepresent];
-        if ([array count] != 0) {
+        if (array == nil)
+            NSLog(@"Controller:handleDrawGraphics: Array de graficas a representar es nil");
+        
+        if ([array count] != 0 && array != nil) {
             NSLog(@"Entrar para dibujar");
             
             [graphicRepresentationView drawAxisAndPoints];
@@ -277,32 +280,30 @@ extern NSString *ShowLegendNotification;
  */
 -(IBAction) exportTableGraphicsAs:(id)sender
 {
-    NSInteger numberOfGraphics = [model countOfArrayListGraphics];
     NSString *typeFile = [[NSString alloc] init];
     
-    if (numberOfGraphics > 0) {
-        NSLog(@"Exportar HABILITADO\r");
-        switch ([sender tag]) {
-            case 1:
-                typeFile = @"txt";
-                break;
-            case 2:
-                typeFile = @"xml";
-                break;
-            case 3:
-                typeFile = @"csv";
-                break;
-            case 4:
-                typeFile = @"log";
-                break;
-            default:
-                typeFile = @"txt";
-                break;
-        }
-        
-        NSLog(@"Extension .%@ escogida", typeFile);
-        [model exportListOfGraphicsTo:typeFile]; 
+    NSLog(@"Exportar HABILITADO\r");
+    switch ([sender tag]) {
+        case 1:
+            typeFile = @"txt";
+            break;
+        case 2:
+            typeFile = @"xml";
+            break;
+        case 3:
+            typeFile = @"csv";
+            break;
+        case 4:
+            typeFile = @"log";
+            break;
+        default:
+            typeFile = @"txt";
+            break;
     }
+    
+    NSLog(@"Extension .%@ escogida", typeFile);
+    [model exportListOfGraphicsTo:typeFile];
+    
 
 }
 
@@ -318,13 +319,17 @@ extern NSString *ShowLegendNotification;
 
     NSMutableArray *array = [model importListOfGraphics];
     
-    NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
-                                                                 forKey:@"graphicsImported"];
-    
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:NewGraphicImportedNotification
-                      object:self
-                    userInfo:notificationInfo];
+    if (array != nil) {
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
+                                                                     forKey:@"graphicsImported"];
+        
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc postNotificationName:NewGraphicImportedNotification
+                          object:self
+                        userInfo:notificationInfo];
+    } else {
+        NSLog(@"Se ha cancelado la importación, el array es nil");
+    }
     
 }
 

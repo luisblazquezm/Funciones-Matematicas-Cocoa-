@@ -130,6 +130,17 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     NSNumber *availabilityC = [notificationInfoToModify objectForKey:@"CisEnabled"];
     NSNumber *availabilityN = [notificationInfoToModify objectForKey:@"NisEnabled"];
     
+    if (modelInPanel == nil) {
+        NSLog(@"PanelModificationController:handleModifyGraphic: Instancia del modelo recibida es nil");
+        return;
+    }
+    
+    if (availabilityB == nil || availabilityC == nil || availabilityN == nil) {
+        NSLog(@"PanelModificationController:handleModifyGraphic: Disponibilidades recibidas son nil");
+        return;
+    }
+    
+    
     BisEnabled = [availabilityB boolValue];
     CisEnabled = [availabilityC boolValue];
     NisEnabled = [availabilityN boolValue];
@@ -137,30 +148,38 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     NSLog(@"B: %d C: %d N: %d",BisEnabled,CisEnabled,NisEnabled);
     
     if (BisEnabled)
-        [newParamB setEnabled:YES];
+        [newParamBField setEnabled:YES];
         
     if (CisEnabled)
-        [newParamC setEnabled:YES];
+        [newParamCField setEnabled:YES];
         
     if (NisEnabled)
-        [newParamN setEnabled:YES];
+        [newParamNField setEnabled:YES];
         
     // Inicializa el array del modelo de funciones
     [modelInPanel initializeArrayListFunctions];
     
     GraphicsClass *graphic = [modelInPanel getGraphicToModify];
+    if (graphic == nil) {
+        NSLog(@"PanelModificationController:handleModifyGraphic: Grafica a modificar es nil");
+        return;
+    }
     
     // Añade esas funciones al ComboBox
-    [newFunction addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
+    [newFunctionComboBox addItemsWithObjectValues:[modelInPanel arrayListFunctions]];
         
-    [newFunction selectItemWithObjectValue:[graphic function]];
-    [newName setStringValue:[graphic funcName]];
-    [newParamA setFloatValue:[graphic paramA]];
-    [newParamB setFloatValue:[graphic paramB]];
-    [newParamC setFloatValue:[graphic paramC]];
-    [newParamN setFloatValue:[graphic paramN]];
-    [newColour setColor:[graphic colour]];
+    [newFunctionComboBox selectItemWithObjectValue:[graphic function]];
+    [newNameField setStringValue:[graphic funcName]];
+    [newParamAField setFloatValue:[graphic paramA]];
+    [newParamBField setFloatValue:[graphic paramB]];
+    [newParamCField setFloatValue:[graphic paramC]];
+    [newParamNField setFloatValue:[graphic paramN]];
+    [newColourField setColor:[graphic colour]];
     
+    /*
+     * Deshabilita o prohibe el uso de las ventanas principales
+     * mientras este panel se encuentre abierto
+     */
     NSWindow *w = [self window];
     [NSApp runModalForWindow:w];
     
@@ -175,13 +194,13 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 -(IBAction) confirmNewGraphic:(id)sender
 {
     // OJOOOOO NO PERMITIR QUE EL USURIO MODIFIQUE EN PANEL PREFERENCIAS MIENTRAS ESTA ESTE ABIERTO PARA EVITAR QUE aRowSelected cambie
-    GraphicsClass *newGraphic = [[GraphicsClass alloc] initWithGraphicName:[newName stringValue]
-                                                               function:[newFunction stringValue]
-                                                                 paramA:[newParamA floatValue]
-                                                                 paramB:[newParamB floatValue]
-                                                                 paramC:[newParamC floatValue]
-                                                                 paramN:[newParamN floatValue]
-                                                                 colour:[newColour color]];
+    GraphicsClass *newGraphic = [[GraphicsClass alloc] initWithGraphicName:[newNameField stringValue]
+                                                               function:[newFunctionComboBox stringValue]
+                                                                 paramA:[newParamAField floatValue]
+                                                                 paramB:[newParamBField floatValue]
+                                                                 paramC:[newParamCField floatValue]
+                                                                 paramN:[newParamNField floatValue]
+                                                                 colour:[newColourField color]];
     
     // El modelo guarda la información nueva de la grafica directamente en el array
     // dado que el modelo almacena el indice del objeto que ha sido enviado a este panel para ser modificado
@@ -242,9 +261,9 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 -(void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
     NSLog(@"Fila cambiada");
-    [newParamB setStringValue:@""];
-    [newParamC setStringValue:@""];
-    [newParamN setStringValue:@""];
+    [newParamBField setStringValue:@""];
+    [newParamCField setStringValue:@""];
+    [newParamNField setStringValue:@""];
     BisEnabled = NO;
     CisEnabled = NO;
     NisEnabled = NO;
@@ -258,18 +277,18 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
 -(void) selectParameters
 {
 
-    NSString *function = [newFunction objectValueOfSelectedItem];
+    NSString *function = [newFunctionComboBox objectValueOfSelectedItem];
     
     if (!BisEnabled && !CisEnabled && !NisEnabled) {
         // Habilitación Campo Variable N
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             if ([function rangeOfString:[[modelInPanel parametersN] objectAtIndex:j]                              options:NSCaseInsensitiveSearch].location != NSNotFound) {
                 NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersN] objectAtIndex:j]);
-                [newParamN setEnabled:YES];
+                [newParamNField setEnabled:YES];
                 NisEnabled = YES;
                 break;
             } else {
-                [newParamN setEnabled:NO];
+                [newParamNField setEnabled:NO];
             }
             
         }
@@ -278,11 +297,11 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             if ([function rangeOfString:[[modelInPanel parametersB] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound) {
                 NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersB] objectAtIndex:j]);
-                [newParamB setEnabled:YES];
+                [newParamBField setEnabled:YES];
                 BisEnabled = YES;
                 break;
             } else {
-                [newParamB setEnabled:NO];
+                [newParamBField setEnabled:NO];
             }
         }
         
@@ -290,11 +309,11 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         for (int j = 0; j < NUM_PARAMETERS; j++) {
             if ([function rangeOfString:[[modelInPanel parametersC] objectAtIndex:j] options:NSCaseInsensitiveSearch].location != NSNotFound) {
                 NSLog(@"Funcion %@ - Patron %@\r", function, [[modelInPanel parametersC] objectAtIndex:j]);
-                [newParamC setEnabled:YES];
+                [newParamCField setEnabled:YES];
                 CisEnabled = YES;
                 break;
             } else {
-                [newParamC setEnabled:NO];
+                [newParamCField setEnabled:NO];
             }
         }
         
@@ -313,20 +332,20 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
     NSCharacterSet *charSet = [[NSCharacterSet characterSetWithCharactersInString:@"-1234567890."] invertedSet];
     
     // Creo varios arrays porque si creo uno general para todos los campos, lo que se escribiera en uno de ellos, se escribiría automaticamente en el resto.
-    NSArray<NSString*> *arrayParamA = [[newParamA stringValue]
+    NSArray<NSString*> *arrayParamA = [[newParamAField stringValue]
                                        componentsSeparatedByCharactersInSet:charSet];
-    NSArray<NSString*> *arrayParamB = [[newParamB stringValue]
+    NSArray<NSString*> *arrayParamB = [[newParamBField stringValue]
                                        componentsSeparatedByCharactersInSet:charSet];
-    NSArray<NSString*> *arrayParamC = [[newParamC stringValue]
+    NSArray<NSString*> *arrayParamC = [[newParamCField stringValue]
                                        componentsSeparatedByCharactersInSet:charSet];
-    NSArray<NSString*> *arrayParamN = [[newParamN stringValue]
+    NSArray<NSString*> *arrayParamN = [[newParamNField stringValue]
                                        componentsSeparatedByCharactersInSet:charSet];
     
     // Aplico el formateador de numeros negativos y positivos float a los campos de los parametros
-    [newParamA setStringValue:[arrayParamA  componentsJoinedByString:@""]];
-    [newParamB setStringValue:[arrayParamB  componentsJoinedByString:@""]];
-    [newParamC setStringValue:[arrayParamC  componentsJoinedByString:@""]];
-    [newParamN setStringValue:[arrayParamN  componentsJoinedByString:@""]];
+    [newParamAField setStringValue:[arrayParamA  componentsJoinedByString:@""]];
+    [newParamBField setStringValue:[arrayParamB  componentsJoinedByString:@""]];
+    [newParamCField setStringValue:[arrayParamC  componentsJoinedByString:@""]];
+    [newParamNField setStringValue:[arrayParamN  componentsJoinedByString:@""]];
     
 }
 

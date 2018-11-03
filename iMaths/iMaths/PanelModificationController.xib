@@ -8,15 +8,15 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PanelModificationController">
             <connections>
-                <outlet property="cancelChanges" destination="Eb3-E5-Xhi" id="gNt-EW-9C6"/>
-                <outlet property="confirmChanges" destination="ytX-uf-eJi" id="iIq-oS-QNm"/>
-                <outlet property="newColour" destination="9Uc-qj-8Wl" id="V01-ik-Dyq"/>
-                <outlet property="newFunction" destination="RSh-6L-lu3" id="5Dj-VN-Pla"/>
-                <outlet property="newName" destination="h3Q-V6-caP" id="9fG-e9-wSO"/>
-                <outlet property="newParamA" destination="8zJ-xg-GlW" id="eOo-zx-vbM"/>
-                <outlet property="newParamB" destination="UZ4-Pl-zD1" id="U1L-cb-GDV"/>
-                <outlet property="newParamC" destination="h2l-ba-gl1" id="F6G-Lm-zUw"/>
-                <outlet property="newParamN" destination="Gmz-oo-rJ7" id="rm4-ky-Cqh"/>
+                <outlet property="cancelChangesButton" destination="Eb3-E5-Xhi" id="FOR-NT-uYf"/>
+                <outlet property="confirmChangesButton" destination="ytX-uf-eJi" id="WuY-yT-fE9"/>
+                <outlet property="newColourField" destination="9Uc-qj-8Wl" id="ZCK-xO-0Va"/>
+                <outlet property="newFunctionComboBox" destination="RSh-6L-lu3" id="9P5-Df-BUS"/>
+                <outlet property="newNameField" destination="h3Q-V6-caP" id="l43-DY-Pip"/>
+                <outlet property="newParamAField" destination="8zJ-xg-GlW" id="6g5-eQ-VE6"/>
+                <outlet property="newParamBField" destination="UZ4-Pl-zD1" id="4r3-4r-uxj"/>
+                <outlet property="newParamCField" destination="h2l-ba-gl1" id="lf2-KR-tsh"/>
+                <outlet property="newParamNField" destination="Gmz-oo-rJ7" id="Dn6-OU-Vws"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>

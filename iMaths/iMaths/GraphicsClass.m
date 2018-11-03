@@ -30,7 +30,7 @@ static NSRect funcRect = {-10, -10, 20 ,20};
 {
 
     self = [super init];
-    
+    NSLog(@"En init de GraphicClass");
     if(!self)
         return nil;
     [self setFuncName: graphic_Name];
@@ -42,6 +42,16 @@ static NSRect funcRect = {-10, -10, 20 ,20};
     [self setColour: graphic_Colour];
     
     return self;
+}
+
+-(NSString *) description
+{
+    NSString *descriptionString;
+    
+    descriptionString = [[NSString alloc] initWithFormat:@"%@:\n\t-Funcion: %@\n\t-paramA: %f\n\t-paramB: %f\n\t-paramC: %f\n\t-paramN: %f\n\t-Colour : %@\n\t",
+                         funcName, function, paramA, paramB, paramC, paramN , colour];
+    
+    return descriptionString;
 }
 
 -(id) init{
@@ -147,6 +157,7 @@ withGraphicsContext:(NSGraphicsContext*)ctx
     
         /* -------------- Dibujo de las graficas --------------- */
 
+        // Debe de haber una función para la gráfica a representar
         if ([[self function] length] > 0){
             
             limitOfDrawing.origin.x = funcRect.origin.x;

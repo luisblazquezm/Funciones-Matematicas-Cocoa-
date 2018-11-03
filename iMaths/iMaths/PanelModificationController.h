@@ -25,15 +25,15 @@
     
     /* Outlets */
     
-    IBOutlet NSComboBox *newFunction;
-    IBOutlet NSTextField *newName;
-    IBOutlet NSTextField *newParamA;
-    IBOutlet NSTextField *newParamB;
-    IBOutlet NSTextField *newParamC;
-    IBOutlet NSTextField *newParamN;
-    IBOutlet NSColorWell *newColour;
-    IBOutlet NSButton *confirmChanges;
-    IBOutlet NSButton *cancelChanges;
+    IBOutlet NSComboBox *newFunctionComboBox;
+    IBOutlet NSTextField *newNameField;
+    IBOutlet NSTextField *newParamAField;
+    IBOutlet NSTextField *newParamBField;
+    IBOutlet NSTextField *newParamCField;
+    IBOutlet NSTextField *newParamNField;
+    IBOutlet NSColorWell *newColourField;
+    IBOutlet NSButton *confirmChangesButton;
+    IBOutlet NSButton *cancelChangesButton;
     
     /* Variables de instancia */
     

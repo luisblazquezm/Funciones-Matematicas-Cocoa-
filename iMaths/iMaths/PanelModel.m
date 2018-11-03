@@ -292,7 +292,7 @@
         } // End of for
     
     } else if(result == NSModalResponseCancel) { // Si se pulsa cancelar
-        NSLog(@"doSaveAs we have a Cancel button");
+        NSLog(@"Botón Cancelar Pulsado");
         return nil;
     } else {
         NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
@@ -300,7 +300,6 @@
     }
     
     if (error) {
-        // This is one way to handle the error, as an example
         [NSApp presentError:error];
     }
     
@@ -318,77 +317,85 @@
         return;
     }
     
-    // Instanciación del panel de guardado
-    NSSavePanel *save = [NSSavePanel savePanel];
-
-    // Array con la extension/es con las que se exportará la lista de gráficas
-    NSArray *zAryOfExtensions = [NSArray arrayWithObject:typeFile];
-    [save setAllowedFileTypes:zAryOfExtensions];
-
-    // Cadena que contendra el path o ruta donde se alojará el nuevo fichero
-    NSString *selectedFile = [[NSString alloc] init];
-    NSError *error = nil;
-    //NSLog(@"Ventana Desplegada %ld\r", result);
-
-    [save setTitle:@"Guardado de la Lista de Graficas"];
-    [save setMessage:@"Por favor, introduzca el nombre del nuevo fichero."];
-
-    NSInteger result = [save runModal];
-    if (result == NSModalResponseOK) {
-        
-        selectedFile = [[save URL] path];
-        
-        // Compruebo que el fichero no exista en la ruta seleccionada.
-        // En caso contrario, creo el nuevo fichero
-        if (![[NSFileManager defaultManager] fileExistsAtPath:selectedFile]) {
-            [[NSFileManager defaultManager] createFileAtPath: selectedFile contents:nil attributes:nil];
-            NSLog(@"Ruta creada");
-        }
-        
-        // Enviaré el contenido de cada gráfica al fichero como un String
-        // cuyos parametros estarán separados por #
-        NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
-        for (GraphicsClass *graphic in arrayListGraphics){
-            [writeString appendString:[NSString stringWithFormat:@"%@#%@#%f#%f#%f#%f#%@\n",
-                                       [graphic funcName],
-                                       [graphic function],
-                                       [graphic paramA],
-                                       [graphic paramB],
-                                       [graphic paramC],
-                                       [graphic paramN],
-                                       [graphic colour] ]];
-        }
-        
-        NSLog(@"Cadena a enviar %@\n", writeString);
-        BOOL zBoolResult = [writeString writeToURL:[save URL]
-                                        atomically:NO
-                                          encoding:NSASCIIStringEncoding
-                                             error:NULL];
-        
-        // En caso de que la exportación falle
-        if (!zBoolResult) {
-            NSLog(@"writeUsingSavePanel failed");
-        }
-        
-    } else if(result == NSModalResponseCancel) {
-        NSLog(@"doSaveAs we have a Cancel button");
+    if ([self countOfArrayListGraphics] == 0) {
+        NSLog(@"PanelModel: exportGraphicView: Aún no hay gráficas añadidas, introduzca alguna\r");
         return;
     } else {
-        NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
-        return;
-    }
+        // Instanciación del panel de guardado
+        NSSavePanel *save = [NSSavePanel savePanel];
+        
+        // Array con la extension/es con las que se exportará la lista de gráficas
+        NSArray *zAryOfExtensions = [NSArray arrayWithObject:typeFile];
+        [save setAllowedFileTypes:zAryOfExtensions];
+        
+        // Cadena que contendra el path o ruta donde se alojará el nuevo fichero
+        NSString *selectedFile = [[NSString alloc] init];
+        NSError *error = nil;
+        //NSLog(@"Ventana Desplegada %ld\r", result);
+        
+        [save setTitle:@"Guardado de la Lista de Graficas"];
+        [save setMessage:@"Por favor, introduzca el nombre del nuevo fichero."];
+        
+        NSInteger result = [save runModal];
+        if (result == NSModalResponseOK) {
+            
+            selectedFile = [[save URL] path];
+            
+            // Compruebo que el fichero no exista en la ruta seleccionada.
+            // En caso contrario, creo el nuevo fichero
+            if (![[NSFileManager defaultManager] fileExistsAtPath:selectedFile]) {
+                [[NSFileManager defaultManager] createFileAtPath: selectedFile contents:nil attributes:nil];
+                NSLog(@"Ruta creada");
+            }
+            
+            // Enviaré el contenido de cada gráfica al fichero como un String
+            // cuyos parametros estarán separados por #
+            NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
+            for (GraphicsClass *graphic in arrayListGraphics){
+                [writeString appendString:[NSString stringWithFormat:@"%@#%@#%f#%f#%f#%f#%@\n",
+                                           [graphic funcName],
+                                           [graphic function],
+                                           [graphic paramA],
+                                           [graphic paramB],
+                                           [graphic paramC],
+                                           [graphic paramN],
+                                           [graphic colour] ]];
+            }
+            
+            NSLog(@"Cadena a enviar %@\n", writeString);
+            BOOL zBoolResult = [writeString writeToURL:[save URL]
+                                            atomically:NO
+                                              encoding:NSASCIIStringEncoding
+                                                 error:NULL];
+            
+            // En caso de que la exportación falle
+            if (!zBoolResult) {
+                NSLog(@"writeUsingSavePanel failed");
+            }
+            
+        } else if(result == NSModalResponseCancel) {
+            NSLog(@"doSaveAs we have a Cancel button");
+            return;
+        } else {
+            NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
+            return;
+        }
+        
+        /* DEPURACIÓN DE FICHEROS Y RUTAS */
+        NSURL *urlDirectory = [save directoryURL];
+        NSString *saveDirectory = [urlDirectory absoluteString];
+        NSLog(@"doSaveAs directory = %@", saveDirectory);
+        
+        NSString * saveFilename = [save representedFilename];
+        NSLog(@"doSaveAs filename = %@", saveFilename);
+        
+        if (error) {
+            [NSApp presentError:error];
+        }
+        
+    } // End of if-else
+    
 
-    /* DEPURACIÓN DE FICHEROS Y RUTAS */
-    NSURL *urlDirectory = [save directoryURL];
-    NSString *saveDirectory = [urlDirectory absoluteString];
-    NSLog(@"doSaveAs directory = %@", saveDirectory);
-    
-    NSString * saveFilename = [save representedFilename];
-    NSLog(@"doSaveAs filename = %@", saveFilename);
-    
-    if (error) {
-        [NSApp presentError:error];
-    }
 }
 
 /*!
@@ -404,7 +411,7 @@
     
     NSLog(@"Exportar HABILITADO\r");
     
-    // Conjunot de bytes donde se alojara el contenido del NSView para exportarlo a una imagen
+    // Conjunto de bytes donde se alojara el contenido del NSView para exportarlo a una imagen
     NSData *imageData;
     
     // Instancia el panel de Guardado
@@ -415,6 +422,7 @@
     // URL o ruta del fichero exportado y bitmap en el que se añadirá el contenido de la vista
     NSURL *fileURL;
     NSBitmapImageRep *imageRep;
+    NSBitmapImageFileType imageExtension = NSPNGFileType; // Por defecto será de tipo PNG
     
     BOOL wasHidden = view.isHidden;
     CGFloat wantedLayer = view.wantsLayer;
@@ -422,36 +430,56 @@
     view.hidden = NO;
     view.wantsLayer = YES;
     
+    // Objeto imágen donde se alojará el contenido de la vista
     NSImage *image = [[NSImage alloc] initWithSize:view.bounds.size];
+    
+    /*
+     * Se bloquea la representación de la vista para renderizar los bordes en su contexto gráfico
+     * actual y poder lograr sacar su contenido.
+     */
     [image lockFocus];
     CGContextRef ctx = [NSGraphicsContext currentContext].graphicsPort;
     [view.layer renderInContext:ctx];
     [image unlockFocus];
-    
+
+    /*
+     * Al poner la funcionalidad de la vista a YES, se utiliza un objeto CALayer
+     * para manejar el contenido renderizado.
+     */
     view.wantsLayer = wantedLayer;
-    view.hidden = wasHidden;
+    view.hidden = wasHidden; // Vista no está escondida
     
+    // Configuración del SavePanel y las extension en la que se va a exportar
     [save setAllowedFileTypes:[NSArray arrayWithObject:extension]];
-    
     [save setTitle:@"Guardar Grafica como..."];
     [save setMessage:@"Message text."];
     
     NSInteger result = [save runModal];
     NSLog(@"Ventana Desplegada %ld\r", result);
     
+    if ([extension isEqualToString:@"jpeg"]) {
+        imageExtension = NSJPEGFileType;
+    } else if ([extension isEqualToString:@"png"]) {
+        imageExtension = NSPNGFileType;
+    } else if ([extension isEqualToString:@"bmp"]) {
+        imageExtension = NSBMPFileType;
+    }
+    
     if (result == NSModalResponseOK) {
         
         fileURL = [save URL];
         
-        // Reducimos la imagen a través de su representación en formato TIFF
-        // Y comprimimos el conjunto de bits de la imagen en Bitmap orientado a la compresión de imagenes
+        /*
+         * Reducimos la imagen a través de su representación en formato TIFF
+         * Y comprimimos el conjunto de bits de la imagen en un objeto de tipo Bitmap orientado
+         * a la compresión de imagenes.
+         */
         imageData = [image TIFFRepresentation];
         imageRep = [NSBitmapImageRep imageRepWithData:imageData];
         
-        
         NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:1.0]
                                                                forKey:NSImageCompressionFactor];
-        imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
+        imageData = [imageRep representationUsingType:imageExtension properties:imageProps];
         
         BOOL zBoolResult = [imageData writeToURL:fileURL
                                          options:NSDataWritingAtomic
@@ -505,18 +533,21 @@
     }
     
     NSMutableString *s = [[NSMutableString alloc] init];
+    NSMutableString *subS = [[NSMutableString alloc] init];
     NSString *a = [NSString stringWithFormat:@"%f",[graph paramA]];
     NSString *b = [NSString stringWithFormat:@"%f",[graph paramB]];
     NSString *c = [NSString stringWithFormat:@"+%f",[graph paramC]];
     NSString *n = [NSString stringWithFormat:@"%f",[graph paramN]];
     
+    [subS appendString:[graph function]];
+    [subS stringByReplacingOccurrencesOfString:@"a" withString:a];
+    [subS stringByReplacingOccurrencesOfString:@"b" withString:b];
+    [subS stringByReplacingOccurrencesOfString:@"+c" withString:c];
+    [subS stringByReplacingOccurrencesOfString:@"n" withString:n];
+    
     [s appendString:[graph funcName]];
-    [s stringByReplacingOccurrencesOfString:@"a" withString:a];
-    [s stringByReplacingOccurrencesOfString:@"b" withString:b];
-    [s stringByReplacingOccurrencesOfString:@"+c" withString:c];
-    [s stringByReplacingOccurrencesOfString:@"n" withString:n];
     [s appendString:@":"];
-    [s appendString:[graph function]];
+    [s appendString:subS];
     
     NSString *message = [NSString stringWithString:s];
     
