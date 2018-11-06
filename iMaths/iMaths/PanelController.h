@@ -91,14 +91,14 @@
     NSColor *colour;
     
     NSInteger previousSelectedRow;
-    BOOL functionSelectedFlag, BisEnabled ,CisEnabled ,NisEnabled, filterEnabled;
+    BOOL functionSelectedFlag, BisEnabled ,CisEnabled ,NisEnabled, filterEnabled, nameNotRepeated;
     NSNumber *availabilityB , *availabilityC, *availabilityN;
     
 }
 
     /* Manejadoras llamadas tras recibir las notificaciones */
--(void) handleNewGraphicImported:(NSNotification *)aNotification;
 -(void) handleModelReceived:(NSNotification *)aNotification;
+-(void) handleReloadTable:(NSNotification *)aNotification;
 
     /* Métodos Definicion de la Grafica */
 -(void) selectFunction;
@@ -118,7 +118,6 @@
 
     /* Métodos Panel Modificar */
 -(IBAction) showPanel:(id)sender;
--(void) handleGraphicModified:(NSNotification *)aNotification;
 
 
 @end

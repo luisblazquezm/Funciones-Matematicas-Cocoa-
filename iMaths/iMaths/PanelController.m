@@ -96,12 +96,13 @@ extern NSString *PanelGraphicModifiedNotification;
         CisEnabled = NO;
         NisEnabled = NO;
         filterEnabled = NO;
+        nameNotRepeated = NO;
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         
         // Observador de la notificación de importación de datos de fichero
         [nc addObserver:self
-               selector:@selector(handleNewGraphicImported:)
+               selector:@selector(handleReloadTable:)
                    name:NewGraphicImportedNotification
                  object:nil];
         
@@ -113,7 +114,7 @@ extern NSString *PanelGraphicModifiedNotification;
         
         // Observador de la notificación de recepción de la grafica modificada
         [nc addObserver:self
-               selector:@selector(handleGraphicModified:)
+               selector:@selector(handleReloadTable:)
                    name:PanelGraphicModifiedNotification
                  object:nil];
     }
@@ -216,30 +217,12 @@ extern NSString *PanelGraphicModifiedNotification;
     
 }
 
-
 /*!
- * @brief  Recoge la lista de graficas de un fichero enviada desde la ventana principal Controller.
+ * @brief  Recibe la notificación de que la grafica ha sido modificada
+ *         o de una lista de graficas importadas de fichero para
+ *         recargar el contenido de la tabla.
  */
--(void) handleNewGraphicImported:(NSNotification *)aNotification
-{
-    NSLog(@"Notificacion %@ recibida en handleNewGraphicImported\r", aNotification);
-    NSDictionary *notificationInfo = [aNotification userInfo];
-    NSArray *array = [notificationInfo objectForKey:@"graphicsImported"];
-    
-    if (array != nil){
-        [[modelInPanel arrayListGraphics] addObjectsFromArray:array];
-        [listOfCreatedFunctionsTableView reloadData];
-    } else {
-        NSLog(@"PanelController:handleNewGraphicImported: Array recibido es nil");
-    }
-    
-}
-
-/*!
- * @brief  Recibe la notificación de que la grafica ha sido modificada para
- *         recargar el contenido de la tabla
- */
--(void) handleGraphicModified:(NSNotification *)aNotification
+-(void) handleReloadTable:(NSNotification *)aNotification
 {
     NSLog(@"Notificacion %@ recibida en handleNewGraphicImported\r", aNotification);
     [listOfCreatedFunctionsTableView reloadData];
@@ -258,6 +241,7 @@ extern NSString *PanelGraphicModifiedNotification;
     CisEnabled = NO;
     NisEnabled = NO;
     functionSelectedFlag = NO;
+    nameNotRepeated = NO;
     
     // Desactivación de botones y campos
     [addGraphicButton setEnabled:NO];
@@ -319,6 +303,7 @@ extern NSString *PanelGraphicModifiedNotification;
 {
     function = [selectListFuncComboBox objectValueOfSelectedItem];
     NSLog(@"Funcion %@ escogida\r", function);
+
 }
 
 /*!
@@ -334,9 +319,9 @@ extern NSString *PanelGraphicModifiedNotification;
         [functionDefLabel setHidden:NO];
         [functionDefLabel setTextColor:[NSColor redColor]];
         [functionDefLabel setStringValue:@"Nombre de Grafica Ya Existente"];
-        functionSelectedFlag = NO;
+        nameNotRepeated = NO;
     } else {
-        functionSelectedFlag = YES;
+        nameNotRepeated = YES;
     }
     
     [functionDefLabel setTextColor:[NSColor blackColor]];
@@ -388,6 +373,8 @@ extern NSString *PanelGraphicModifiedNotification;
     [maxRangeXField setStringValue:[arrayXMax  componentsJoinedByString:@""]];
     [minRangeYField setStringValue:[arrayYMin  componentsJoinedByString:@""]];
     [maxRangeYField setStringValue:[arrayYMax  componentsJoinedByString:@""]];
+    
+    NSLog(@"Formateador aplicado");
 }
 
 /*!
@@ -491,6 +478,7 @@ extern NSString *PanelGraphicModifiedNotification;
     // Tienen que cumplirse los parametros para habilitar el boton 'Añadir'
     if([name length] != 0 &&
        [function length] != 0 &&
+       nameNotRepeated &&
        (
         ([selectParamAField isEnabled] && [selectParamBField isEnabled] && ![selectParamCField isEnabled] && paramA != 0 && paramB != 0) ||
         ([selectParamAField isEnabled] && [selectParamNField isEnabled] && paramA != 0 && paramN != 0) ||
@@ -539,11 +527,6 @@ extern NSString *PanelGraphicModifiedNotification;
   
     NSLog(@"Grafica nueva guardada en tabla\r");
     [listOfCreatedFunctionsTableView reloadData];
-    
-    // Deshabilito todo
-    availabilityB = [[NSNumber alloc]initWithBool:BisEnabled];
-    availabilityC  = [[NSNumber alloc]initWithBool:CisEnabled];
-    availabilityN  = [[NSNumber alloc]initWithBool:NisEnabled];
 
     [self deactivateFields];
 
@@ -614,19 +597,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 }
 
-
-/*!
- * @brief  Permite editar y sobreescribir el nombre del objeto
- *         cuya fila ha sido seleccionada en la tabla.
- */
--(void) tableView:(NSTableView *)tableView
-   setObjectValue:(nullable id)object
-   forTableColumn:(nullable NSTableColumn *)tableColumn
-              row:(NSInteger)row
-{
-    [[modelInPanel arrayListGraphics] setObject:object atIndexedSubscript:row];
-}
-
 /*!
  * @brief  Aplica a la tabla un descriptor de ordenamiento (en nuestro caso nombres por orden
  *         alfabético) para una o varias columnas
@@ -675,8 +645,9 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     [self fomatterOnlyRealNumbers];
     
     /*
-     * Si los rangos se cambian de valor no podrán tener el máximo y el mínimo con el mismo valor
-     * porque la gráfica no se mostraría. Por defecto si no se añade nada será 0.
+     * Si los rangos se cambian de valor no podrán tener el máximo y el mínimo con
+     * el mismo valor porque la gráfica no se mostraría.
+     * Por defecto si no se añade nada será 0.
      */
     
     if ([maxRangeYField floatValue] == [minRangeYField floatValue] && [minRangeYField floatValue] != 0 && [maxRangeYField floatValue] != 0) {
@@ -723,7 +694,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 
 /*!
  * @brief  Función que es notificada cada vez que se escribe
- *         un caracter dentro del textField
+ *         un caracter dentro del textField (Controla la introduccion de parametros de la grafica)
  */
 -(IBAction) controlTextDidChange:(NSNotification *)obj;
 {
@@ -753,14 +724,16 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
             [self selectName];
             
             // Se activa en comboBoxSelectionDidChange
-            if(functionSelectedFlag){
-                
-                // Progreso parcial (Apariencia amarilla)
-                [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
-                [functionDefLabel setHidden:NO];
-                [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+            if(functionSelectedFlag) {
                 
                 [self selectParameters];
+                
+                if (nameNotRepeated) {
+                    // Progreso parcial (Apariencia amarilla)
+                    [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+                    [functionDefLabel setHidden:NO];
+                    [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+                }
 
             }
         
@@ -891,18 +864,16 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
  */
 -(IBAction) deleteGraphic:(id)sender
 {
-    NSInteger aRowSelected = [listOfCreatedFunctionsTableView selectedRow];
+    NSIndexSet *rowsSelected = [[NSIndexSet alloc] init];
+    rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
     /*
      * Orden que deniega la edición al usuario (Es necesrio en el caso en el que
      * el usuario intente editar un campo y pulse el botón eliminar (produce un bug)
      */
     [listOfCreatedFunctionsTableView abortEditing];
-    if (aRowSelected != -1) {
-        [modelInPanel deleteGraphicAtIndex:aRowSelected];
-        NSLog(@"Cadena eliminada en array en pos %ld\r", aRowSelected);
-        [listOfCreatedFunctionsTableView reloadData];
-    }
-
+    [modelInPanel deleteGraphicAtIndexes:rowsSelected];
+    NSLog(@"Cadena/s eliminada/s en array\r");
+    [listOfCreatedFunctionsTableView reloadData];
 }
 
 /*!
@@ -924,6 +895,10 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     if (RowSelected != -1) {
         // Se guarda el indice de la gráfica a modificar en el modelo
         [modelInPanel setRowSelectedToModify:RowSelected];
+        
+        availabilityB = [[NSNumber alloc]initWithBool:BisEnabled];
+        availabilityC  = [[NSNumber alloc]initWithBool:CisEnabled];
+        availabilityN  = [[NSNumber alloc]initWithBool:NisEnabled];
         
         NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                           modelInPanel,@"modelInPanel",

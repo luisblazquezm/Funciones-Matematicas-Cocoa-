@@ -59,12 +59,14 @@
 -(GraphicsClass*) getGraphicToModify;
 -(void) graphicModified:(GraphicsClass*)graph;
 -(void) arrayOfGraphicToDrawInIndexes:(NSIndexSet*)indexArray;
--(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
--(NSMutableArray*) importListOfGraphics;
+-(void) deleteGraphicAtIndexes:(NSIndexSet*)graphicDeletedIndexes;
+-(BOOL) importListOfGraphics;
 -(void) exportListOfGraphicsTo:(NSString*)typeFile;
 -(void) exportGraphicView:(NSView*)view To:(NSString*)extension;
 -(NSInteger) countOfArrayListGraphics;
 -(NSString*) graphicLabelInfo:(GraphicsClass*)graph;
+-(NSString*) stringRepresentationOf:(NSColor*) colour;
+-(NSColor*) colorFromString:(NSString*)string forColorSpace:(NSColorSpace*)colorSpace;
 
 
 @end

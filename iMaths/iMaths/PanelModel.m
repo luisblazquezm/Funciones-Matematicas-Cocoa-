@@ -198,24 +198,24 @@
 /*!
  * @brief  Elimina el objeto grafica que se acaba de eliminar de la tabla del panel 'Preferencias' en
  *         array de graficas.
- * @param  graphicDeletedIndex Posición en el array de graficas de la grafica que se desea eliminar de
+ * @param  graphicDeletedIndexes Posición en el array de graficas de la grafica que se desea eliminar de
  *         la tabla.
  */
--(void) deleteGraphicAtIndex:(NSInteger)graphicDeletedIndex;
+-(void) deleteGraphicAtIndexes:(NSIndexSet*)graphicDeletedIndexes;
 {
-    if (graphicDeletedIndex == -1){
+    if (graphicDeletedIndexes == nil){
         NSLog(@"PanelModel: deleteGraphicAtIndex: Indice es -1\r");
         return;
     }
     
-    [arrayListGraphics removeObjectAtIndex:graphicDeletedIndex];
+    [arrayListGraphics removeObjectsAtIndexes:graphicDeletedIndexes];
 }
 
 /*!
  * @brief  Importa la información de un conjunto de gráficas de un fichero.
  * @return NSMutableArray Devuelve el array de graficas que se ha importado de un fichero
  */
--(NSMutableArray*) importListOfGraphics
+-(BOOL) importListOfGraphics
 {
     // Instanciación del panel de apertura
     NSOpenPanel *open = [NSOpenPanel openPanel];
@@ -238,14 +238,15 @@
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
     // Parametros que se van a recoger de la grafica.
-    GraphicsClass *graphicExported;
+    GraphicsClass *graphicExported = [[GraphicsClass alloc] init];
     NSString *name = [[NSString alloc] init];
     NSString *func = [[NSString alloc] init];
     float a = 0;
     float b = 0;
     float c = 0;
     float n = 0;
-    NSString *color = [[NSString alloc] init];
+    NSString * colorString = [[NSString alloc] init];
+    NSColor *color = [[NSColor alloc] init];
     
 
     result = [open runModal];
@@ -260,6 +261,10 @@
         // Cada linea del fichero será una grafica (una serie de parametros delimitados por #)
         // En este caso, cada grafica esta separada por \n
         items = [imported componentsSeparatedByString:graphicsDelimiter];
+        if (items == nil || [items count] == 0){
+            NSLog(@"PanelModel: importListOfGraphics: Objeto no recuperado\r");
+            return NO;
+        }
         
         // Va recorriendo
         for (NSString *item in items){
@@ -267,13 +272,40 @@
             
             // Divide los parametros del string a partir del delimitador y los añade a los indices de un array
             NSArray *foo = [item componentsSeparatedByString:parametersDelimiter];
+            if (foo == nil){
+                NSLog(@"PanelModel: importListOfGraphics: Parámetros no recuperados\r");
+                return NO;
+            }
+            
             name = [foo objectAtIndex: 0];
+            if (name == nil){
+                NSLog(@"PanelModel: importListOfGraphics: name es nil\r");
+                return NO;
+            }
+            
             func = [foo objectAtIndex: 1];
+            if (func == nil){
+                NSLog(@"PanelModel: importListOfGraphics: func es nil\r");
+                return NO;
+            }
+            
             a = [[foo objectAtIndex: 2] floatValue];
             b = [[foo objectAtIndex: 3] floatValue];
             c = [[foo objectAtIndex: 4] floatValue];
             n = [[foo objectAtIndex: 5] floatValue];
-            color = [foo objectAtIndex: 6];
+            
+            colorString = [foo objectAtIndex: 6];
+            if (colorString == nil){
+                NSLog(@"PanelModel: importListOfGraphics: colorString es nil\r");
+                return NO;
+            }
+            
+            // Recupera el color como un NSString y a través de un metodo lo transforma en NSColor
+            color = [self colorFromString:colorString forColorSpace:[NSColorSpace deviceRGBColorSpace]];
+            if (color == nil){
+                NSLog(@"PanelModel: importListOfGraphics: color es nil\r");
+                return NO;
+            }
             
             graphicExported = [[GraphicsClass alloc] initWithGraphicName:name
                                                                 function:func
@@ -281,7 +313,7 @@
                                                                   paramB:b
                                                                   paramC:c
                                                                   paramN:n
-                                                                  colour:nil];
+                                                                  colour:color];
             [array addObject:graphicExported];
             ++i;
             
@@ -293,17 +325,19 @@
     
     } else if(result == NSModalResponseCancel) { // Si se pulsa cancelar
         NSLog(@"Botón Cancelar Pulsado");
-        return nil;
+        return NO;
     } else {
         NSLog(@"doSaveAs tvarInt not equal 1 or zero = %3ld", result);
-        return nil;
+        return NO;
     }
     
     if (error) {
         [NSApp presentError:error];
     }
     
-    return array;
+    [arrayListGraphics addObjectsFromArray:array];
+    
+    return YES;
 }
 
 /*!
@@ -331,7 +365,7 @@
         // Cadena que contendra el path o ruta donde se alojará el nuevo fichero
         NSString *selectedFile = [[NSString alloc] init];
         NSError *error = nil;
-        //NSLog(@"Ventana Desplegada %ld\r", result);
+        NSString *colorString = [[NSString alloc] init];
         
         [save setTitle:@"Guardado de la Lista de Graficas"];
         [save setMessage:@"Por favor, introduzca el nombre del nuevo fichero."];
@@ -352,6 +386,12 @@
             // cuyos parametros estarán separados por #
             NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
             for (GraphicsClass *graphic in arrayListGraphics){
+                colorString = [self stringRepresentationOf:[graphic colour]];
+                if (colorString == nil){
+                    NSLog(@"PanelModel: exportListOfGraphics: colorString es nil\r");
+                    return;
+                }
+                
                 [writeString appendString:[NSString stringWithFormat:@"%@#%@#%f#%f#%f#%f#%@\n",
                                            [graphic funcName],
                                            [graphic function],
@@ -359,7 +399,7 @@
                                            [graphic paramB],
                                            [graphic paramC],
                                            [graphic paramN],
-                                           [graphic colour] ]];
+                                           colorString]];
             }
             
             NSLog(@"Cadena a enviar %@\n", writeString);
@@ -552,6 +592,60 @@
     NSString *message = [NSString stringWithString:s];
     
     return message;
+}
+
+/*!
+ * @brief  Devuelve la representación del color en formato NSString
+ * @param  colour Color de la grafica
+ * @return NSString Cadena que contiene el color en otro formato para ser exportado
+ */
+- (NSString*) stringRepresentationOf:(NSColor*) colour
+{
+    if (colour == nil){
+        NSLog(@"PanelModel: stringRepresentationOf: colour es nil\r");
+        return nil;
+    }
+    
+    CGFloat components[10];
+    [colour getComponents:components];
+    NSMutableString *string = [NSMutableString string];
+    for (int i = 0; i < [colour numberOfComponents]; i++) {
+        [string appendFormat:@"%f ", components[i]];
+    }
+    [string deleteCharactersInRange:NSMakeRange([string length]-1, 1)]; // Corta el espacio sobrante
+    
+    // Se podria pasar el color como NSData pero hay problemas de formato con los otros parametros
+    return string;
+}
+
+/*!
+ * @brief  Devuelve el color a su formato original a partir de la información en forma de NSString importada de fichero
+ * @param  string Color de la grafica pasada o importada de fichero como una cadena
+ *         colorSpace Espacio de colores en los que se representará el color devuelto (RGB por defecto)
+ * @return NSColor Color formateado desde NSString
+ */
+- (NSColor*) colorFromString:(NSString*)string forColorSpace:(NSColorSpace*)colorSpace
+{
+    if (string == nil || colorSpace == nil){
+        NSLog(@"PanelModel: colorFromString: parametros nil\r");
+        return nil;
+    }
+    
+    CGFloat components[10];    // Los espacios de colores necesitan entre 10 y más espacios
+    NSArray *componentStrings = [string componentsSeparatedByString:@" "];
+    int count = (int)[componentStrings count];
+    NSColor *color = nil;
+    if (count <= 10) {
+        /*
+         * Cada indice del array componentes contiene cada uno de los componentes(en formato CGfloat -> un numero)
+         * de la paleta de colores necesarios para formar el NSColor correspondiente
+         */
+        for (int i = 0; i < count; i++) {
+            components[i] = [[componentStrings objectAtIndex:i] floatValue];
+        }
+        color = [NSColor colorWithColorSpace:colorSpace components:components count:count];
+    }
+    return color;
 }
 
 @end

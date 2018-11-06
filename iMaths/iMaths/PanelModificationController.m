@@ -140,7 +140,6 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         return;
     }
     
-    
     BisEnabled = [availabilityB boolValue];
     CisEnabled = [availabilityC boolValue];
     NisEnabled = [availabilityN boolValue];
@@ -155,9 +154,6 @@ NSString *PanelGraphicModifiedNotification = @"PanelGraphicModified";
         
     if (NisEnabled)
         [newParamNField setEnabled:YES];
-        
-    // Inicializa el array del modelo de funciones
-    [modelInPanel initializeArrayListFunctions];
     
     GraphicsClass *graphic = [modelInPanel getGraphicToModify];
     if (graphic == nil) {

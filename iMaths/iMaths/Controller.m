@@ -317,18 +317,15 @@ extern NSString *ShowLegendNotification;
 -(IBAction) importTableGraphics:(id)sender
 {
 
-    NSMutableArray *array = [model importListOfGraphics];
+    BOOL isImported = [model importListOfGraphics];
     
-    if (array != nil) {
-        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObject:array
-                                                                     forKey:@"graphicsImported"];
-        
+    if (isImported) {
+        // Se avisa al PanelController para que recargue el contenido de la tabla
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc postNotificationName:NewGraphicImportedNotification
-                          object:self
-                        userInfo:notificationInfo];
+                          object:self];
     } else {
-        NSLog(@"Se ha cancelado la importación, el array es nil");
+        NSLog(@"ERROR:Controller:importTableGraphics: Se ha cancelado la importación, el array es nil");
     }
     
 }
