@@ -175,16 +175,16 @@ withGraphicsContext:(NSGraphicsContext*)ctx
                   funcRect.size.height);
             
             // Se cambia el funcRect si se introducen los limites en el panel 'Preferencias'
-            if (limit.origin.x != 0)
+            if (limit.origin.x != 0) // minX
                 limitOfDrawing.origin.x = limit.origin.x;
             
-            if (limit.origin.y != 0)
+            if (limit.origin.y != 0) // minY
                 limitOfDrawing.origin.y = limit.origin.y;
             
-            if (limit.size.width != 0)
+            if (limit.size.width != 0) // maxX
                 limitOfDrawing.size.width = limit.size.width;
             
-            if (limit.size.height != 0)
+            if (limit.size.height != 0) // maxY
                 limitOfDrawing.size.height = limit.size.height;
             
             NSLog(@"Nuevo FunRect: oX: %f oY: %f width: %f height: %f", limitOfDrawing.origin.x,
@@ -203,6 +203,13 @@ withGraphicsContext:(NSGraphicsContext*)ctx
             while (aPoint.x <= limitOfDrawing.size.width) {
                 NSLog(@"Point: %f %f", aPoint.x, aPoint.y);
                 aPoint.y = [self valueAt:aPoint.x];
+                
+                // Si superan el valor definido en maxY
+                if (limit.size.height != 0 && aPoint.y > 0 && aPoint.y > limit.size.height)
+                    aPoint.y = limit.size.height;
+                else if (limit.origin.y != 0 && aPoint.y < 0 && aPoint.y < limit.origin.y)
+                    aPoint.y = limit.origin.y;
+                
                 [funcBezier lineToPoint:aPoint];
                 aPoint.x += distance;
             }

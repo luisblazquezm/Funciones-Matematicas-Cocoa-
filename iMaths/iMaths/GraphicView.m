@@ -7,9 +7,11 @@
 //
 
 #import "GraphicView.h"
+
 #define RANDFLOAT() (random()%128/128.0)
 #define HOPS (500) // Numero de puntos
 #define WIDTH (20)
+
 static const int zoom = 20;
 static NSRect funcRect = {-10, -10, 20 ,20}; 
 

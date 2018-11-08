@@ -189,11 +189,10 @@ extern NSString *ShowLegendNotification;
         zoomIsRestored = YES;
         [graphicRepresentationView setNeedsDisplay:YES];
         // De aqui llama al drawRect de la clase "GraphicView"
-    }
-    
-    
+        
     // Modela la representación de los objetos que se visualizarán dentro del 'Custom View': ejes, graficas,...
-    if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
+    } else if (oX != nil && oY != nil && alt != nil && anch != nil && ctx != nil) {
+        NSLog(@"Representación de la grafica");
         // Variables locales
         NSArray *array = [[NSArray alloc] init];
         
@@ -212,34 +211,36 @@ extern NSString *ShowLegendNotification;
               limit.size.height);
         
         array = [model arrayOfGraphicsToRepresent];
-        if (array == nil)
+        if (array == nil) {
             NSLog(@"Controller:handleDrawGraphics: Array de graficas a representar es nil");
+            return;
+        }
+        
+        // Se dibujan los ejes
+        [graphicRepresentationView drawAxisAndPoints];
         
         if ([array count] != 0 && array != nil) {
             NSLog(@"Entrar para dibujar");
-            
-            [graphicRepresentationView drawAxisAndPoints];
             
             if (zoomIsRestored) {
                 NSLog(@"Zoom is Restored");
                 graphicIsZoomed = NO;
             }
             
-            NSLog(@"Valor Zoom antes de dibujar: %hhd", graphicIsZoomed);
             for (GraphicsClass *g in array) {
+                // Se dibujan las graficas
                 [g drawInRect:bounds withGraphicsContext:ctx andLimits:limit isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
                 
+                // Se muestra en un label encima de la vista la información del nombre y funcion representada
                 s = [model graphicLabelInfo:g];
                 [self sendLabel:s];
             }
             NSLog(@"Grafica Representada");
             
-        } else {
-            [graphicRepresentationView drawAxisAndPoints];
         }
         
         zoomIsRestored = NO;
-    }
+    } // End of if-else
 
 }
 

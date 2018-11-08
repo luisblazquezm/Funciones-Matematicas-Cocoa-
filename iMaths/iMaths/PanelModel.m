@@ -8,6 +8,7 @@
 
 #import "PanelModel.h"
 #import "GraphicsClass.h"
+#define NUM_PARAM 7
 
 @implementation PanelModel
 @synthesize arrayListFunctions, arrayListGraphics, parametersC, parametersN, parametersB , arrayOfGraphicsToRepresent, rowSelectedToModify, arrayFilteredGraphics;
@@ -220,6 +221,7 @@
     // Instanciación del panel de apertura
     NSOpenPanel *open = [NSOpenPanel openPanel];
     
+    BOOL funcFound = NO;
     int i = 0;
     NSInteger result = 0;
     NSError *error = nil;
@@ -266,6 +268,7 @@
             return NO;
         }
         
+
         // Va recorriendo
         for (NSString *item in items){
             NSLog(@"Objeto recuperado: %@\n", item);
@@ -275,17 +278,40 @@
             if (foo == nil){
                 NSLog(@"PanelModel: importListOfGraphics: Parámetros no recuperados\r");
                 return NO;
+                
+            // El array tiene que contener 7 elementos (los 7 parámetros de una gráfica)
+            } else if ([foo count] != NUM_PARAM) {
+                NSLog(@"PanelModel: importListOfGraphics: No se han recogido 7 parametros\r");
+                return NO;
             }
-            
+        
             name = [foo objectAtIndex: 0];
             if (name == nil){
                 NSLog(@"PanelModel: importListOfGraphics: name es nil\r");
                 return NO;
             }
             
+            // Si el nombre ya está contenido en la tabla, este se cambia
+            if ([self containsName:name])
+                name = [name stringByAppendingString:@"_imported"];
+            
+            
             func = [foo objectAtIndex: 1];
             if (func == nil){
                 NSLog(@"PanelModel: importListOfGraphics: func es nil\r");
+                return NO;
+            }
+            
+            // Comprueba que la función este en la lista de funciones
+            for (NSString* f in arrayListFunctions) {
+                if ([func isEqualToString:f]){
+                    funcFound = YES;
+                    break;
+                }
+            }
+            
+            if (!funcFound) {
+                NSLog(@"PanelModel: importListOfGraphics: Funcion importada no pertenece a una función del programa\r");
                 return NO;
             }
             
@@ -320,7 +346,7 @@
             // OJO esto es porque siempre coge una linea en blanco y la toma como otro string más
             if ([items count] == (i+1))
                 break;
-            
+
         } // End of for
     
     } else if(result == NSModalResponseCancel) { // Si se pulsa cancelar

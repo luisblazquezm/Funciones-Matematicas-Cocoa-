@@ -11,7 +11,8 @@
 
 @interface GraphicView : NSView
 {
-    IBOutlet __weak Controller *controller;
+    // Comunicación de la vista y el controlador a través de notificaciones
+    //IBOutlet __weak Controller *controller;
     
     /* Variables de instancia */
 

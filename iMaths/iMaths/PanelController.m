@@ -10,7 +10,6 @@
 #import "PanelModel.h"
 #import "GraphicsClass.h"
 #import "PanelModificationController.h"
-#import "ParametersNumberFormatter.h"
 
 /* --------- Esquema metodos ---------
  *   > Inicializadores
@@ -463,6 +462,69 @@ extern NSString *PanelGraphicModifiedNotification;
 }
 
 /*!
+ * @brief  Función que es notificada cada vez que se escribe
+ *         un caracter dentro del textField (Controla la introduccion de parametros de la grafica)
+ */
+-(IBAction) controlTextDidChange:(NSNotification *)obj;
+{
+    
+    /*
+     *--------- Definicion Funcion ------------
+     */
+    
+    if ([obj object] == searchField) {
+        NSLog(@"Llamando a applyFilter");
+        
+        // LLamada al metodo de filtrado de la tabla
+        [self applyFilterWithString:[searchField stringValue]];
+        
+    } else if ([obj object] == maxRangeXField || [obj object] == minRangeXField
+               || [obj object] == maxRangeYField || [obj object] == minRangeYField) {
+        [self selectLimits];
+    } else {
+        
+        [self selectFunction];
+        
+        if ([function length] > 0) {
+            
+            // Progreso parcial (Apariencia amarilla)
+            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+            
+            [self selectName];
+            
+            // Se activa en comboBoxSelectionDidChange
+            if(functionSelectedFlag) {
+                
+                [self selectParameters];
+                
+                if (nameNotRepeated) {
+                    // Progreso parcial (Apariencia amarilla)
+                    [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
+                    [functionDefLabel setHidden:NO];
+                    [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
+                }
+                
+            }
+            
+            // Progreso parcial (Apariencia amarilla)
+            [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+            
+            [self selectColour];
+            
+        } else {
+            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
+            [functionDefLabel setHidden:NO];
+            [functionDefLabel setStringValue:@"¡La función es lo primero!"];
+            [selectGraphicNameField setStringValue:@""];
+        }
+        
+        [self checkAddGraphicIsAvailable];
+    }
+    
+}
+
+
+/*!
  * @brief  Comprueba que todos los datos introducidos para la creación de la grafica han sido
  *         introducidos
  */
@@ -692,67 +754,6 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
     [limitsLabel setStringValue:@"Limites correctos"];
 }
 
-/*!
- * @brief  Función que es notificada cada vez que se escribe
- *         un caracter dentro del textField (Controla la introduccion de parametros de la grafica)
- */
--(IBAction) controlTextDidChange:(NSNotification *)obj;
-{
-    
-    /*
-     *--------- Definicion Funcion ------------
-     */
-    
-    if ([obj object] == searchField) {
-        NSLog(@"Llamando a applyFilter");
-        
-        // LLamada al metodo de filtrado de la tabla
-        [self applyFilterWithString:[searchField stringValue]];
-        
-    } else if ([obj object] == maxRangeXField || [obj object] == minRangeXField
-               || [obj object] == maxRangeYField || [obj object] == minRangeYField) {
-        [self selectLimits];
-    } else {
-        
-        [self selectFunction];
-        
-        if ([function length] > 0) {
-            
-            // Progreso parcial (Apariencia amarilla)
-            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            
-            [self selectName];
-            
-            // Se activa en comboBoxSelectionDidChange
-            if(functionSelectedFlag) {
-                
-                [self selectParameters];
-                
-                if (nameNotRepeated) {
-                    // Progreso parcial (Apariencia amarilla)
-                    [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusAvailable]];
-                    [functionDefLabel setHidden:NO];
-                    [functionDefLabel setStringValue:@"Función y Nombre introducidos"];
-                }
-
-            }
-        
-            // Progreso parcial (Apariencia amarilla)
-            [parametersProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            
-            [self selectColour];
-            
-        } else {
-            [functionDefProgressButton setImage:[NSImage imageNamed:NSImageNameStatusPartiallyAvailable]];
-            [functionDefLabel setHidden:NO];
-            [functionDefLabel setStringValue:@"¡La función es lo primero!"];
-            [selectGraphicNameField setStringValue:@""];
-        }
-
-        [self checkAddGraphicIsAvailable];
-    }
-    
-}
 
 /*!
  * @brief  Metodo que filtra en la tabla las graficas que coincidan con la cadena
