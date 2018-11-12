@@ -226,6 +226,7 @@
  */
 -(BOOL) importListOfGraphics
 {
+    [self initializeArrayListFunctions];
     // Instanciación del panel de apertura
     NSOpenPanel *open = [NSOpenPanel openPanel];
     
