@@ -217,7 +217,8 @@ extern NSString *ShowLegendNotification;
         }
         
         // Se dibujan los ejes
-        [graphicRepresentationView drawAxisAndPoints];
+        
+        [model drawAxisAndPoints:bounds withGraphicsContext:ctx isZoomed:graphicIsZoomed withMovement:graphicIsMoved w:wid h:heig];
         
         if ([array count] != 0 && array != nil) {
             NSLog(@"Entrar para dibujar");

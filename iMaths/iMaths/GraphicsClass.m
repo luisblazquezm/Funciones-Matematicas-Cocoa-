@@ -72,7 +72,7 @@ static NSRect funcRect = {-10, -10, 20 ,20};
  */
 -(float)valueAt:(float)x{
     float resultY = 0;
-    
+
     if ([[self function] isEqualToString:@"a*sen(b*x)"]) {
         resultY = [self paramA] * sinf( ([self paramB] * x) );
     } else if ([[self function] isEqualToString:@"a*x+b"]) {
@@ -86,6 +86,9 @@ static NSRect funcRect = {-10, -10, 20 ,20};
     } else { // @"a/(b*x)"
         resultY = [self paramA] / ([self paramB] * x);
     }
+    
+    NSLog(@"Funcion %@ %f =  %f * %f + %f\n", [self function], resultY, [self paramA], x, [self paramB]);
+    
     return resultY;
 }
 

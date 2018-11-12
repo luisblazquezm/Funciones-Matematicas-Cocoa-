@@ -809,9 +809,7 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
 -(IBAction) drawGraphic:(id)sender
 {
     float varXMax = 0, varXMin = 0, varYMax = 0, varYMin = 0;
-    NSMutableArray *graphicsToRepresent = [[NSMutableArray alloc] init];
-    NSIndexSet *rowsSelected = [[NSIndexSet alloc] init];
-    rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
+    NSIndexSet *rowsSelected = [listOfCreatedFunctionsTableView selectedRowIndexes];
     
     NSLog(@"Enviando notificación para dibujar");
     [limitsLabel setHidden:YES];
@@ -845,12 +843,11 @@ sortDescriptorsDidChange:(NSArray<NSSortDescriptor *> *)oldDescriptors
         NSNumber *YMax = [[NSNumber alloc]initWithFloat:varYMax];
         NSNumber *YMin = [[NSNumber alloc]initWithFloat:varYMin];
     
-        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:graphicsToRepresent,@"graphicsToRepresent",
-                                         XMax,@"XMax",
-                                         XMin,@"XMin",
-                                         YMax,@"YMax",
-                                         YMin,@"YMin",
-                                         nil];
+        NSDictionary *notificationInfo = [NSDictionary dictionaryWithObjectsAndKeys:XMax,@"XMax",
+                                                                                     XMin,@"XMin",
+                                                                                     YMax,@"YMax",
+                                                                                     YMin,@"YMin",
+                                                                                     nil];
         
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc postNotificationName:DrawGraphicsNotification

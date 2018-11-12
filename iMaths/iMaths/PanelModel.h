@@ -8,8 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 @class GraphicsClass;
-
+#define RANDFLOAT() (random()%128/128.0)
+#define HOPS (500) // Numero de puntos
 #define NUM_DEFAULT_FUNCTIONS 6
+
+static NSRect funcRect = {-10, -10, 20 ,20}; 
 
 @interface PanelModel : NSObject
 {
@@ -27,6 +30,9 @@
     NSArray *arrayOfGraphicsToRepresent;
     // Indice de la grafica del arrayListGraphics que se va a modificar
     NSInteger rowSelectedToModify;
+    float zoomQuant;
+    NSColor *colorAxis;
+    NSBezierPath *funcBezier, *axisXBezier, *axisYBezier, *pointsAxisXBezier, *pointsAxisYBezier;
 
 }
 
@@ -67,6 +73,12 @@
 -(NSString*) graphicLabelInfo:(GraphicsClass*)graph;
 -(NSString*) stringRepresentationOf:(NSColor*) colour;
 -(NSColor*) colorFromString:(NSString*)string forColorSpace:(NSColorSpace*)colorSpace;
+-(void) drawAxisAndPoints:(NSRect)b
+      withGraphicsContext:(NSGraphicsContext*)ctx
+                 isZoomed:(BOOL)zoom
+             withMovement:(BOOL)move
+                        w:(float)width
+                        h:(float)height;
 
 
 @end

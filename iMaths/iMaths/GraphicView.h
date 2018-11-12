@@ -17,13 +17,10 @@
     /* Variables de instancia */
 
     NSPoint startPoint, endPoint, clickInView;
-    NSColor *colorAxis;
-    NSBezierPath *funcBezier, *axisXBezier, *axisYBezier, *pointsAxisXBezier, *pointsAxisYBezier;
-    float zoomQuant, zoomCoordenateX, zoomCoordenateY;
+    float zoomCoordenateX, zoomCoordenateY;
     BOOL graphicIsZoomed, mouseDraggedFlag, graphicIsMoved;// * Flags *
 }
 
--(void) drawAxisAndPoints;
 -(void) restoreView:(BOOL)flag;
 
 @end
