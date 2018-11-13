@@ -1,0 +1,16 @@
+-- OBSERVACIONES --
+
+	> El metodo 'drawAxesAndPoints' de la clase PanelModel podría funcionar igualmente bien
+          en la clase de la vista GraphicView. La diferencia es que en el modelo almaceno los valores
+          de los BezierPaths y los colores si estos se quisieran cambiar en tiempo de ejecución y facilitando la flexibilidad
+          y reduciendo el acoplamiento.
+	> Hay algunas variables que se instancian de más , y aunque no afectan al comportamiento normal del programa , 
+          suponen un trabajo extra para el ARC, pues casi todos los casos
+          se hace el alloc init correspondiente seguido de un metodo que devuelve una instancia de ese mismo objeto.
+        > El uso excesivo de notificaciones no es una mala práctica de programación, en mi caso favorece la reducción
+          del acoplamiento del controlador con la vista y el modelo respectivamente; aunque ya que en este caso hacemos
+          uso de la arquitectura MVC que conlleva un claro ejemplo de acoplamiento entre dichas clases, lo suyo sería 
+          aprovechar ese acoplamiento utilizando una instancia de cada clase (PanelController en Controller por ejemplo)
+          , y sea a través de esta instancia donde se aloje o se envie la instancia del modelo así como otro tipo de datos
+          ([instanciaPanelController setModel:instanciaModelo] por ejemplo).
+                   
