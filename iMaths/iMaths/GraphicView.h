@@ -18,7 +18,7 @@
 
     NSPoint startPoint, endPoint, clickInView;
     float zoomCoordenateX, zoomCoordenateY;
-    BOOL graphicIsZoomed, mouseDraggedFlag, graphicIsMoved;// * Flags *
+    BOOL graphicIsZoomed, mouseDraggedFlag, graphicIsMoved, flippedFlag;// * Flags *
 }
 
 -(void) restoreView:(BOOL)flag;

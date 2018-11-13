@@ -42,11 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iMaths/GraphicView.m"
-            timestampString = "563748190.931833"
+            timestampString = "563786964.355099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207">
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "GraphicView"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

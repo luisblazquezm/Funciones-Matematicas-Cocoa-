@@ -36,6 +36,7 @@ NSString *ShowLegendNotification = @"ShowLegend";
         graphicIsZoomed = NO;
         mouseDraggedFlag = NO;
         graphicIsMoved = NO;
+        flippedFlag = NO;
         zoomCoordenateX = 0;
         zoomCoordenateY = 0;
     }
@@ -99,7 +100,10 @@ NSString *ShowLegendNotification = @"ShowLegend";
  * @return BOOL Devuelve si
  */
 - (BOOL) isFlipped {
-    return YES;
+    if (flippedFlag)
+        return YES;
+    else
+        return NO;
 }
 
 /*!
@@ -130,7 +134,9 @@ NSString *ShowLegendNotification = @"ShowLegend";
 - (void)mouseDown:(NSEvent *)theEvent {
     NSPoint new;
     NSRect bounds = [self bounds];
-
+    
+    flippedFlag = YES;
+    
     // Punto de la vista donde se pulsa con el botón izquierdo del ratón
     startPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     clickInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -156,6 +162,9 @@ NSString *ShowLegendNotification = @"ShowLegend";
     NSLog(@"Click in view X: %f Y: %f", new.x, new.y);
     NSNumber *Xleyend = [[NSNumber alloc]initWithFloat:new.x];
     NSNumber *Yleyend = [[NSNumber alloc]initWithFloat:new.y];
+    
+    // Aviso al metodo isFlipped
+    flippedFlag = NO;
     
     NSDictionary *info=[NSDictionary dictionaryWithObjectsAndKeys: Xleyend,@"LeyendaX",
                                                                    Yleyend,@"LeyendaY",
